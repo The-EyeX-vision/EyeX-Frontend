@@ -6,7 +6,7 @@ import { NextResponse, type NextRequest } from 'next/server'
  *
  * Responsibilities:
  * 1. Refresh the Supabase session token in cookies (keeps the 4-hour window rolling)
- * 2. Protect /dashboard and /live-alerts — redirect to /login if unauthenticated
+ * 2. Protect dashboard routes — redirect to /login if unauthenticated
  * 3. Redirect already-authenticated users away from /login & /signup → /dashboard
  * 4. Allow public access to / (Landing Page), /login, and /signup
  */
@@ -41,8 +41,16 @@ export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
 
   // Protected routes — unauthenticated users go to /login
-  const protectedRoutes = ['/dashboard', '/live-alerts']
-  const isProtected = protectedRoutes.some((r) => pathname.startsWith(r))
+  const protectedPrefixes = [
+    '/dashboard',
+    '/exams',
+    '/students',
+    '/monitoring',
+    '/alerts',
+    '/settings',
+    '/live-alerts',
+  ]
+  const isProtected = protectedPrefixes.some((r) => pathname.startsWith(r))
 
   if (isProtected && !user) {
     const loginUrl = request.nextUrl.clone()

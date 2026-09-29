@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useTransition } from 'react'
-import type { Alert, AlertStatus } from '@/types'
+import type { LegacyAlert as Alert, AlertStatus } from '@/types'
 
 interface AlertTableProps {
   alerts: Alert[]

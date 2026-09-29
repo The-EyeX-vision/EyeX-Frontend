@@ -1,4 +1,4 @@
-import type { Alert, AnalyticsSummary } from '@/types'
+import type { LegacyAlert as Alert, AnalyticsSummary } from '@/types'
 
 interface AnalyticsProps {
   alerts: Alert[]

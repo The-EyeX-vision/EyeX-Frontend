@@ -95,7 +95,7 @@ export async function loginAction(
           generateCodePrefix(schoolName)
 
         // Try inserting with code_prefix
-        let { data: newSchool, error: insertError } = await db.from('schools').upsert(
+        const { data: initialSchool, error: insertError } = await db.from('schools').upsert(
           {
             auth_user_id: data.user.id,
             school_name: schoolName,
@@ -104,6 +104,8 @@ export async function loginAction(
           },
           { onConflict: 'auth_user_id' }
         ).select().maybeSingle()
+
+        let newSchool = initialSchool
 
         // Fallback without code_prefix if column does not exist
         if (insertError && insertError.message?.includes('code_prefix')) {
@@ -134,14 +136,18 @@ export async function loginAction(
 
     revalidatePath('/', 'layout')
     redirect('/dashboard')
-  } catch (err: any) {
-    if (err?.message === 'NEXT_REDIRECT' || err?.digest?.includes('NEXT_REDIRECT')) {
+  } catch (err: unknown) {
+    if (
+      err instanceof Error &&
+      (err.message === 'NEXT_REDIRECT' ||
+        ('digest' in err && String((err as { digest?: unknown }).digest).includes('NEXT_REDIRECT')))
+    ) {
       throw err
     }
 
     console.error('[loginAction] Uncaught exception:', err)
     return {
-      error: err?.message || 'An unexpected error occurred during login. Please try again.',
+      error: err instanceof Error ? err.message : 'An unexpected error occurred during login. Please try again.',
     }
   }
 }
@@ -277,7 +283,7 @@ export async function signUpAction(
     try {
       const db = admin || supabase
 
-      let { data: createdSchool, error: schoolErr } = await db.from('schools').upsert(
+      const { data: initialCreatedSchool, error: schoolErr } = await db.from('schools').upsert(
         {
           auth_user_id: userId,
           school_name: schoolName,
@@ -286,6 +292,8 @@ export async function signUpAction(
         },
         { onConflict: 'auth_user_id' }
       ).select().maybeSingle()
+
+      let createdSchool = initialCreatedSchool
 
       if (schoolErr && schoolErr.message?.includes('code_prefix')) {
         const fallback = await db.from('schools').upsert(
@@ -323,14 +331,18 @@ export async function signUpAction(
       success:
         'Registration saved in Supabase! If email confirmation is required, please check your inbox or run: UPDATE auth.users SET email_confirmed_at = now(); in Supabase SQL Editor.',
     }
-  } catch (err: any) {
-    if (err?.message === 'NEXT_REDIRECT' || err?.digest?.includes('NEXT_REDIRECT')) {
+  } catch (err: unknown) {
+    if (
+      err instanceof Error &&
+      (err.message === 'NEXT_REDIRECT' ||
+        ('digest' in err && String((err as { digest?: unknown }).digest).includes('NEXT_REDIRECT')))
+    ) {
       throw err
     }
 
     console.error('[signUpAction] Uncaught exception:', err)
     return {
-      error: err?.message || 'An unexpected error occurred during signup. Please try again.',
+      error: err instanceof Error ? err.message : 'An unexpected error occurred during signup. Please try again.',
     }
   }
 }

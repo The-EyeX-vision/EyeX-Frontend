@@ -28,13 +28,6 @@ function LockIcon() {
   )
 }
 
-function ArrowUpRightIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" className="w-4 h-4" stroke="currentColor" strokeWidth={2}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" />
-    </svg>
-  )
-}
 
 function ShieldCheckIcon() {
   return (
@@ -97,13 +90,13 @@ export default async function LandingPage() {
                   className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-700 hover:text-slate-900 px-3 py-1.5 rounded-md hover:bg-slate-100 transition-colors"
                 >
                   <LockIcon />
-                  Sign In to Terminal
+                  Sign In
                 </Link>
                 <Link
                   href="/signup"
                   className="inline-flex items-center rounded-md bg-[#0e5a4d] hover:bg-[#0b483d] text-white text-xs font-semibold px-3.5 py-1.5 transition-colors shadow-sm"
                 >
-                  Request Pilot Access
+                  Get Started
                 </Link>
               </>
             )}
@@ -116,18 +109,18 @@ export default async function LandingPage() {
         {/* Compliance Badge */}
         <div className="inline-flex items-center gap-1.5 text-xs font-medium text-blue-700 bg-blue-50/80 border border-blue-200/80 rounded-full px-3.5 py-1 mb-6">
           <ShieldCheckIcon />
-          GCE &amp; Formal Board Examination Standard
+          Examination &amp; Classroom Monitoring Standard
         </div>
 
         {/* Hero Editorial Heading */}
         <h1 className="text-3xl sm:text-5xl lg:text-[54px] font-bold tracking-tight text-slate-950 leading-[1.18] max-w-4xl mx-auto">
-          It does not decide if a student is cheating.<br className="hidden sm:inline" />
+          Intelligent Examination Monitoring.<br className="hidden sm:inline" />
           <span className="text-slate-900">It points. A human reviews. A human decides.</span>
         </h1>
 
         {/* Subtitle */}
         <p className="mt-5 text-sm sm:text-base text-slate-600 max-w-2xl mx-auto leading-relaxed">
-          The Eye X provides real-time behavioral flags to invigilators during live exam sessions—reducing false allegations, eliminating subjective bias, and safeguarding student futures.
+          EyeX provides real-time behavioral alerts to invigilators during live exam sessions—reducing false allegations, eliminating subjective bias, and safeguarding student integrity.
         </p>
 
         {/* Call to Actions */}
@@ -136,19 +129,15 @@ export default async function LandingPage() {
             href="/signup"
             className="inline-flex items-center gap-2 rounded-md bg-[#0e5a4d] hover:bg-[#0b483d] text-white text-xs sm:text-sm font-semibold px-5 py-2.5 transition-all shadow-sm"
           >
-            <svg viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
-              <path fillRule="evenodd" d="M5.75 2a.75.75 0 01.75.75V4h7V2.75a.75.75 0 011.5 0V4h.25A2.75 2.75 0 0118 6.75v8.5A2.75 2.75 0 0115.25 18H4.75A2.75 2.75 0 012 15.25v-8.5A2.75 2.75 0 014.75 4H5V2.75A.75.75 0 015.75 2zm-1 5.5c-.69 0-1.25.56-1.25 1.25v6.5c0 .69.56 1.25 1.25 1.25h10.5c.69 0 1.25-.56 1.25-1.25v-6.5c0-.69-.56-1.25-1.25-1.25H4.75z" clipRule="evenodd" />
-            </svg>
-            Schedule Institutional Pilot
+            Get Started &rarr;
           </Link>
 
-          <a
-            href="#workflow"
+          <Link
+            href="/login"
             className="inline-flex items-center gap-1.5 rounded-md border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 text-xs sm:text-sm font-medium px-4 py-2.5 transition-colors shadow-2xs"
           >
-            Explore the 3-Screen Workflow
-            <ArrowUpRightIcon />
-          </a>
+            Sign In
+          </Link>
         </div>
 
         {/* 4 Feature Checklist Items */}
