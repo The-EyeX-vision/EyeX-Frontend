@@ -1,12 +1,12 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { signOutAction } from '@/app/actions/signout'
 
 interface SidebarProps {
   schoolName: string
-  schoolPrefix: string
   userEmail: string
 }
 
@@ -30,15 +30,7 @@ const navItems = [
       </svg>
     ),
   },
-  {
-    href: '/students',
-    label: 'Students',
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} className="w-4 h-4">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" />
-      </svg>
-    ),
-  },
+
   {
     href: '/monitoring',
     label: 'Monitoring',
@@ -70,7 +62,7 @@ const navItems = [
   },
 ]
 
-export function Sidebar({ schoolName, schoolPrefix, userEmail }: SidebarProps) {
+export function Sidebar({ schoolName, userEmail }: SidebarProps) {
   const pathname = usePathname()
 
   function isActive(href: string, exact = false) {
@@ -82,20 +74,21 @@ export function Sidebar({ schoolName, schoolPrefix, userEmail }: SidebarProps) {
     <aside className="w-60 flex-shrink-0 flex flex-col border-r border-gray-800 bg-gray-900/80 h-full">
       {/* Brand */}
       <div className="p-4 border-b border-gray-800">
-        <div className="flex items-center gap-2.5">
-          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#0e5a4d] text-white text-sm font-bold shadow-sm">
-            👁
-          </span>
-          <div>
-            <p className="text-sm font-bold text-white leading-none">EyeX</p>
-            <p className="text-[10px] text-gray-500 leading-none mt-0.5 truncate max-w-[120px]">
-              {schoolName}
-            </p>
-          </div>
+        <div className="flex flex-col items-start gap-1">
+          <Image
+            src="/image.jpeg"
+            alt="EyeX Logo"
+            width={48}
+            height={48}
+            className="h-12 w-12 rounded-xl object-cover shadow-md border border-gray-700/60"
+          />
+          <p className="text-[11px] text-gray-400 leading-none truncate max-w-[160px]">
+            {schoolName}
+          </p>
         </div>
         <div className="mt-2.5 flex items-center gap-1.5 text-[11px] font-mono text-teal-400 bg-teal-950 border border-teal-900 px-2 py-0.5 rounded w-fit">
           <span className="w-1.5 h-1.5 rounded-full bg-teal-400 animate-pulse" />
-          {schoolPrefix}
+          LIVE
         </div>
       </div>
 

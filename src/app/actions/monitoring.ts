@@ -132,14 +132,15 @@ export async function endMonitoringSession(
 // Currently used by the simulated detection system.
 export async function createAlert({
   sessionId,
-  studentId,
+  trackerId,
   eventType,
   confidence,
   severity,
   metadata,
 }: {
   sessionId: string
-  studentId?: string | null
+  /** CV tracker ID — e.g. "Tracker 17". Not a registered student. */
+  trackerId?: string | null
   eventType: AlertEventType
   confidence: number
   severity: AlertSeverity
@@ -167,7 +168,7 @@ export async function createAlert({
       .from('alerts')
       .insert({
         monitoring_session_id: sessionId,
-        student_id: studentId ?? null,
+        tracker_id: trackerId ?? null,
         event_type: eventType,
         confidence: clampedConfidence,
         severity,
@@ -238,7 +239,7 @@ export async function updateAlertStatus(
 export async function createSimulatedAlert(
   sessionId: string,
   eventType: AlertEventType,
-  studentId?: string | null
+  trackerId?: string | null
 ): Promise<AlertResult> {
   if (process.env.NODE_ENV === 'production') {
     return { error: 'Simulation not available in production.' }
@@ -254,9 +255,12 @@ export async function createSimulatedAlert(
 
   const confidence = Math.round((0.6 + Math.random() * 0.39) * 100) / 100
 
+  // Generate a simulated tracker ID if not provided
+  const simulatedTrackerId = trackerId ?? `Tracker ${Math.floor(Math.random() * 50) + 1}`
+
   return createAlert({
     sessionId,
-    studentId: studentId ?? null,
+    trackerId: simulatedTrackerId,
     eventType,
     confidence,
     severity: severityMap[eventType],

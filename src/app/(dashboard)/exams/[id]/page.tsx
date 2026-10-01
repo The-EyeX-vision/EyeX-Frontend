@@ -3,8 +3,7 @@ import { redirect, notFound } from 'next/navigation'
 import Link from 'next/link'
 import { startMonitoringSession } from '@/app/actions/monitoring'
 import { archiveExam } from '@/app/actions/exams'
-import { AssignStudentsPanel } from '@/components/exams/AssignStudentsPanel'
-import type { Exam, ExamStudent, MonitoringSession } from '@/types'
+import type { Exam, MonitoringSession } from '@/types'
 
 export const dynamic = 'force-dynamic'
 
@@ -45,20 +44,6 @@ export default async function ExamDetailPage({ params }: { params: Promise<{ id:
 
   if (!exam) notFound()
 
-  // Get assigned students
-  const { data: examStudents } = await supabase
-    .from('exam_students')
-    .select('*, student:students(*)')
-    .eq('exam_id', id)
-    .order('seat_number', { ascending: true })
-
-  // Get all school students for assignment panel
-  const { data: allStudents } = await supabase
-    .from('students')
-    .select('*')
-    .eq('school_id', school.id)
-    .order('student_number', { ascending: true })
-
   // Get active monitoring session if any
   const { data: activeSession } = await supabase
     .from('monitoring_sessions')
@@ -67,9 +52,18 @@ export default async function ExamDetailPage({ params }: { params: Promise<{ id:
     .eq('status', 'active')
     .maybeSingle()
 
+  // Count alerts for this exam's sessions
+  const { data: sessionIds } = await supabase
+    .from('monitoring_sessions')
+    .select('id')
+    .eq('exam_id', id)
+
+  const { count: alertCount } = await supabase
+    .from('alerts')
+    .select('id', { count: 'exact', head: true })
+    .in('monitoring_session_id', (sessionIds ?? []).map((s) => s.id))
+
   const typedExam = exam as Exam
-  const typedExamStudents: ExamStudent[] = examStudents ?? []
-  const assignedStudentIds = typedExamStudents.map(es => es.student_id)
 
   async function handleStartAction() {
     'use server'
@@ -120,12 +114,13 @@ export default async function ExamDetailPage({ params }: { params: Promise<{ id:
       {/* Exam Details */}
       <div className="rounded-xl border border-gray-800 bg-gray-900/60 p-5">
         <h2 className="text-sm font-semibold text-gray-200 mb-4">Exam Details</h2>
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-5 gap-4">
           {[
             { label: 'Date', value: typedExam.exam_date },
             { label: 'Start Time', value: typedExam.start_time },
             { label: 'Duration', value: `${typedExam.duration_minutes} min` },
             { label: 'Room', value: typedExam.room_number },
+            { label: 'Expected Students', value: String(typedExam.expected_students ?? '—') },
           ].map(({ label, value }) => (
             <div key={label}>
               <p className="text-[11px] text-gray-500 uppercase tracking-wider font-semibold">{label}</p>
@@ -154,7 +149,7 @@ export default async function ExamDetailPage({ params }: { params: Promise<{ id:
               className="flex items-center gap-2 px-4 py-2 rounded-lg bg-emerald-900/40 border border-emerald-700 text-emerald-300 text-sm font-medium hover:bg-emerald-900/60 transition-colors"
             >
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-              Open Session →
+              Open Live Session →
             </Link>
           ) : typedExam.status !== 'archived' && typedExam.status !== 'completed' ? (
             <form action={handleStartAction}>
@@ -172,13 +167,25 @@ export default async function ExamDetailPage({ params }: { params: Promise<{ id:
         </div>
       </div>
 
-      {/* Assigned Students */}
-      <AssignStudentsPanel
-        examId={id}
-        examStudents={typedExamStudents}
-        allStudents={allStudents ?? []}
-        assignedStudentIds={assignedStudentIds}
-      />
+      {/* Alert Summary */}
+      <div className="rounded-xl border border-gray-800 bg-gray-900/60 p-5">
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="text-sm font-semibold text-gray-200">Alerts</h2>
+            <p className="text-xs text-gray-500 mt-0.5">
+              {alertCount
+                ? `${alertCount} alert${alertCount !== 1 ? 's' : ''} detected across all sessions for this exam.`
+                : 'No alerts detected for this exam yet.'}
+            </p>
+          </div>
+          <Link
+            href="/alerts"
+            className="text-xs text-teal-400 hover:text-teal-300 transition-colors"
+          >
+            View all alerts →
+          </Link>
+        </div>
+      </div>
     </div>
   )
 }

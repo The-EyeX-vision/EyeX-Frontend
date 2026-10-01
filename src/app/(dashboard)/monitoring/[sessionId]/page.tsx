@@ -1,6 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect, notFound } from 'next/navigation'
-import type { MonitoringSession, Exam, ExamStudent, Alert } from '@/types'
+import type { MonitoringSession, Exam, Alert } from '@/types'
 import { LiveMonitoringConsole } from '@/components/monitoring/LiveMonitoringConsole'
 
 export const dynamic = 'force-dynamic'
@@ -20,13 +20,13 @@ export default async function MonitoringSessionPage({
 
   const { data: school } = await supabase
     .from('schools')
-    .select('id, school_name, code_prefix')
+    .select('id, school_name')
     .eq('auth_user_id', user.id)
     .maybeSingle()
 
   if (!school) redirect('/dashboard')
 
-  // Fetch session
+  // Fetch session + linked exam
   const { data: session } = await supabase
     .from('monitoring_sessions')
     .select('*, exam:exams(*)')
@@ -38,19 +38,10 @@ export default async function MonitoringSessionPage({
 
   const exam = session.exam as Exam
 
-  // Fetch assigned students for this exam
-  const { data: rawExamStudents } = await supabase
-    .from('exam_students')
-    .select('*, student:students(*)')
-    .eq('exam_id', session.exam_id)
-    .order('seat_number', { ascending: true })
-
-  const examStudents = (rawExamStudents ?? []) as ExamStudent[]
-
   // Fetch initial alerts for this monitoring session
   const { data: rawAlerts } = await supabase
     .from('alerts')
-    .select('*, student:students(*)')
+    .select('*')
     .eq('monitoring_session_id', sessionId)
     .order('created_at', { ascending: false })
     .limit(50)
@@ -61,7 +52,6 @@ export default async function MonitoringSessionPage({
     <LiveMonitoringConsole
       session={session as MonitoringSession}
       exam={exam}
-      examStudents={examStudents}
       initialAlerts={initialAlerts}
       schoolName={school.school_name}
     />

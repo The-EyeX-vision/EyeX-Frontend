@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { createClient } from '@/lib/supabase/server'
 
 export const dynamic = 'force-dynamic'
@@ -55,9 +56,13 @@ export default async function LandingPage() {
           {/* Logo & Tag */}
           <div className="flex items-center gap-3">
             <Link href="/" className="flex items-center gap-2">
-              <span className="flex h-7 w-7 items-center justify-center rounded-md bg-[#0e5a4d] text-white text-xs font-bold shadow-sm">
-                👁
-              </span>
+              <Image
+                src="/image.jpeg"
+                alt="The Eye X Logo"
+                width={28}
+                height={28}
+                className="h-7 w-7 rounded-md object-cover shadow-sm"
+              />
               <span className="font-bold text-slate-900 tracking-tight text-sm">The Eye X</span>
             </Link>
             <span className="hidden sm:inline-block text-[11px] text-slate-500 bg-slate-100 border border-slate-200/80 px-2.5 py-0.5 rounded-full font-medium">
@@ -585,9 +590,13 @@ export default async function LandingPage() {
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 mb-10">
           <div>
             <div className="flex items-center gap-2 mb-2">
-              <span className="flex h-6 w-6 items-center justify-center rounded bg-[#0e5a4d] text-white text-xs font-bold">
-                👁
-              </span>
+              <Image
+                src="/image.jpeg"
+                alt="The Eye X Logo"
+                width={24}
+                height={24}
+                className="h-6 w-6 rounded object-cover shadow-sm"
+              />
               <span className="font-bold text-slate-900 text-sm">The Eye X</span>
             </div>
             <p className="text-[11px] text-slate-500 leading-relaxed mb-3">

@@ -23,32 +23,31 @@ async function getDashboardData() {
 
   const schoolId = school.id
 
-  // Parallel queries
-  const [examsRes, studentsRes, sessionsRes, alertsRes] = await Promise.all([
+  // Parallel queries — no student queries
+  const [examsRes, sessionsRes, alertsRes] = await Promise.all([
     supabase.from('exams').select('*').eq('school_id', schoolId),
-    supabase.from('students').select('id').eq('school_id', schoolId),
     supabase.from('monitoring_sessions').select('*, exam:exams(title, room_number)').eq('school_id', schoolId).order('created_at', { ascending: false }).limit(5),
-    supabase.from('alerts').select('*, student:students(full_name, student_number)').in(
+    supabase.from('alerts').select('*').in(
       'monitoring_session_id',
       (await supabase.from('monitoring_sessions').select('id').eq('school_id', schoolId)).data?.map(s => s.id) ?? []
     ).order('created_at', { ascending: false }).limit(10),
   ])
 
   const exams: Exam[] = examsRes.data ?? []
-  const totalStudents = studentsRes.data?.length ?? 0
   const sessions: MonitoringSession[] = sessionsRes.data ?? []
   const alerts: Alert[] = alertsRes.data ?? []
   const activeExams = exams.filter(e => e.status === 'active' || e.status === 'scheduled')
   const activeSessions = sessions.filter(s => s.status === 'active')
   const totalAlerts = alerts.length
+  const flaggedAlerts = alerts.filter(a => a.status === 'FLAGGED').length
 
   return {
     school,
     stats: {
       totalExams: exams.length,
       activeMonitoringSessions: activeSessions.length,
-      totalStudents,
       totalAlerts,
+      flaggedAlerts,
     },
     activeExams: activeExams.slice(0, 5),
     recentAlerts: alerts.slice(0, 5),
@@ -125,8 +124,8 @@ export default async function DashboardPage() {
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           <StatCard label="Total Examinations" value={stats.totalExams} color="teal" href="/exams" />
           <StatCard label="Active Sessions" value={stats.activeMonitoringSessions} color="blue" href="/monitoring" />
-          <StatCard label="Total Students" value={stats.totalStudents} color="amber" href="/students" />
-          <StatCard label="Total Alerts" value={stats.totalAlerts} color="red" href="/alerts" />
+          <StatCard label="Total Alerts" value={stats.totalAlerts} color="amber" href="/alerts" />
+          <StatCard label="Flagged Alerts" value={stats.flaggedAlerts} color="red" href="/alerts" />
         </div>
       )}
 
@@ -151,7 +150,10 @@ export default async function DashboardPage() {
                   <div className="flex items-center justify-between p-3 rounded-lg bg-gray-800/50 hover:bg-gray-800 transition-colors">
                     <div>
                       <p className="text-sm font-medium text-white">{exam.title}</p>
-                      <p className="text-xs text-gray-400 mt-0.5">Room {exam.room_number} · {exam.exam_date}</p>
+                      <p className="text-xs text-gray-400 mt-0.5">
+                        Room {exam.room_number} · {exam.exam_date}
+                        {exam.expected_students ? ` · ${exam.expected_students} expected` : ''}
+                      </p>
                     </div>
                     <StatusBadge status={exam.status} />
                   </div>
@@ -210,7 +212,7 @@ export default async function DashboardPage() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="text-left text-xs text-gray-500 border-b border-gray-800">
-                  <th className="pb-2 pr-4 font-medium">Student</th>
+                  <th className="pb-2 pr-4 font-medium">Tracker</th>
                   <th className="pb-2 pr-4 font-medium">Event</th>
                   <th className="pb-2 pr-4 font-medium">Severity</th>
                   <th className="pb-2 pr-4 font-medium">Confidence</th>
@@ -219,21 +221,18 @@ export default async function DashboardPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-800/50">
-                {recentAlerts.map((alert) => {
-                  const a = alert as Alert & { student?: { full_name: string; student_number: string } }
-                  return (
-                    <tr key={alert.id} className="hover:bg-gray-800/30 transition-colors">
-                      <td className="py-2.5 pr-4 text-white font-medium">
-                        {a.student ? `${a.student.student_number} – ${a.student.full_name}` : 'Unknown'}
-                      </td>
-                      <td className="py-2.5 pr-4 text-gray-300">{alert.event_type.replace(/_/g, ' ')}</td>
-                      <td className="py-2.5 pr-4"><StatusBadge status={alert.severity} /></td>
-                      <td className="py-2.5 pr-4 text-gray-300">{Math.round(alert.confidence * 100)}%</td>
-                      <td className="py-2.5 pr-4"><StatusBadge status={alert.status} /></td>
-                      <td className="py-2.5 text-gray-500 text-xs">{new Date(alert.created_at).toLocaleTimeString()}</td>
-                    </tr>
-                  )
-                })}
+                {recentAlerts.map((alert) => (
+                  <tr key={alert.id} className="hover:bg-gray-800/30 transition-colors">
+                    <td className="py-2.5 pr-4 text-white font-medium font-mono text-xs">
+                      {(alert as Alert & { tracker_id?: string | null }).tracker_id ?? '—'}
+                    </td>
+                    <td className="py-2.5 pr-4 text-gray-300">{alert.event_type.replace(/_/g, ' ')}</td>
+                    <td className="py-2.5 pr-4"><StatusBadge status={alert.severity} /></td>
+                    <td className="py-2.5 pr-4 text-gray-300">{Math.round(alert.confidence * 100)}%</td>
+                    <td className="py-2.5 pr-4"><StatusBadge status={alert.status} /></td>
+                    <td className="py-2.5 text-gray-500 text-xs">{new Date(alert.created_at).toLocaleTimeString()}</td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
@@ -241,10 +240,9 @@ export default async function DashboardPage() {
       </div>
 
       {/* Quick Actions */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
         {[
           { href: '/exams/create', label: 'New Examination', icon: '📋' },
-          { href: '/students/create', label: 'Add Student', icon: '👤' },
           { href: '/monitoring', label: 'View Monitoring', icon: '👁' },
           { href: '/alerts', label: 'Alert History', icon: '🔔' },
         ].map(({ href, label, icon }) => (

@@ -13,12 +13,8 @@ CREATE TABLE IF NOT EXISTS public.schools (
     auth_user_id UUID UNIQUE NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
     school_name VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
-    code_prefix VARCHAR(20) DEFAULT 'SCH',
     created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
-
--- Ensure code_prefix column exists even if table was created previously
-ALTER TABLE public.schools ADD COLUMN IF NOT EXISTS code_prefix VARCHAR(20) DEFAULT 'SCH';
 
 -- Enable Row Level Security
 ALTER TABLE public.schools ENABLE ROW LEVEL SECURITY;

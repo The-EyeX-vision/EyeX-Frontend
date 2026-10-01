@@ -5,7 +5,7 @@ import { updateAlertStatus } from '@/app/actions/monitoring'
 import type { Alert, AlertStatusType, AlertSeverity } from '@/types'
 
 interface Props {
-  initialAlerts: (Alert & { student?: { full_name: string; student_number: string } })[]
+  initialAlerts: Alert[]
   exams: { id: string; title: string; room_number: string }[]
 }
 
@@ -29,11 +29,9 @@ export function AlertsManager({ initialAlerts, exams }: Props) {
     if (statusFilter && alert.status !== statusFilter) return false
     if (search) {
       const term = search.toLowerCase()
-      const studentMatch =
-        alert.student?.full_name.toLowerCase().includes(term) ||
-        alert.student?.student_number.toLowerCase().includes(term)
+      const trackerMatch = alert.tracker_id?.toLowerCase().includes(term)
       const eventMatch = alert.event_type.toLowerCase().includes(term)
-      if (!studentMatch && !eventMatch) return false
+      if (!trackerMatch && !eventMatch) return false
     }
     return true
   })
@@ -91,7 +89,7 @@ export function AlertsManager({ initialAlerts, exams }: Props) {
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search candidate name or student #…"
+            placeholder="Search tracker ID or event type…"
             className="w-full px-3 py-2 text-xs rounded-lg border border-gray-700 bg-gray-800 text-white placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-teal-500"
           />
         </div>
@@ -180,7 +178,7 @@ export function AlertsManager({ initialAlerts, exams }: Props) {
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-gray-800 text-left text-xs text-gray-500">
-              <th className="px-5 py-3.5 font-medium">Candidate</th>
+              <th className="px-5 py-3.5 font-medium">CV Tracker ID</th>
               <th className="px-5 py-3.5 font-medium">Event Type</th>
               <th className="px-5 py-3.5 font-medium">Severity</th>
               <th className="px-5 py-3.5 font-medium">Confidence</th>
@@ -200,12 +198,10 @@ export function AlertsManager({ initialAlerts, exams }: Props) {
               filtered.map((alert) => (
                 <tr key={alert.id} className="hover:bg-gray-800/30 transition-colors">
                   <td className="px-5 py-4">
-                    <p className="font-semibold text-white">
-                      {alert.student?.full_name ?? 'Unassigned Candidate'}
+                    <p className="font-semibold font-mono text-teal-300">
+                      {alert.tracker_id ?? '—'}
                     </p>
-                    <p className="text-xs font-mono text-teal-400 mt-0.5">
-                      {alert.student?.student_number ?? 'Desk #—'}
-                    </p>
+                    <p className="text-[11px] text-gray-500 mt-0.5">CV Tracker</p>
                   </td>
                   <td className="px-5 py-4 text-gray-200 font-medium">
                     {alert.event_type.replace(/_/g, ' ')}

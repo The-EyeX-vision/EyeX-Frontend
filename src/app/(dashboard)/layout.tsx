@@ -18,16 +18,14 @@ export default async function DashboardLayout({
 
   // Get school info for sidebar
   let schoolName = 'EyeX'
-  let schoolPrefix = 'SCH'
   try {
     const { data: school } = await supabase
       .from('schools')
-      .select('school_name, code_prefix')
+      .select('school_name')
       .eq('auth_user_id', user.id)
       .maybeSingle()
     if (school) {
       schoolName = school.school_name
-      schoolPrefix = school.code_prefix || 'SCH'
     }
   } catch {
     // Use defaults
@@ -35,7 +33,7 @@ export default async function DashboardLayout({
 
   return (
     <div className="flex h-screen bg-gray-950 text-gray-100 overflow-hidden">
-      <Sidebar schoolName={schoolName} schoolPrefix={schoolPrefix} userEmail={user.email ?? ''} />
+      <Sidebar schoolName={schoolName} userEmail={user.email ?? ''} />
       <div className="flex-1 flex flex-col overflow-hidden">
         <main className="flex-1 overflow-y-auto">
           {children}

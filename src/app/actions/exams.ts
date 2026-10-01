@@ -35,12 +35,16 @@ export async function createExam(
     const startTime = (formData.get('start_time') as string)?.trim()
     const durationMinutes = parseInt(formData.get('duration_minutes') as string, 10)
     const roomNumber = (formData.get('room_number') as string)?.trim()
+    const expectedStudents = parseInt(formData.get('expected_students') as string, 10)
 
     if (!title) return { error: 'Exam title is required.' }
     if (!examDate) return { error: 'Exam date is required.' }
     if (!startTime) return { error: 'Start time is required.' }
     if (!durationMinutes || durationMinutes < 1) return { error: 'Duration must be at least 1 minute.' }
     if (!roomNumber) return { error: 'Room number is required.' }
+    if (!expectedStudents || expectedStudents < 1 || !Number.isInteger(expectedStudents)) {
+      return { error: 'Expected students must be a whole number greater than 0.' }
+    }
 
     const { data, error } = await supabase
       .from('exams')
@@ -52,6 +56,7 @@ export async function createExam(
         start_time: startTime,
         duration_minutes: durationMinutes,
         room_number: roomNumber,
+        expected_students: expectedStudents,
         status: 'scheduled',
       })
       .select('id')
@@ -85,12 +90,16 @@ export async function updateExam(
     const startTime = (formData.get('start_time') as string)?.trim()
     const durationMinutes = parseInt(formData.get('duration_minutes') as string, 10)
     const roomNumber = (formData.get('room_number') as string)?.trim()
+    const expectedStudents = parseInt(formData.get('expected_students') as string, 10)
 
     if (!title) return { error: 'Exam title is required.' }
     if (!examDate) return { error: 'Exam date is required.' }
     if (!startTime) return { error: 'Start time is required.' }
     if (!durationMinutes || durationMinutes < 1) return { error: 'Duration must be at least 1 minute.' }
     if (!roomNumber) return { error: 'Room number is required.' }
+    if (!expectedStudents || expectedStudents < 1 || !Number.isInteger(expectedStudents)) {
+      return { error: 'Expected students must be a whole number greater than 0.' }
+    }
 
     const { error } = await supabase
       .from('exams')
@@ -101,6 +110,7 @@ export async function updateExam(
         start_time: startTime,
         duration_minutes: durationMinutes,
         room_number: roomNumber,
+        expected_students: expectedStudents,
         updated_at: new Date().toISOString(),
       })
       .eq('id', examId)

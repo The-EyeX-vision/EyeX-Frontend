@@ -39,17 +39,17 @@ export default async function AlertsPage() {
   const sessionIds = (rawSessions ?? []).map((s) => s.id)
 
   // Fetch alerts belonging to school's monitoring sessions
-  let alerts: (Alert & { student?: { full_name: string; student_number: string } })[] = []
+  let alerts: Alert[] = []
 
   if (sessionIds.length > 0) {
     const { data: rawAlerts } = await supabase
       .from('alerts')
-      .select('*, student:students(full_name, student_number)')
+      .select('*')
       .in('monitoring_session_id', sessionIds)
       .order('created_at', { ascending: false })
       .limit(200)
 
-    alerts = (rawAlerts ?? []) as typeof alerts
+    alerts = (rawAlerts ?? []) as Alert[]
   }
 
   return (

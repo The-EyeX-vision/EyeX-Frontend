@@ -48,15 +48,6 @@ export default async function SettingsPage() {
 
           <div>
             <label className="block text-xs font-medium text-gray-500 mb-1">
-              Station Code Prefix
-            </label>
-            <div className="px-3.5 py-2.5 rounded-lg border border-gray-800 bg-gray-950 text-teal-400 font-mono text-sm font-bold">
-              {typedSchool?.code_prefix ?? 'SCH'}
-            </div>
-          </div>
-
-          <div>
-            <label className="block text-xs font-medium text-gray-500 mb-1">
               Authorized Administrator Email
             </label>
             <div className="px-3.5 py-2.5 rounded-lg border border-gray-800 bg-gray-950 text-gray-300 text-sm">

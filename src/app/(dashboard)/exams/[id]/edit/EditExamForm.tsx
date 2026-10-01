@@ -129,7 +129,7 @@ export default function EditExamForm({ exam }: { exam: Exam }) {
             </div>
             <div>
               <label htmlFor="room_number" className="block text-xs font-medium text-gray-300 mb-1.5">
-                Room Number <span className="text-red-400">*</span>
+                Room / Venue <span className="text-red-400">*</span>
               </label>
               <input
                 id="room_number"
@@ -140,6 +140,26 @@ export default function EditExamForm({ exam }: { exam: Exam }) {
                 className="w-full px-3.5 py-2.5 rounded-lg border border-gray-700 bg-gray-800 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-[#0e5a4d]/50 focus:border-[#0e5a4d] transition-colors"
               />
             </div>
+          </div>
+
+          {/* Expected Students */}
+          <div>
+            <label htmlFor="expected_students" className="block text-xs font-medium text-gray-300 mb-1.5">
+              Expected Students <span className="text-red-400">*</span>
+            </label>
+            <input
+              id="expected_students"
+              name="expected_students"
+              type="number"
+              min={1}
+              step={1}
+              required
+              defaultValue={exam.expected_students}
+              className="w-full px-3.5 py-2.5 rounded-lg border border-gray-700 bg-gray-800 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-[#0e5a4d]/50 focus:border-[#0e5a4d] transition-colors"
+            />
+            <p className="mt-1 text-[11px] text-gray-500">
+              The total number of students expected to sit this examination.
+            </p>
           </div>
 
           {/* Error */}

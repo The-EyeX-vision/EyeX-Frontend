@@ -1,5 +1,5 @@
 /**
- * Core domain types for EyeX — full application types.
+ * Core domain types for EyeX — Final Backend Architecture
  */
 
 // ── School ────────────────────────────────────────────────────
@@ -8,13 +8,119 @@ export interface School {
   auth_user_id: string
   school_name: string
   email: string
-  code_prefix: string
   created_at: string
+  updated_at?: string
 }
 
-// ── Exam ─────────────────────────────────────────────────────
-export type ExamStatus = 'scheduled' | 'active' | 'completed' | 'archived'
+// ── Classroom (Examination Hall) ──────────────────────────────
+export interface Classroom {
+  id: string
+  school_id: string
+  name: string
+  access_code: string
+  code_valid_until?: string | null
+  created_at: string
+  updated_at: string
+}
 
+// ── Camera ───────────────────────────────────────────────────
+export type CameraStatus = 'ACTIVE' | 'INACTIVE' | 'OFFLINE'
+
+export interface Camera {
+  id: string
+  classroom_id: string
+  name: string
+  camera_number: number
+  status: CameraStatus
+  created_at: string
+  updated_at: string
+}
+
+// ── Exam Session ─────────────────────────────────────────────
+export type SessionStatus = 'SCHEDULED' | 'ACTIVE' | 'COMPLETED' | 'CANCELLED'
+
+export interface ExamSession {
+  id: string
+  classroom_id: string
+  course_name: string
+  course_code: string
+  duration_minutes: number
+  student_count: number
+  status: SessionStatus
+  started_at?: string | null
+  ended_at?: string | null
+  created_at: string
+  updated_at: string
+  classroom?: Classroom
+}
+
+// ── Session Student (Temporary Tracker Identity) ──────────────
+export interface SessionStudent {
+  id: string
+  session_id: string
+  tracker_label: string
+  first_seen_at: string
+  last_seen_at: string
+  created_at: string
+  updated_at: string
+  violations?: StudentViolation[]
+}
+
+// ── Student Violation ─────────────────────────────────────────
+export type ViolationActivityType =
+  | 'PHONE_DETECTED'
+  | 'UNAUTHORIZED_MATERIAL'
+  | 'SUSPICIOUS_MOVEMENT'
+  | 'POSSIBLE_COMMUNICATION'
+  | 'LOOKING_AWAY'
+  | 'MULTIPLE_PERSONS'
+  | 'UNKNOWN'
+
+export interface StudentViolation {
+  id: string
+  session_student_id: string
+  activity_type: ViolationActivityType
+  description?: string | null
+  count: number
+  image_path?: string | null
+  first_detected_at: string
+  last_detected_at: string
+  created_at: string
+  updated_at: string
+  session_student?: SessionStudent
+}
+
+// ── CV Model Ingestion Types ──────────────────────────────────
+export interface ModelDetectionRequest {
+  session_id: string
+  camera_id: string
+  tracker_label: string | number
+  activity_type: ViolationActivityType
+  description?: string
+  confidence?: number
+  timestamp?: string
+  image?: string // Base64 or image data string
+}
+
+// ── Hall Access Verification Types ────────────────────────────
+export interface HallAccessVerificationRequest {
+  access_code: string
+}
+
+export interface HallAccessVerificationResponse {
+  valid: boolean
+  classroom: {
+    id: string
+    name: string
+    access_code: string
+    code_valid_until?: string | null
+  }
+  active_session?: ExamSession | null
+  scheduled_sessions?: ExamSession[]
+}
+
+// ── Legacy Compatibility Types (if referenced elsewhere) ──────
+export type ExamStatus = 'scheduled' | 'active' | 'completed' | 'archived'
 export interface Exam {
   id: string
   school_id: string
@@ -24,34 +130,13 @@ export interface Exam {
   start_time: string
   duration_minutes: number
   room_number: string
+  expected_students: number
   status: ExamStatus
   created_at: string
   updated_at: string
 }
 
-// ── Student ───────────────────────────────────────────────────
-export interface Student {
-  id: string
-  school_id: string
-  student_number: string
-  full_name: string
-  email?: string | null
-  created_at: string
-}
-
-// ── ExamStudent ───────────────────────────────────────────────
-export interface ExamStudent {
-  id: string
-  exam_id: string
-  student_id: string
-  seat_number?: string | null
-  created_at: string
-  student?: Student
-}
-
-// ── Monitoring Session ────────────────────────────────────────
 export type MonitoringStatus = 'scheduled' | 'active' | 'completed' | 'cancelled'
-
 export interface MonitoringSession {
   id: string
   exam_id: string
@@ -63,7 +148,6 @@ export interface MonitoringSession {
   exam?: Exam
 }
 
-// ── Alert ─────────────────────────────────────────────────────
 export type AlertEventType =
   | 'PHONE_DETECTED'
   | 'SUSPICIOUS_MOVEMENT'
@@ -72,49 +156,21 @@ export type AlertEventType =
   | 'OTHER'
 
 export type AlertSeverity = 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL'
-
 export type AlertStatusType = 'FLAGGED' | 'REVIEWED' | 'DISMISSED' | 'CONFIRMED'
 
 export interface Alert {
   id: string
   monitoring_session_id: string
-  student_id?: string | null
+  tracker_id?: string | null
   event_type: AlertEventType
   confidence: number
   severity: AlertSeverity
   status: AlertStatusType
   metadata?: Record<string, unknown>
   created_at: string
-  student?: Student
 }
 
-// ── Legacy types (for existing classroom_alerts table) ────────
-export type SessionStatus = 'scheduled' | 'active' | 'completed' | 'archived'
-
-export interface ExamSession {
-  id: string
-  school_id: string
-  invigilator_id?: string | null
-  title: string
-  room_number: string
-  status: SessionStatus
-  started_at?: string | null
-  ended_at?: string | null
-  exam_id?: string | null
-  created_at: string
-}
-
-export interface ClassroomAlert {
-  id: string
-  session_id: string
-  student_id_tracker: number
-  timestamp_ms: number
-  suspicion_score: number
-  status: string
-  created_at: string
-}
-
-// ── UI convenience types ──────────────────────────────────────
+// ── Legacy UI Convenience Types ──────────────────────────────
 export type AlertStatus = 'FLAGGED_ALERT' | 'REVIEWED' | 'DISMISSED' | 'pending' | 'reviewed' | 'dismissed'
 
 export interface LegacyAlert {
@@ -133,3 +189,4 @@ export interface AnalyticsSummary {
   dismissed: number
   avgSuspicionScore: number
 }
+

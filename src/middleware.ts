@@ -44,7 +44,6 @@ export async function middleware(request: NextRequest) {
   const protectedPrefixes = [
     '/dashboard',
     '/exams',
-    '/students',
     '/monitoring',
     '/alerts',
     '/settings',

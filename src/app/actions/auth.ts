@@ -13,15 +13,6 @@ export type AuthState = {
 export type LoginState = AuthState
 
 /**
- * Helper to generate a clean, uppercase 3-6 letter code prefix for a school.
- */
-function generateCodePrefix(name: string): string {
-  const lettersOnly = name.replace(/[^a-zA-Z0-9]/g, '').toUpperCase()
-  const base = lettersOnly.slice(0, 4) || 'SCH'
-  return `${base}_${Math.floor(100 + Math.random() * 900)}`
-}
-
-/**
  * Server Action — handles school account sign-in.
  */
 export async function loginAction(
@@ -90,45 +81,11 @@ export async function loginAction(
           (data.user.user_metadata?.school_name as string) ||
           email.split('@')[0].toUpperCase()
 
-        const codePrefix =
-          (data.user.user_metadata?.code_prefix as string) ||
-          generateCodePrefix(schoolName)
-
-        // Try inserting with code_prefix
-        const { data: initialSchool, error: insertError } = await db.from('schools').upsert(
-          {
-            auth_user_id: data.user.id,
-            school_name: schoolName,
-            email: email,
-            code_prefix: codePrefix,
-          },
-          { onConflict: 'auth_user_id' }
-        ).select().maybeSingle()
-
-        let newSchool = initialSchool
-
-        // Fallback without code_prefix if column does not exist
-        if (insertError && insertError.message?.includes('code_prefix')) {
-          const fallback = await db.from('schools').upsert(
-            {
-              auth_user_id: data.user.id,
-              school_name: schoolName,
-              email: email,
-            },
-            { onConflict: 'auth_user_id' }
-          ).select().maybeSingle()
-          newSchool = fallback.data
-        }
-
-        if (newSchool?.id) {
-          await db.from('exam_sessions').insert({
-            school_id: newSchool.id,
-            title: `${schoolName} Main Exam Hall`,
-            room_number: 'Hall 1',
-            status: 'active',
-            started_at: new Date().toISOString(),
-          })
-        }
+        await db.from('schools').insert({
+          auth_user_id: data.user.id,
+          school_name: schoolName,
+          email: email,
+        }).select().maybeSingle()
       }
     } catch (syncErr) {
       console.error('[loginAction] Safe notice during school sync:', syncErr)
@@ -163,7 +120,6 @@ export async function signUpAction(
   try {
     const schoolName = (formData.get('schoolName') as string | null)?.trim() ?? ''
     const email = (formData.get('email') as string | null)?.trim() ?? ''
-    const codePrefixInput = (formData.get('codePrefix') as string | null)?.trim() ?? ''
     const password = (formData.get('password') as string | null) ?? ''
     const confirmPassword = (formData.get('confirmPassword') as string | null) ?? ''
 
@@ -183,10 +139,6 @@ export async function signUpAction(
       return { error: 'Passwords do not match.' }
     }
 
-    const codePrefix = codePrefixInput
-      ? codePrefixInput.replace(/[^a-zA-Z0-9]/g, '').toUpperCase().slice(0, 10)
-      : generateCodePrefix(schoolName)
-
     const supabase = await createClient()
     const admin = createAdminClient()
 
@@ -201,7 +153,6 @@ export async function signUpAction(
         email_confirm: true,
         user_metadata: {
           school_name: schoolName,
-          code_prefix: codePrefix,
           role: 'admin',
         },
       })
@@ -238,7 +189,6 @@ export async function signUpAction(
         options: {
           data: {
             school_name: schoolName,
-            code_prefix: codePrefix,
             role: 'admin',
           },
         },
@@ -283,39 +233,11 @@ export async function signUpAction(
     try {
       const db = admin || supabase
 
-      const { data: initialCreatedSchool, error: schoolErr } = await db.from('schools').upsert(
-        {
-          auth_user_id: userId,
-          school_name: schoolName,
-          email: email,
-          code_prefix: codePrefix,
-        },
-        { onConflict: 'auth_user_id' }
-      ).select().maybeSingle()
-
-      let createdSchool = initialCreatedSchool
-
-      if (schoolErr && schoolErr.message?.includes('code_prefix')) {
-        const fallback = await db.from('schools').upsert(
-          {
-            auth_user_id: userId,
-            school_name: schoolName,
-            email: email,
-          },
-          { onConflict: 'auth_user_id' }
-        ).select().maybeSingle()
-        createdSchool = fallback.data
-      }
-
-      if (createdSchool?.id) {
-        await db.from('exam_sessions').insert({
-          school_id: createdSchool.id,
-          title: `${schoolName} Active Exam Session`,
-          room_number: 'Hall A',
-          status: 'active',
-          started_at: new Date().toISOString(),
-        })
-      }
+      await db.from('schools').insert({
+        auth_user_id: userId,
+        school_name: schoolName,
+        email: email,
+      }).select().maybeSingle()
     } catch (err) {
       console.error('[signUpAction] Safe notice during school creation:', err)
     }

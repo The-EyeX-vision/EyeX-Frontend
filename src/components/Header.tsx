@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { signOutAction } from '@/app/actions/signout'
 
 
@@ -8,10 +9,13 @@ export default function Header() {
       <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
         {/* Brand */}
         <Link href="/dashboard" className="flex items-center gap-3">
-          {/* Camera icon */}
-          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-teal-700 text-white text-sm font-bold">
-            👁
-          </span>
+          <Image
+            src="/image.jpeg"
+            alt="The Eye X Logo"
+            width={32}
+            height={32}
+            className="h-8 w-8 rounded-lg object-cover shadow-sm border border-gray-700/60"
+          />
           <div>
             <p className="text-sm font-bold text-white leading-none">The Eye X</p>
             <p className="text-[10px] text-gray-500 leading-none mt-0.5">
