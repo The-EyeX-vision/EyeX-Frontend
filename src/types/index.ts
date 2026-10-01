@@ -133,3 +133,75 @@ export interface AnalyticsSummary {
   dismissed: number
   avgSuspicionScore: number
 }
+
+// ── Classroom (Examination Hall) ──────────────────────────────
+export interface Classroom {
+  id: string
+  school_id: string
+  name: string
+  access_code: string
+  code_expires_at?: string | null
+  created_at: string
+  cameras?: Camera[]
+  cameras_count?: number
+  active_session?: HallSession | null
+}
+
+// ── Camera ───────────────────────────────────────────────────
+export type CameraStatus = 'ACTIVE' | 'OFFLINE'
+
+export interface Camera {
+  id: string
+  classroom_id: string
+  camera_number: number
+  name: string
+  status: CameraStatus
+  created_at: string
+}
+
+// ── Hall Session ─────────────────────────────────────────────
+export type HallSessionStatus = 'SCHEDULED' | 'ACTIVE' | 'COMPLETED' | 'CANCELLED'
+
+export interface HallSession {
+  id: string
+  school_id: string
+  classroom_id: string
+  course_name: string
+  course_code?: string | null
+  duration_minutes: number
+  expected_students: number
+  status: HallSessionStatus
+  started_at?: string | null
+  ended_at?: string | null
+  created_at: string
+  classroom?: Classroom
+  active_trackers_count?: number
+  violations_count?: number
+}
+
+// ── Violation (Evidence Incident) ────────────────────────────
+export type ViolationActivityType =
+  | 'PHONE_DETECTED'
+  | 'SUSPICIOUS_MOVEMENT'
+  | 'POSSIBLE_COMMUNICATION'
+  | 'UNAUTHORIZED_MATERIAL'
+  | 'OTHER'
+
+export type ViolationSeverity = 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL'
+export type ViolationStatus = 'FLAGGED' | 'REVIEWED' | 'DISMISSED' | 'CONFIRMED'
+
+export interface Violation {
+  id: string
+  session_id: string
+  tracker_label: string
+  tracker_id?: number | null
+  activity_type: ViolationActivityType
+  severity: ViolationSeverity
+  status: ViolationStatus
+  confidence: number
+  evidence_url?: string | null
+  metadata?: Record<string, unknown>
+  created_at: string
+  session?: HallSession
+}
+

@@ -43,11 +43,14 @@ export async function middleware(request: NextRequest) {
   // Protected routes — unauthenticated users go to /login
   const protectedPrefixes = [
     '/dashboard',
+    '/classrooms',
+    '/sessions',
+    '/violations',
+    '/monitoring',
+    '/settings',
     '/exams',
     '/students',
-    '/monitoring',
     '/alerts',
-    '/settings',
     '/live-alerts',
   ]
   const isProtected = protectedPrefixes.some((r) => pathname.startsWith(r))

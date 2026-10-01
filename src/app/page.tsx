@@ -75,13 +75,21 @@ export default async function LandingPage() {
           </nav>
 
           {/* Action CTAs */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
+            <Link
+              href="/hall-access"
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-800 bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 px-3 py-1.5 rounded-md transition-colors"
+            >
+              <span>🔑</span>
+              <span>Hall Access Code</span>
+            </Link>
+
             {user ? (
               <Link
                 href="/dashboard"
                 className="inline-flex items-center gap-1.5 rounded-md bg-[#0e5a4d] hover:bg-[#0b483d] text-white text-xs font-semibold px-3.5 py-1.5 transition-colors shadow-sm"
               >
-                Go to Dashboard →
+                School Portal →
               </Link>
             ) : (
               <>
@@ -94,9 +102,9 @@ export default async function LandingPage() {
                 </Link>
                 <Link
                   href="/signup"
-                  className="inline-flex items-center rounded-md bg-[#0e5a4d] hover:bg-[#0b483d] text-white text-xs font-semibold px-3.5 py-1.5 transition-colors shadow-sm"
+                  className="hidden sm:inline-flex items-center rounded-md bg-[#0e5a4d] hover:bg-[#0b483d] text-white text-xs font-semibold px-3.5 py-1.5 transition-colors shadow-sm"
                 >
-                  Get Started
+                  Register School
                 </Link>
               </>
             )}
@@ -123,20 +131,57 @@ export default async function LandingPage() {
           EyeX provides real-time behavioral alerts to invigilators during live exam sessions—reducing false allegations, eliminating subjective bias, and safeguarding student integrity.
         </p>
 
-        {/* Call to Actions */}
-        <div className="mt-8 flex flex-wrap items-center justify-center gap-3.5">
+        {/* Dual-User Entry Pathways (Examiner vs School Admin) */}
+        <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-xl mx-auto text-left">
+          {/* Examiner Entry Card */}
           <Link
-            href="/signup"
-            className="inline-flex items-center gap-2 rounded-md bg-[#0e5a4d] hover:bg-[#0b483d] text-white text-xs sm:text-sm font-semibold px-5 py-2.5 transition-all shadow-sm"
+            href="/hall-access"
+            className="group rounded-xl border-2 border-emerald-600/70 bg-emerald-50/40 p-4 transition-all hover:bg-emerald-50 hover:shadow-md flex flex-col justify-between"
           >
-            Get Started &rarr;
+            <div>
+              <div className="flex items-center justify-between text-xs font-mono font-bold text-emerald-800">
+                <span>INVIGILATOR / EXAMINER</span>
+                <span className="text-base group-hover:translate-x-1 transition-transform">&rarr;</span>
+              </div>
+              <h3 className="font-bold text-slate-900 text-sm mt-1">
+                Enter with Hall Access Code
+              </h3>
+              <p className="text-[11px] text-slate-600 mt-1">
+                Zero password needed. Type your 8-character code to unlock live proctoring.
+              </p>
+            </div>
+            <span className="mt-3 text-xs font-semibold text-emerald-700">
+              Unlock Hall Terminal &rarr;
+            </span>
           </Link>
 
+          {/* School Admin Card */}
           <Link
             href="/login"
-            className="inline-flex items-center gap-1.5 rounded-md border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 text-xs sm:text-sm font-medium px-4 py-2.5 transition-colors shadow-2xs"
+            className="group rounded-xl border border-slate-300 bg-white p-4 transition-all hover:border-slate-400 hover:shadow-md flex flex-col justify-between"
           >
-            Sign In
+            <div>
+              <div className="flex items-center justify-between text-xs font-mono font-bold text-slate-700">
+                <span>INSTITUTION PORTAL</span>
+                <span className="text-base group-hover:translate-x-1 transition-transform">&rarr;</span>
+              </div>
+              <h3 className="font-bold text-slate-900 text-sm mt-1">
+                School Administrator Login
+              </h3>
+              <p className="text-[11px] text-slate-600 mt-1">
+                Configure examination halls, rotate access codes, view evidence archive.
+              </p>
+            </div>
+            <span className="mt-3 text-xs font-semibold text-[#0e5a4d]">
+              Sign In to Dashboard &rarr;
+            </span>
+          </Link>
+        </div>
+
+        {/* Secondary Links (API Docs) */}
+        <div className="mt-5 flex items-center justify-center gap-4 text-xs text-slate-500">
+          <Link href="/api/docs" className="hover:text-slate-800 font-mono underline underline-offset-2">
+            Interactive API Docs (Swagger) &rarr;
           </Link>
         </div>
 
