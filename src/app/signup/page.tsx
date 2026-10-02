@@ -13,31 +13,21 @@ export default function SignUpPage() {
 
   return (
     <main className="min-h-screen bg-[#f8f9ff] flex flex-col items-center justify-center p-4 sm:p-8">
-      <div className="relative w-full max-w-[500px]">
+      <div className="relative w-full max-w-[440px]">
         {/* Ambient glows */}
         <div className="absolute -top-16 -right-16 w-48 h-48 rounded-full bg-[#dce9ff] blur-3xl opacity-60 pointer-events-none" />
         <div className="absolute -bottom-10 -left-10 w-44 h-44 rounded-full bg-[#bbd6ff] blur-2xl opacity-40 pointer-events-none" />
 
-        {/* Logo */}
-        <div className="flex flex-col items-center mb-6 relative z-10">
-          <Link href="/"><EyeXLogo width={140} showTagline /></Link>
-        </div>
-
         {/* Card */}
-        <div className="relative bg-white rounded-2xl shadow-xl p-6 sm:p-8 z-10">
+        <div className="relative bg-white rounded-2xl shadow-xl p-6 sm:p-8 z-10 border border-[#e5eeff]">
           {/* Header */}
           <div className="flex flex-col items-center text-center mb-6">
-            <div className="w-14 h-14 rounded-xl bg-[#eff4ff] flex items-center justify-center text-[#1d4ed8] shadow-sm mb-4">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} className="w-7 h-7">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0012 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75z" />
-              </svg>
-            </div>
-            <span className="font-code-sm text-[11px] uppercase tracking-widest text-[#466083] font-semibold mb-1">
-              INSTITUTION ONBOARDING · MINESEC
-            </span>
-            <h1 className="font-headline-lg text-[#0b1c30] tracking-tight">Register Your School</h1>
-            <p className="text-[14px] text-[#434655] mt-1.5 leading-relaxed max-w-[340px]">
-              Create an institutional EyeX account to manage examination halls, schedule sessions, and monitor malpractice.
+            <Link href="/" className="mb-3 inline-block">
+              <EyeXLogo width={160} showTagline={true} />
+            </Link>
+            <h1 className="text-2xl font-bold text-[#0b1c30] tracking-tight">Register Your School</h1>
+            <p className="text-[14px] text-[#434655] mt-1">
+              Create an institutional EyeX account
             </p>
           </div>
 
@@ -51,8 +41,8 @@ export default function SignUpPage() {
                 <div>
                   <p className="text-[13px] font-semibold text-emerald-800">{state.success}</p>
                   <p className="text-[12px] text-emerald-700 mt-1">
-                    Check your email to confirm your account, then{' '}
-                    <Link href="/login" className="font-semibold underline">sign in here.</Link>
+                    Account created successfully!{' '}
+                    <Link href="/login" className="font-semibold underline">Sign in here.</Link>
                   </p>
                 </div>
               </div>
@@ -72,47 +62,25 @@ export default function SignUpPage() {
           <form action={formAction} className="flex flex-col gap-4">
             {/* School Name */}
             <div className="flex flex-col gap-1.5">
-              <label htmlFor="school_name" className="text-[13px] font-medium text-[#0b1c30]">Official School Name</label>
+              <label htmlFor="schoolName" className="text-[13px] font-medium text-[#0b1c30]">School Name</label>
               <div className="relative flex items-center">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} className="absolute left-3 w-4 h-4 text-[#747686] pointer-events-none">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0012 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75z" />
                 </svg>
                 <input
-                  id="school_name"
-                  name="school_name"
+                  id="schoolName"
+                  name="schoolName"
                   type="text"
                   required
-                  placeholder="e.g. Government Bilingual High School Yaoundé"
+                  placeholder="e.g. Government Bilingual High School"
                   className="w-full pl-10 pr-3 py-2.5 bg-[#eff4ff] rounded-lg text-[14px] text-[#0b1c30] placeholder:text-[#747686] focus:outline-none focus:ring-2 focus:ring-[#1d4ed8] focus:bg-white transition-all"
                 />
               </div>
             </div>
 
-            {/* Station Code Prefix */}
+            {/* Email */}
             <div className="flex flex-col gap-1.5">
-              <div className="flex items-center justify-between">
-                <label htmlFor="code_prefix" className="text-[13px] font-medium text-[#0b1c30]">Station Code Prefix</label>
-                <span className="font-code-sm text-[10px] text-[#466083] uppercase tracking-wider">e.g. GBHS, SCH</span>
-              </div>
-              <div className="relative flex items-center">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} className="absolute left-3 w-4 h-4 text-[#747686] pointer-events-none">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M5.25 8.25h15m-16.5 7.5h15m-1.8-13.5l-3.9 19.5m-2.1-19.5l-3.9 19.5" />
-                </svg>
-                <input
-                  id="code_prefix"
-                  name="code_prefix"
-                  type="text"
-                  required
-                  maxLength={6}
-                  placeholder="e.g. GBHS"
-                  className="w-full pl-10 pr-3 py-2.5 bg-[#eff4ff] rounded-lg text-[14px] text-[#0b1c30] placeholder:text-[#747686] font-mono uppercase focus:outline-none focus:ring-2 focus:ring-[#1d4ed8] focus:bg-white transition-all"
-                />
-              </div>
-            </div>
-
-            {/* Admin Email */}
-            <div className="flex flex-col gap-1.5">
-              <label htmlFor="email" className="text-[13px] font-medium text-[#0b1c30]">Administrator Email</label>
+              <label htmlFor="email" className="text-[13px] font-medium text-[#0b1c30]">Email</label>
               <div className="relative flex items-center">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} className="absolute left-3 w-4 h-4 text-[#747686] pointer-events-none">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
@@ -123,7 +91,7 @@ export default function SignUpPage() {
                   type="email"
                   required
                   autoComplete="email"
-                  placeholder="e.g. principal@gbhsyaounde.cm"
+                  placeholder="admin@school.cm"
                   className="w-full pl-10 pr-3 py-2.5 bg-[#eff4ff] rounded-lg text-[14px] text-[#0b1c30] placeholder:text-[#747686] focus:outline-none focus:ring-2 focus:ring-[#1d4ed8] focus:bg-white transition-all"
                 />
               </div>
@@ -141,8 +109,8 @@ export default function SignUpPage() {
                   name="password"
                   type={showPassword ? 'text' : 'password'}
                   required
-                  minLength={8}
-                  placeholder="Min. 8 characters"
+                  minLength={6}
+                  placeholder="••••••••••••"
                   className="w-full pl-10 pr-10 py-2.5 bg-[#eff4ff] rounded-lg text-[14px] text-[#0b1c30] placeholder:text-[#747686] focus:outline-none focus:ring-2 focus:ring-[#1d4ed8] focus:bg-white transition-all"
                 />
                 <button type="button" onClick={() => setShowPassword(v => !v)} className="absolute right-3 p-1 text-[#747686] hover:text-[#0b1c30] transition-colors">
@@ -162,38 +130,27 @@ export default function SignUpPage() {
             <button
               type="submit"
               disabled={isPending || !!state.success}
-              className="w-full bg-[#1d4ed8] hover:bg-[#0037b0] disabled:opacity-70 disabled:cursor-not-allowed text-white py-3 rounded-lg text-[14px] font-semibold tracking-wide shadow-md transition-all flex items-center justify-center gap-2 group mt-1"
+              className="w-full bg-[#1d4ed8] hover:bg-[#0037b0] disabled:opacity-70 disabled:cursor-not-allowed text-white py-3 rounded-lg text-[14px] font-semibold tracking-wide shadow-md transition-all flex items-center justify-center gap-2 mt-2"
             >
               {isPending ? (
                 <>
                   <svg className="w-4 h-4 animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
                   </svg>
-                  Registering Institution...
+                  Registering...
                 </>
               ) : (
-                <>
-                  Register Institution
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-4 h-4 group-hover:translate-x-0.5 transition-transform">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-                  </svg>
-                </>
+                'Register'
               )}
             </button>
           </form>
 
-          {/* Footer */}
-          <div className="mt-5 -mx-6 sm:-mx-8 -mb-6 sm:-mb-8 px-6 sm:px-8 py-4 bg-[#eff4ff] rounded-b-2xl flex items-center justify-between gap-3">
-            <div className="flex items-center gap-1.5 text-[#747686]">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} className="w-3 h-3">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
-              </svg>
-              <span className="font-code-sm text-[10px] uppercase tracking-wider">TLS 1.3 Secure</span>
-            </div>
-            <span className="text-[13px] text-[#434655]">
-              Already registered?{' '}
-              <Link href="/login" className="text-[#1d4ed8] font-semibold hover:underline">Sign in →</Link>
-            </span>
+          {/* Already have a school account? Login */}
+          <div className="mt-6 pt-5 border-t border-[#e5eeff] text-center text-[14px] text-[#434655]">
+            Already have a school account?{' '}
+            <Link href="/login" className="text-[#1d4ed8] font-semibold hover:underline ml-1">
+              Login
+            </Link>
           </div>
         </div>
       </div>

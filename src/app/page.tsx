@@ -1,18 +1,9 @@
 import Link from 'next/link'
-import { createClient } from '@/lib/supabase/server'
 import { EyeXLogo } from '@/components/ui/EyeXLogo'
 
 export const dynamic = 'force-dynamic'
 
-export default async function LandingPage() {
-  let user = null
-  try {
-    const supabase = await createClient()
-    const { data } = await supabase.auth.getUser()
-    user = data.user
-  } catch (err) {
-    console.error('[LandingPage] Auth query error:', err)
-  }
+export default function LandingPage() {
 
   return (
     <div className="min-h-screen bg-[#f8f9ff] text-[#0b1c30] antialiased">
@@ -23,46 +14,27 @@ export default async function LandingPage() {
             <Link href="/" className="flex items-center gap-3">
               <EyeXLogo width={130} showTagline={false} />
             </Link>
-            <span className="hidden lg:block h-6 w-px bg-[#c4c5d7]" />
-            <div className="hidden xl:flex items-center gap-2 px-3 py-1 rounded-lg bg-[#eff4ff] border border-[#c4c5d7]">
-              <span className="w-2 h-2 rounded-full bg-[#1d4ed8] animate-pulse" />
-              <span className="font-code-sm text-[11px] text-[#466083] uppercase font-semibold">
-                MINESEC / GCE Board Protocol 2025
-              </span>
-            </div>
           </div>
 
           <nav className="hidden md:flex items-center gap-6 text-[14px] font-medium text-[#434655]">
             <Link href="/" className="text-[#0037b0] font-semibold">Home</Link>
+            <Link href="#about" className="hover:text-[#0b1c30] transition-colors">About</Link>
             <Link href="/hall-access" className="hover:text-[#0b1c30] transition-colors">Invigilator Hall Code</Link>
-            <Link href="/api/docs" className="hover:text-[#0b1c30] transition-colors">API Documentation</Link>
-            <Link href="/login" className="hover:text-[#0b1c30] transition-colors">School Login</Link>
           </nav>
 
           <div className="flex items-center gap-3">
-            {user ? (
-              <Link
-                href="/dashboard"
-                className="inline-flex items-center justify-center bg-[#1d4ed8] text-white text-[14px] font-semibold px-4 py-2 rounded-lg hover:bg-[#0037b0] transition-colors shadow-sm"
-              >
-                Go to Dashboard →
-              </Link>
-            ) : (
-              <>
-                <Link
-                  href="/login"
-                  className="hidden sm:inline-flex items-center justify-center text-[14px] font-medium text-[#434655] hover:text-[#0b1c30] px-3 py-2 transition-colors"
-                >
-                  Sign In
-                </Link>
-                <Link
-                  href="/signup"
-                  className="inline-flex items-center justify-center bg-[#1d4ed8] text-white text-[14px] font-semibold px-4 py-2 rounded-lg hover:bg-[#0037b0] transition-colors shadow-sm"
-                >
-                  Register School
-                </Link>
-              </>
-            )}
+            <Link
+              href="/login"
+              className="inline-flex items-center justify-center text-[14px] font-medium text-[#434655] hover:text-[#0b1c30] px-3 py-2 transition-colors"
+            >
+              Login
+            </Link>
+            <Link
+              href="/signup"
+              className="inline-flex items-center justify-center bg-[#1d4ed8] text-white text-[14px] font-semibold px-4 py-2 rounded-lg hover:bg-[#0037b0] transition-colors shadow-sm"
+            >
+              Register
+            </Link>
           </div>
         </div>
       </header>
@@ -242,8 +214,8 @@ export default async function LandingPage() {
           </section>
         </div>
 
-        {/* SECTION 2: CORE PLATFORM PILLARS */}
-        <section className="w-full px-4 sm:px-8 py-16 max-w-7xl mx-auto">
+        {/* SECTION 2: CORE PLATFORM PILLARS (ABOUT) */}
+        <section id="about" className="w-full px-4 sm:px-8 py-16 max-w-7xl mx-auto scroll-mt-24">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
             <div>
               <span className="font-code-sm text-[11px] uppercase tracking-wider text-[#0037b0] font-semibold">

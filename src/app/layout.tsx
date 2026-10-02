@@ -5,6 +5,11 @@ export const metadata: Metadata = {
   title: "EyeX — Exam Monitoring Platform",
   description:
     "Institutional-grade real-time examination monitoring and malpractice detection platform for Anglophone Cameroon secondary schools.",
+  icons: {
+    icon: "/fav.jpeg",
+    shortcut: "/fav.jpeg",
+    apple: "/fav.jpeg",
+  },
 };
 
 export default function RootLayout({
@@ -15,6 +20,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        <link rel="icon" href="/fav.jpeg" type="image/jpeg" />
+        <link rel="shortcut icon" href="/fav.jpeg" type="image/jpeg" />
+        <link rel="apple-touch-icon" href="/fav.jpeg" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link

@@ -1,12 +1,9 @@
 'use client'
 
-/**
- * EyeXLogo — Official brand mark for the EyeX Exam Monitoring Platform
- * Matches the SVG specification from stitch_eyex_exam_monitoring_platform/eyex_logo/code.html
- */
+import Image from 'next/image'
 
 interface EyeXLogoProps {
-  /** Width in px — height auto-scales proportionally */
+  /** Width in px — scales proportionally */
   width?: number
   /** Optional className for positioning/spacing */
   className?: string
@@ -22,99 +19,67 @@ export function EyeXLogo({
   showTagline = true,
   variant = 'full',
 }: EyeXLogoProps) {
-  const height = showTagline ? width * 0.25 : width * 0.2
+  // Height / size calculation based on requested width
+  const iconSize = variant === 'icon'
+    ? (width <= 48 ? width : Math.max(32, Math.round(width * 0.28)))
+    : Math.max(28, Math.min(44, Math.round(width * 0.25)))
 
   if (variant === 'icon') {
     return (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 44 44"
-        width={height}
-        height={height}
-        fill="none"
-        className={className}
-        aria-label="EyeX"
-      >
-        <rect width="44" height="44" rx="10" fill="#1D4ED8" />
-        <path
-          d="M8 22C11.5 16 17.5 12 22 12C26.5 12 32.5 16 36 22C32.5 28 26.5 32 22 32C17.5 32 11.5 28 8 22Z"
-          stroke="#FFFFFF"
-          strokeWidth="2.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-        <circle cx="22" cy="22" r="5" fill="#FFFFFF" />
-        <circle cx="22" cy="22" r="2" fill="#1D4ED8" />
-        <path
-          d="M22 8V10M22 34V36M6 22H8M36 22H38"
-          stroke="#93C5FD"
-          strokeWidth="2"
-          strokeLinecap="round"
-        />
-      </svg>
+      <Image
+        src="/image.jpeg"
+        alt="EyeX Logo"
+        width={iconSize}
+        height={iconSize}
+        className={`rounded-xl object-cover shadow-sm border border-gray-700/60 shrink-0 ${className}`}
+        style={{ width: `${iconSize}px`, height: `${iconSize}px` }}
+        priority
+      />
+    )
+  }
+
+  if (variant === 'wordmark') {
+    return (
+      <div className={`inline-flex flex-col justify-center leading-none ${className}`}>
+        <span className="font-['Plus_Jakarta_Sans',system-ui,sans-serif] text-xl font-extrabold text-[#0B2A4A] tracking-tight">
+          Eye<span className="text-[#1D4ED8]">X</span>
+        </span>
+        {showTagline && (
+          <span className="font-['Plus_Jakarta_Sans',system-ui,sans-serif] text-[9px] font-semibold text-[#64748B] tracking-[1.2px] uppercase mt-0.5">
+            EXAM MONITOR
+          </span>
+        )}
+      </div>
     )
   }
 
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox={showTagline ? '0 0 240 60' : '0 0 240 50'}
-      width={width}
-      height={height}
-      fill="none"
-      className={className}
-      aria-label="EyeX Exam Monitor"
-    >
-      {variant !== 'wordmark' && (
-        <>
-          {/* Icon Background */}
-          <rect width="44" height="44" x="8" y="8" rx="10" fill="#1D4ED8" />
-          {/* Stylized Eye Aperture */}
-          <path
-            d="M16 30C19.5 24 25.5 20 30 20C34.5 20 40.5 24 44 30C40.5 36 34.5 40 30 40C25.5 40 19.5 36 16 30Z"
-            stroke="#FFFFFF"
-            strokeWidth="2.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-          {/* Lens */}
-          <circle cx="30" cy="30" r="5" fill="#FFFFFF" />
-          <circle cx="30" cy="30" r="2" fill="#1D4ED8" />
-          {/* Focus Crosshairs */}
-          <path
-            d="M30 16V18M30 42V44M14 30H16M44 30H46"
-            stroke="#93C5FD"
-            strokeWidth="2"
-            strokeLinecap="round"
-          />
-        </>
-      )}
-
-      {/* Wordmark */}
-      <text
-        x={variant === 'wordmark' ? 4 : 62}
-        y="35"
-        fontFamily="'Plus Jakarta Sans', system-ui, sans-serif"
-        fontSize="24"
-        fontWeight="800"
-        fill="#0B2A4A"
-        letterSpacing="-0.5"
-      >
-        Eye<tspan fill="#1D4ED8">X</tspan>
-      </text>
-      {showTagline && (
-        <text
-          x={variant === 'wordmark' ? 4 : 63}
-          y="47"
-          fontFamily="'Plus Jakarta Sans', system-ui, sans-serif"
-          fontSize="9"
-          fontWeight="600"
-          fill="#64748B"
-          letterSpacing="1.2"
+    <div className={`inline-flex items-center gap-2.5 ${className}`}>
+      <Image
+        src="/image.jpeg"
+        alt="EyeX Logo"
+        width={iconSize}
+        height={iconSize}
+        className="rounded-xl object-cover shadow-sm border border-gray-700/60 shrink-0"
+        style={{ width: `${iconSize}px`, height: `${iconSize}px` }}
+        priority
+      />
+      <div className="flex flex-col justify-center leading-none">
+        <span
+          className="font-['Plus_Jakarta_Sans',system-ui,sans-serif] font-extrabold text-[#0B2A4A] tracking-tight leading-none"
+          style={{ fontSize: `${Math.max(15, Math.round(width * 0.15))}px` }}
         >
-          EXAM MONITOR
-        </text>
-      )}
-    </svg>
+          Eye<span className="text-[#1D4ED8]">X</span>
+        </span>
+        {showTagline && (
+          <span
+            className="font-['Plus_Jakarta_Sans',system-ui,sans-serif] font-semibold text-[#64748B] tracking-[1.2px] uppercase mt-1 leading-none"
+            style={{ fontSize: `${Math.max(8, Math.round(width * 0.06))}px` }}
+          >
+            EXAM MONITOR
+          </span>
+        )}
+      </div>
+    </div>
   )
 }
