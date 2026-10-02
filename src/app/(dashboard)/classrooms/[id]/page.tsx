@@ -3,6 +3,7 @@
 import { useState, useEffect, use } from 'react'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
+import { CameraIcon, CloseIcon } from '@/components/ui/Icons'
 import type { Classroom, Camera, HallSession } from '@/types'
 
 export default function ClassroomDetailPage({
@@ -262,7 +263,7 @@ export default function ClassroomDetailPage({
                   className="rounded-xl border border-gray-800 bg-gray-950 p-4 flex items-center justify-between"
                 >
                   <div className="flex items-center gap-3">
-                    <span className="text-xl">📹</span>
+                    <CameraIcon className="w-5 h-5 text-teal-400 shrink-0" />
                     <div>
                       <p className="text-sm font-bold text-white leading-tight">
                         {cam.name || `Camera ${cam.camera_number}`}
@@ -367,7 +368,7 @@ export default function ClassroomDetailPage({
                 onClick={() => setIsCameraModalOpen(false)}
                 className="text-gray-400 hover:text-white p-1"
               >
-                ✕
+                <CloseIcon className="w-4 h-4" />
               </button>
             </div>
 

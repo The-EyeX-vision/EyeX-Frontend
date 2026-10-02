@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { EyeIcon } from '@/components/ui/Icons'
 
 export default function HallAccessPage() {
   const router = useRouter()
@@ -51,7 +52,7 @@ export default function HallAccessPage() {
       <header className="w-full max-w-5xl mx-auto flex items-center justify-between py-4">
         <Link href="/" className="flex items-center gap-2.5 focus:outline-none focus:ring-2 focus:ring-teal-500 rounded-lg p-1">
           <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#0e5a4d] text-white text-base font-bold shadow-sm">
-            👁
+            <EyeIcon className="w-5 h-5 text-white" />
           </span>
           <span className="text-base font-bold tracking-tight text-white">The Eye X</span>
         </Link>

@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
+import { BuildingIcon, RotateIcon, TrashIcon, CloseIcon } from '@/components/ui/Icons'
 import type { Classroom } from '@/types'
 
 export default function ClassroomsPage() {
@@ -186,7 +187,7 @@ export default function ClassroomsPage() {
         </div>
       ) : classrooms.length === 0 ? (
         <div className="rounded-2xl border border-gray-800 bg-gray-900/40 p-12 text-center space-y-3">
-          <span className="text-4xl block">🏛️</span>
+          <BuildingIcon className="w-10 h-10 text-gray-600 mx-auto" />
           <h2 className="text-base font-bold text-white">No examination halls configured</h2>
           <p className="text-xs sm:text-sm text-gray-400 max-w-sm mx-auto">
             Create your first examination hall to produce 8-character access codes for examiners.
@@ -261,7 +262,7 @@ export default function ClassroomsPage() {
                           className="min-h-[36px] px-3 py-1.5 rounded-lg border border-gray-700 bg-gray-800 hover:bg-gray-700 text-gray-200 text-xs font-medium transition-colors disabled:opacity-50 inline-flex items-center gap-1.5"
                           title="Generate a fresh 8-character access code"
                         >
-                          <span>🔄</span>
+                          <RotateIcon className="w-3.5 h-3.5" />
                           <span>{isRotating ? 'Rotating…' : 'Rotate Code'}</span>
                         </button>
                       </td>
@@ -277,10 +278,10 @@ export default function ClassroomsPage() {
                           <button
                             type="button"
                             onClick={() => handleDeleteHall(hall.id)}
-                            className="min-h-[36px] p-2 rounded-lg text-gray-500 hover:text-red-400 hover:bg-red-950/20 transition-colors"
+                            className="min-h-[36px] p-2 rounded-lg text-gray-500 hover:text-red-400 hover:bg-red-950/20 transition-colors flex items-center justify-center"
                             title="Delete Hall"
                           >
-                            🗑
+                            <TrashIcon className="w-4 h-4" />
                           </button>
                         </div>
                       </td>
@@ -304,7 +305,7 @@ export default function ClassroomsPage() {
                 onClick={() => setIsModalOpen(false)}
                 className="text-gray-400 hover:text-white p-1"
               >
-                ✕
+                <CloseIcon className="w-4 h-4" />
               </button>
             </div>
 

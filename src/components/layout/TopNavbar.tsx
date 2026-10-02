@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useSidebar } from './SidebarContext'
 import { createClient } from '@/lib/supabase/client'
 import { signOutAction } from '@/app/actions/signout'
+import { ShieldIcon } from '@/components/ui/Icons'
 import type { Alert, MonitoringSession } from '@/types'
 
 export interface ActiveSessionData {
@@ -333,7 +334,7 @@ export function TopNavbar({
               <div className="max-h-80 overflow-y-auto divide-y divide-gray-800/60 p-1">
                 {alerts.length === 0 ? (
                   <div className="py-8 text-center text-gray-500 text-xs">
-                    <p className="text-base mb-1">🛡️</p>
+                    <ShieldIcon className="w-6 h-6 text-gray-600 mx-auto mb-1" />
                     No alerts registered. System calm.
                   </div>
                 ) : (

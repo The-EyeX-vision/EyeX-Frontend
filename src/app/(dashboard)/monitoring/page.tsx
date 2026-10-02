@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
+import { CalendarIcon, CameraIcon } from '@/components/ui/Icons'
 import type { HallSession, Violation } from '@/types'
 
 export const dynamic = 'force-dynamic'
@@ -84,7 +85,8 @@ export default async function GlobalMonitoringHubPage() {
           href="/sessions"
           className="min-h-[44px] px-4 py-2 rounded-xl border border-gray-700 bg-gray-900 hover:bg-gray-800 text-gray-200 text-xs sm:text-sm font-semibold transition-colors flex items-center gap-1.5 shadow-sm self-start sm:self-auto"
         >
-          <span>📅</span> All Sessions &rarr;
+          <CalendarIcon className="w-4 h-4 shrink-0" />
+          <span>All Sessions &rarr;</span>
         </Link>
       </div>
 
@@ -104,7 +106,7 @@ export default async function GlobalMonitoringHubPage() {
 
         {activeHallCards.length === 0 ? (
           <div className="rounded-2xl border border-gray-800 bg-gray-900/40 p-12 text-center space-y-3">
-            <span className="text-4xl block">📹</span>
+            <CameraIcon className="w-10 h-10 text-gray-600 mx-auto" />
             <h3 className="text-base font-bold text-white">No active examinations running right now</h3>
             <p className="text-xs sm:text-sm text-gray-400 max-w-sm mx-auto">
               When an examiner starts a test in any hall, its live stream, tracker count, and alerts appear here instantly.

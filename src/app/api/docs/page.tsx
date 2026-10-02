@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { EyeIcon, RocketIcon } from '@/components/ui/Icons'
 
 interface EndpointSpec {
   method: 'GET' | 'POST' | 'PUT' | 'DELETE'
@@ -170,8 +171,8 @@ export default function ApiDocsPage() {
       <header className="border-b border-gray-800 bg-gray-900/90 backdrop-blur-md px-4 sm:px-6 lg:px-8 py-3.5 flex flex-wrap items-center justify-between gap-4 sticky top-0 z-30">
         <div className="flex items-center gap-3">
           <Link href="/" className="flex items-center gap-2">
-            <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#0e5a4d] text-white text-xs font-bold">
-              👁
+            <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#0e5a4d] text-white">
+              <EyeIcon className="w-4 h-4 text-white" />
             </span>
             <span className="font-bold text-white tracking-tight text-sm">The Eye X</span>
           </Link>
@@ -294,7 +295,8 @@ export default function ApiDocsPage() {
                 disabled={isTesting}
                 className="min-h-[44px] px-5 py-2 rounded-xl bg-[#0e5a4d] hover:bg-[#0b483d] text-white text-xs sm:text-sm font-semibold transition-colors disabled:opacity-50 flex items-center gap-1.5 shadow-sm"
               >
-                {isTesting ? 'Sending Request…' : 'Execute Test Call 🚀'}
+                <span>{isTesting ? 'Sending Request…' : 'Execute Test Call'}</span>
+                {!isTesting && <RocketIcon className="w-4 h-4" />}
               </button>
             </div>
 

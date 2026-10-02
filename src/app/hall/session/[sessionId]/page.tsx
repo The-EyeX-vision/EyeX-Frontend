@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, use } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
+import { BellIcon, BellOffIcon, CameraIcon, PhoneIcon, RotateIcon, MessageIcon, FileTextIcon, ShieldIcon, ImageIcon, CloseIcon } from '@/components/ui/Icons'
 import type { HallSession, Violation, ViolationActivityType } from '@/types'
 
 // Web Audio API chime sound
@@ -286,7 +287,11 @@ export default function ExaminerLiveConsolePage({
             className="p-2 rounded-lg border border-gray-800 bg-gray-900 hover:bg-gray-800 text-xs text-gray-400 hover:text-white transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
             title={soundEnabled ? 'Mute alert sounds' : 'Enable alert sounds'}
           >
-            {soundEnabled ? '🔔' : '🔕'}
+            {soundEnabled ? (
+              <BellIcon className="w-4 h-4 text-emerald-400" />
+            ) : (
+              <BellOffIcon className="w-4 h-4 text-gray-500" />
+            )}
           </button>
 
           {/* End Session Button */}
@@ -330,8 +335,8 @@ export default function ExaminerLiveConsolePage({
 
               {/* Center Lens Marker */}
               <div className="relative z-10 text-center max-w-sm p-6 rounded-2xl border border-dashed border-gray-700 bg-gray-950/85 backdrop-blur-md">
-                <div className="w-12 h-12 rounded-xl bg-teal-950/80 border border-teal-700 text-teal-400 flex items-center justify-center mx-auto mb-3 text-2xl shadow-inner">
-                  📹
+                <div className="w-12 h-12 rounded-xl bg-teal-950/80 border border-teal-700 text-teal-400 flex items-center justify-center mx-auto mb-3 shadow-inner">
+                  <CameraIcon className="w-6 h-6 text-teal-400" />
                 </div>
                 <p className="font-mono text-xs font-bold uppercase tracking-widest text-gray-200">
                   Live Overhead Surveillance Feed
@@ -400,33 +405,37 @@ export default function ExaminerLiveConsolePage({
                 type="button"
                 onClick={() => triggerSimulation('PHONE_DETECTED')}
                 disabled={simulating}
-                className="min-h-[44px] px-3 py-2 rounded-lg bg-red-950/80 hover:bg-red-900/80 border border-red-800 text-red-200 text-xs font-semibold transition-colors disabled:opacity-50"
+                className="min-h-[44px] px-3 py-2 rounded-lg bg-red-950/80 hover:bg-red-900/80 border border-red-800 text-red-200 text-xs font-semibold transition-colors disabled:opacity-50 flex items-center justify-center gap-1.5"
               >
-                📱 Phone Detected
+                <PhoneIcon className="w-3.5 h-3.5 text-red-400 shrink-0" />
+                <span>Phone Detected</span>
               </button>
               <button
                 type="button"
                 onClick={() => triggerSimulation('SUSPICIOUS_MOVEMENT')}
                 disabled={simulating}
-                className="min-h-[44px] px-3 py-2 rounded-lg bg-amber-950/80 hover:bg-amber-900/80 border border-amber-800 text-amber-200 text-xs font-semibold transition-colors disabled:opacity-50"
+                className="min-h-[44px] px-3 py-2 rounded-lg bg-amber-950/80 hover:bg-amber-900/80 border border-amber-800 text-amber-200 text-xs font-semibold transition-colors disabled:opacity-50 flex items-center justify-center gap-1.5"
               >
-                🔄 Movement Anomaly
+                <RotateIcon className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                <span>Movement Anomaly</span>
               </button>
               <button
                 type="button"
                 onClick={() => triggerSimulation('POSSIBLE_COMMUNICATION')}
                 disabled={simulating}
-                className="min-h-[44px] px-3 py-2 rounded-lg bg-indigo-950/80 hover:bg-indigo-900/80 border border-indigo-800 text-indigo-200 text-xs font-semibold transition-colors disabled:opacity-50"
+                className="min-h-[44px] px-3 py-2 rounded-lg bg-indigo-950/80 hover:bg-indigo-900/80 border border-indigo-800 text-indigo-200 text-xs font-semibold transition-colors disabled:opacity-50 flex items-center justify-center gap-1.5"
               >
-                💬 Communication
+                <MessageIcon className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
+                <span>Communication</span>
               </button>
               <button
                 type="button"
                 onClick={() => triggerSimulation('UNAUTHORIZED_MATERIAL')}
                 disabled={simulating}
-                className="min-h-[44px] px-3 py-2 rounded-lg bg-rose-950/80 hover:bg-rose-900/80 border border-rose-800 text-rose-200 text-xs font-semibold transition-colors disabled:opacity-50"
+                className="min-h-[44px] px-3 py-2 rounded-lg bg-rose-950/80 hover:bg-rose-900/80 border border-rose-800 text-rose-200 text-xs font-semibold transition-colors disabled:opacity-50 flex items-center justify-center gap-1.5"
               >
-                📄 Paper / Material
+                <FileTextIcon className="w-3.5 h-3.5 text-rose-400 shrink-0" />
+                <span>Paper / Material</span>
               </button>
             </div>
           </div>
@@ -519,7 +528,7 @@ export default function ExaminerLiveConsolePage({
           <div className="flex-1 overflow-y-auto p-4 space-y-3">
             {violations.length === 0 ? (
               <div className="py-16 text-center text-gray-500 text-xs">
-                <span className="text-2xl block mb-2">🛡️</span>
+                <ShieldIcon className="w-8 h-8 text-gray-600 mx-auto mb-2" />
                 No violations detected in this session.
                 <p className="text-[11px] text-gray-600 mt-1">
                   Use the dev panel to simulate real-time incident alerts.
@@ -593,7 +602,7 @@ export default function ExaminerLiveConsolePage({
                   onClick={() => setSelectedViolation(null)}
                   className="min-h-[44px] min-w-[44px] flex items-center justify-center text-gray-400 hover:text-white"
                 >
-                  ✕
+                  <CloseIcon className="w-5 h-5" />
                 </button>
               </div>
 
@@ -630,7 +639,7 @@ export default function ExaminerLiveConsolePage({
                     />
                   ) : (
                     <div className="text-center p-6 text-gray-500 text-xs">
-                      <span className="text-3xl block mb-2">📸</span>
+                      <ImageIcon className="w-8 h-8 text-gray-600 mx-auto mb-2" />
                       Local edge camera buffer archived
                     </div>
                   )}

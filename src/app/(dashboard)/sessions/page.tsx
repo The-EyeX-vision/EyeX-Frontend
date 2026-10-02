@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
+import { CalendarIcon, ClipboardIcon, CloseIcon } from '@/components/ui/Icons'
 import type { HallSession, Classroom } from '@/types'
 
 export default function SessionsManagementPage() {
@@ -133,7 +134,8 @@ export default function SessionsManagementPage() {
           onClick={() => setIsModalOpen(true)}
           className="min-h-[44px] px-4 py-2 rounded-xl bg-[#0e5a4d] hover:bg-[#0b483d] text-white text-xs sm:text-sm font-semibold transition-colors flex items-center gap-1.5 shadow-sm self-start sm:self-auto"
         >
-          <span>📅</span> Schedule Examination
+          <CalendarIcon className="w-4 h-4 shrink-0" />
+          <span>Schedule Examination</span>
         </button>
       </div>
 
@@ -176,7 +178,7 @@ export default function SessionsManagementPage() {
         </div>
       ) : filtered.length === 0 ? (
         <div className="rounded-2xl border border-gray-800 bg-gray-900/40 p-12 text-center space-y-3">
-          <span className="text-4xl block">📋</span>
+          <ClipboardIcon className="w-10 h-10 text-gray-600 mx-auto" />
           <h2 className="text-base font-bold text-white">No {activeTab.toLowerCase()} sessions found</h2>
           <p className="text-xs sm:text-sm text-gray-400 max-w-sm mx-auto">
             Schedule an upcoming examination or start one immediately from the hall workspace.
@@ -286,7 +288,7 @@ export default function SessionsManagementPage() {
                 onClick={() => setIsModalOpen(false)}
                 className="text-gray-400 hover:text-white p-1"
               >
-                ✕
+                <CloseIcon className="w-4 h-4" />
               </button>
             </div>
 

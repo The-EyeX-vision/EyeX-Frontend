@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase/client'
+import { RotateIcon, ShieldIcon, ImageIcon, CloseIcon } from '@/components/ui/Icons'
 import type { Violation, ViolationActivityType, ViolationSeverity, ViolationStatus } from '@/types'
 
 export default function ViolationsLedgerPage() {
@@ -92,7 +93,8 @@ export default function ViolationsLedgerPage() {
           onClick={loadViolations}
           className="min-h-[44px] px-4 py-2 rounded-xl border border-gray-700 bg-gray-900 hover:bg-gray-800 text-gray-300 text-xs sm:text-sm font-semibold transition-colors flex items-center gap-1.5 self-start sm:self-auto"
         >
-          <span>🔄</span> Refresh Ledger
+          <RotateIcon className="w-3.5 h-3.5" />
+          <span>Refresh Ledger</span>
         </button>
       </div>
 
@@ -206,7 +208,7 @@ export default function ViolationsLedgerPage() {
         </div>
       ) : filtered.length === 0 ? (
         <div className="rounded-2xl border border-gray-800 bg-gray-900/40 p-12 text-center space-y-2">
-          <span className="text-3xl block">🛡️</span>
+          <ShieldIcon className="w-8 h-8 text-gray-600 mx-auto mb-1" />
           <p className="text-white font-semibold text-sm">No violations match the filter criteria</p>
           <p className="text-xs text-gray-500">All examination sessions are operating within integrity bounds.</p>
         </div>
@@ -283,9 +285,10 @@ export default function ViolationsLedgerPage() {
                         <button
                           type="button"
                           onClick={() => setSelectedViolation(v)}
-                          className="min-h-[36px] px-3 py-1.5 rounded-lg bg-teal-950 hover:bg-teal-900 border border-teal-800 text-teal-300 text-xs font-semibold transition-colors"
+                          className="min-h-[36px] px-3 py-1.5 rounded-lg bg-teal-950 hover:bg-teal-900 border border-teal-800 text-teal-300 text-xs font-semibold transition-colors inline-flex items-center gap-1.5"
                         >
-                          View Snapshot 📸
+                          <span>View Snapshot</span>
+                          <ImageIcon className="w-3.5 h-3.5" />
                         </button>
                       </td>
                     </tr>
@@ -315,7 +318,7 @@ export default function ViolationsLedgerPage() {
                 onClick={() => setSelectedViolation(null)}
                 className="text-gray-400 hover:text-white p-1"
               >
-                ✕
+                <CloseIcon className="w-4 h-4" />
               </button>
             </div>
 
@@ -329,7 +332,7 @@ export default function ViolationsLedgerPage() {
                 />
               ) : (
                 <div className="p-8 text-center text-gray-500 text-xs">
-                  <span className="text-3xl block mb-2">📸</span>
+                  <ImageIcon className="w-8 h-8 text-gray-600 mx-auto mb-2" />
                   Encrypted frame archived in edge hardware buffer
                 </div>
               )}

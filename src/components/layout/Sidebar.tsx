@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { signOutAction } from '@/app/actions/signout'
 import { useSidebar } from './SidebarContext'
+import { EyeIcon } from '@/components/ui/Icons'
 
 interface SidebarProps {
   schoolName: string
@@ -108,10 +109,10 @@ export function Sidebar({ schoolName, schoolPrefix, userEmail }: SidebarProps) {
         <div className="p-4 border-b border-gray-800 flex items-center justify-between">
           <div className="flex items-center gap-2.5 min-w-0">
             <span
-              className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#0e5a4d] text-white text-sm font-bold shadow-sm flex-shrink-0"
+              className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#0e5a4d] text-white shadow-sm flex-shrink-0"
               title="The Eye X"
             >
-              👁
+              <EyeIcon className="w-5 h-5 text-white" />
             </span>
             {(!isCollapsed || isMobileOpen) && (
               <div className="min-w-0 overflow-hidden">

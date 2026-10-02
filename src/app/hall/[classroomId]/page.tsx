@@ -4,6 +4,7 @@ import { useState, useEffect, use } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
+import { EyeIcon, CameraIcon, CloseIcon } from '@/components/ui/Icons'
 import type { Classroom, Camera, HallSession } from '@/types'
 
 export default function HallWorkspacePage({
@@ -186,7 +187,7 @@ export default function HallWorkspacePage({
           <span className="text-gray-700">/</span>
           <div className="flex items-center gap-2">
             <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#0e5a4d] text-white text-xs font-bold shadow-sm">
-              👁
+              <EyeIcon className="w-4 h-4 text-white" />
             </span>
             <h1 className="text-base font-bold text-white tracking-tight">
               {classroom?.name || 'Examination Hall'}
@@ -335,8 +336,8 @@ export default function HallWorkspacePage({
                   className="rounded-xl border border-gray-800 bg-gray-900/60 p-4 flex items-center justify-between"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-lg bg-gray-800 border border-gray-700 flex items-center justify-center text-lg">
-                      📹
+                    <div className="w-10 h-10 rounded-lg bg-gray-800 border border-gray-700 flex items-center justify-center">
+                      <CameraIcon className="w-5 h-5 text-gray-400" />
                     </div>
                     <div>
                       <p className="text-sm font-bold text-white leading-tight">
@@ -382,7 +383,7 @@ export default function HallWorkspacePage({
                 onClick={() => setIsModalOpen(false)}
                 className="text-gray-400 hover:text-white p-1"
               >
-                ✕
+                <CloseIcon className="w-4 h-4" />
               </button>
             </div>
 

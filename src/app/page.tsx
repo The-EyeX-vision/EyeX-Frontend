@@ -1,5 +1,13 @@
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
+import {
+  EyeIcon,
+  KeyIcon,
+  CameraIcon,
+  ClipboardIcon,
+  ShieldIcon,
+  RocketIcon,
+} from '@/components/ui/Icons'
 
 export const dynamic = 'force-dynamic'
 
@@ -56,7 +64,7 @@ export default async function LandingPage() {
           <div className="flex items-center gap-3">
             <Link href="/" className="flex items-center gap-2">
               <span className="flex h-7 w-7 items-center justify-center rounded-md bg-[#0e5a4d] text-white text-xs font-bold shadow-sm">
-                👁
+                <EyeIcon className="w-4 h-4 text-white" />
               </span>
               <span className="font-bold text-slate-900 tracking-tight text-sm">The Eye X</span>
             </Link>
@@ -80,7 +88,7 @@ export default async function LandingPage() {
               href="/hall-access"
               className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-800 bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 px-3 py-1.5 rounded-md transition-colors"
             >
-              <span>🔑</span>
+              <KeyIcon className="w-3.5 h-3.5" />
               <span>Hall Access Code</span>
             </Link>
 
@@ -236,7 +244,7 @@ export default async function LandingPage() {
                 </div>
                 <div className="rounded-lg border border-slate-200 bg-slate-50 p-6 flex flex-col items-center justify-center text-center min-h-[140px]">
                   <div className="w-8 h-8 rounded-full border border-slate-300 bg-white flex items-center justify-center text-slate-500 mb-2 shadow-2xs">
-                    📹
+                    <CameraIcon className="w-4 h-4 text-slate-600" />
                   </div>
                   <span className="text-xs font-semibold text-slate-800">Desk D-04</span>
                   <span className="mt-1 text-[11px] font-medium text-amber-800 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded">
@@ -493,7 +501,7 @@ export default async function LandingPage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           <div className="rounded-xl border border-slate-200 bg-white p-5">
             <div className="w-8 h-8 rounded-lg bg-blue-50 text-blue-700 flex items-center justify-center mb-3">
-              📝
+              <ClipboardIcon className="w-4 h-4 text-blue-700" />
             </div>
             <h3 className="font-bold text-slate-900 text-sm mb-1.5">Non-Negotiable Language Standard</h3>
             <p className="text-xs text-slate-600 leading-relaxed">
@@ -503,7 +511,7 @@ export default async function LandingPage() {
 
           <div className="rounded-xl border border-slate-200 bg-white p-5">
             <div className="w-8 h-8 rounded-lg bg-teal-50 text-teal-700 flex items-center justify-center mb-3">
-              🔒
+              <ShieldIcon className="w-4 h-4 text-teal-700" />
             </div>
             <h3 className="font-bold text-slate-900 text-sm mb-1.5">Privacy by Design Perimeter</h3>
             <p className="text-xs text-slate-600 leading-relaxed">
@@ -513,7 +521,7 @@ export default async function LandingPage() {
 
           <div className="rounded-xl border border-slate-200 bg-white p-5">
             <div className="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-700 flex items-center justify-center mb-3">
-              ⚡
+              <RocketIcon className="w-4 h-4 text-indigo-700" />
             </div>
             <h3 className="font-bold text-slate-900 text-sm mb-1.5">Fail-Safe Edge Fallback</h3>
             <p className="text-xs text-slate-600 leading-relaxed">
@@ -631,7 +639,7 @@ export default async function LandingPage() {
           <div>
             <div className="flex items-center gap-2 mb-2">
               <span className="flex h-6 w-6 items-center justify-center rounded bg-[#0e5a4d] text-white text-xs font-bold">
-                👁
+                <EyeIcon className="w-3.5 h-3.5 text-white" />
               </span>
               <span className="font-bold text-slate-900 text-sm">The Eye X</span>
             </div>

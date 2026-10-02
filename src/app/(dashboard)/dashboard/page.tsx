@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
+import { CalendarIcon, ShieldIcon } from '@/components/ui/Icons'
 import type { Classroom, HallSession, Violation } from '@/types'
 
 export const dynamic = 'force-dynamic'
@@ -141,7 +142,8 @@ export default async function ExecutiveDashboardPage() {
             href="/sessions"
             className="min-h-[44px] px-4 py-2 rounded-xl bg-[#0e5a4d] hover:bg-[#0b483d] text-white text-xs sm:text-sm font-semibold transition-colors flex items-center gap-1.5 shadow-sm"
           >
-            <span>📅</span> Schedule Session
+            <CalendarIcon className="w-4 h-4 shrink-0" />
+            <span>Schedule Session</span>
           </Link>
         </div>
       </div>
@@ -306,7 +308,7 @@ export default async function ExecutiveDashboardPage() {
 
         {data.recentViolations.length === 0 ? (
           <div className="py-12 text-center text-gray-500 text-xs">
-            <span className="text-3xl block mb-2">🛡️</span>
+            <ShieldIcon className="w-8 h-8 text-gray-600 mx-auto mb-2" />
             No violations recorded yet. Examination halls are running smoothly.
           </div>
         ) : (
