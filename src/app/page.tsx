@@ -1,14 +1,16 @@
-import Link from 'next/link'
-import { EyeXLogo } from '@/components/ui/EyeXLogo'
+import Link from "next/link";
+import { EyeXLogo } from "@/components/ui/EyeXLogo";
 
-export const dynamic = 'force-dynamic'
+export const dynamic = "force-dynamic";
 
 export default function LandingPage() {
-
   return (
     <div className="min-h-screen bg-[#f8f9ff] text-[#0b1c30] antialiased">
       {/* ── Fixed Top Header ── */}
-      <header className="fixed top-0 left-0 w-full z-50 bg-white border-b border-[#c4c5d7]" style={{ boxShadow: '0 1px 8px rgba(0,0,0,0.04)' }}>
+      <header
+        className="fixed top-0 left-0 w-full z-50 bg-white border-b border-[#c4c5d7]"
+        style={{ boxShadow: "0 1px 8px rgba(0,0,0,0.04)" }}
+      >
         <div className="h-20 w-full px-4 sm:px-8 max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-6">
             <Link href="/" className="flex items-center gap-3">
@@ -17,9 +19,21 @@ export default function LandingPage() {
           </div>
 
           <nav className="hidden md:flex items-center gap-6 text-[14px] font-medium text-[#434655]">
-            <Link href="/" className="text-[#0037b0] font-semibold">Home</Link>
-            <Link href="#about" className="hover:text-[#0b1c30] transition-colors">About</Link>
-            <Link href="/hall-access" className="hover:text-[#0b1c30] transition-colors">Invigilator Hall Code</Link>
+            <Link href="/" className="text-[#0037b0] font-semibold">
+              Home
+            </Link>
+            <Link
+              href="#about"
+              className="hover:text-[#0b1c30] transition-colors"
+            >
+              About
+            </Link>
+            <Link
+              href="/hall-access"
+              className="hover:text-[#0b1c30] transition-colors"
+            >
+              Invigilator Hall Code
+            </Link>
           </nav>
 
           <div className="flex items-center gap-3">
@@ -48,42 +62,75 @@ export default function LandingPage() {
 
           <section className="w-full px-4 sm:px-8 py-16 sm:py-20 max-w-7xl mx-auto flex flex-col items-center text-center">
             {/* Tag */}
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#dce9ff] shadow-sm mb-6">
+            {/* <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#dce9ff] shadow-sm mb-6">
               <span className="w-2 h-2 rounded-full bg-[#1d4ed8] animate-pulse" />
               <span className="font-code-sm text-[11px] text-[#004870] uppercase tracking-wider font-semibold">
                 Cameroon Secondary Education • GCE Board Protocol Ready
               </span>
-            </div>
+            </div> */}
 
             {/* Title */}
             <h1 className="font-headline-xl text-3xl sm:text-5xl lg:text-6xl text-[#0b1c30] max-w-4xl tracking-tight leading-tight font-bold">
-              Smarter Examination Monitoring for Cameroonian Schools
+              Smart Examination Monitoring for Cameroonian Schools
             </h1>
 
             {/* Subtitle */}
             <p className="mt-5 text-[16px] sm:text-[18px] text-[#434655] max-w-3xl leading-relaxed">
-              EyeX helps schools monitor examination halls in real time, identify unusual activities, and preserve evidence for authorised human review. The system detects, the invigilator reviews, the school remains in control.
+              EyeX helps schools monitor examination halls in real time,
+              identify unusual activities, and preserve evidence for authorised
+              human review. The system detects, the invigilator reviews, the
+              school remains in control.
             </p>
 
             {/* Trust Highlights */}
             <div className="mt-8 flex flex-wrap items-center justify-center gap-6 text-[#466083] text-[13px] font-medium">
               <div className="flex items-center gap-2">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-4 h-4 text-[#0037b0]">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                  className="w-4 h-4 text-[#0037b0]"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"
+                  />
                 </svg>
                 <span className="font-code-sm">GCE Board Protocol 2025</span>
               </div>
               <div className="hidden sm:block w-1.5 h-1.5 rounded-full bg-[#c4c5d7]" />
               <div className="flex items-center gap-2">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-4 h-4 text-[#0037b0]">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                  className="w-4 h-4 text-[#0037b0]"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"
+                  />
                 </svg>
                 <span className="font-code-sm">Offline-Edge Resilient</span>
               </div>
               <div className="hidden sm:block w-1.5 h-1.5 rounded-full bg-[#c4c5d7]" />
               <div className="flex items-center gap-2">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-4 h-4 text-[#0037b0]">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                  className="w-4 h-4 text-[#0037b0]"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"
+                  />
                 </svg>
                 <span className="font-code-sm">Tamper-Proof Audit Vault</span>
               </div>
@@ -98,8 +145,18 @@ export default function LandingPage() {
                   <div className="flex items-center justify-between gap-2 mb-3">
                     <div className="flex items-center gap-2">
                       <span className="p-2 rounded-lg bg-[#eff4ff] text-[#0037b0] flex items-center justify-center">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} className="w-5 h-5">
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 5.25a3 3 0 013 3m3 0a6 6 0 01-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1121.75 8.25z" />
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth={1.75}
+                          className="w-5 h-5"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M15.75 5.25a3 3 0 013 3m3 0a6 6 0 01-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1121.75 8.25z"
+                          />
                         </svg>
                       </span>
                       <span className="font-code-sm text-[11px] uppercase tracking-wider text-[#466083] font-semibold">
@@ -115,7 +172,8 @@ export default function LandingPage() {
                     Enter Examination Hall
                   </h2>
                   <p className="mt-1.5 text-[14px] text-[#434655] leading-relaxed">
-                    Conduct scheduled supervision. Enter the 8-character terminal code generated by your Chief Invigilator.
+                    Conduct scheduled supervision. Enter the 8-character
+                    terminal code generated by your Chief Invigilator.
                   </p>
 
                   <div className="mt-5 bg-[#eff4ff] rounded-xl p-4">
@@ -128,15 +186,27 @@ export default function LandingPage() {
                         className="flex-1 bg-white text-[#0b1c30] font-code-lg text-[16px] font-semibold tracking-widest px-4 py-2.5 rounded-lg border border-[#c4c5d7] hover:border-[#1d4ed8] transition-colors flex items-center justify-between"
                       >
                         <span className="text-[#0037b0]">7K4P-92XM</span>
-                        <span className="text-[12px] font-sans font-normal text-[#747686]">Click to enter</span>
+                        <span className="text-[12px] font-sans font-normal text-[#747686]">
+                          Click to enter
+                        </span>
                       </Link>
                       <Link
                         href="/hall-access"
                         className="inline-flex items-center gap-1.5 bg-[#1d4ed8] text-white text-[14px] font-semibold px-4 py-2.5 rounded-lg hover:bg-[#0037b0] transition-colors shadow-sm"
                       >
                         <span>Enter Hall</span>
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-4 h-4">
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth={2}
+                          className="w-4 h-4"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
+                          />
                         </svg>
                       </Link>
                     </div>
@@ -144,10 +214,23 @@ export default function LandingPage() {
                 </div>
 
                 <div className="mt-5 pt-3 border-t border-[#eff4ff] flex items-center gap-2 text-[#434655] text-[13px]">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-4 h-4 text-emerald-600 shrink-0">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                    className="w-4 h-4 text-emerald-600 shrink-0"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
                   </svg>
-                  <span>No password required for on-duty invigilators. Instant token access.</span>
+                  <span>
+                    No password required for on-duty invigilators. Instant token
+                    access.
+                  </span>
                 </div>
               </div>
 
@@ -158,8 +241,18 @@ export default function LandingPage() {
                   <div className="flex items-center justify-between gap-2 mb-3">
                     <div className="flex items-center gap-2">
                       <span className="p-2 rounded-lg bg-[#eff4ff] text-[#006194] flex items-center justify-center">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} className="w-5 h-5">
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.75a1.5 1.5 0 011.5-1.5h1.5a1.5 1.5 0 011.5 1.5V21m6-9.75h.75m-.75 3h.75m-.75 3h.75" />
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth={1.75}
+                          className="w-5 h-5"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.75a1.5 1.5 0 011.5-1.5h1.5a1.5 1.5 0 011.5 1.5V21m6-9.75h.75m-.75 3h.75m-.75 3h.75"
+                          />
                         </svg>
                       </span>
                       <span className="font-code-sm text-[11px] uppercase tracking-wider text-[#466083] font-semibold">
@@ -175,19 +268,32 @@ export default function LandingPage() {
                     School Command Portal
                   </h2>
                   <p className="mt-1.5 text-[14px] text-[#434655] leading-relaxed">
-                    Centralized telemetry hub for Principals, Vice Principals, Examination Officers, and GCE Center Superintendents.
+                    Centralized telemetry hub for Principals, Vice Principals,
+                    Examination Officers, and GCE Center Superintendents.
                   </p>
 
                   <div className="mt-5 grid grid-cols-2 gap-3">
                     <div className="p-3.5 rounded-xl bg-[#eff4ff] flex flex-col justify-between">
-                      <span className="font-code-sm text-[10px] text-[#747686] uppercase font-semibold">Verified Centers</span>
-                      <span className="font-headline-md text-2xl text-[#0b1c30] font-bold mt-1">100%</span>
-                      <span className="text-[12px] text-[#466083]">Accredited Protocol</span>
+                      <span className="font-code-sm text-[10px] text-[#747686] uppercase font-semibold">
+                        Verified Centers
+                      </span>
+                      <span className="font-headline-md text-2xl text-[#0b1c30] font-bold mt-1">
+                        100%
+                      </span>
+                      <span className="text-[12px] text-[#466083]">
+                        Accredited Protocol
+                      </span>
                     </div>
                     <div className="p-3.5 rounded-xl bg-[#eff4ff] flex flex-col justify-between">
-                      <span className="font-code-sm text-[10px] text-[#747686] uppercase font-semibold">Tamper Audits</span>
-                      <span className="font-headline-md text-2xl text-[#0037b0] font-bold mt-1">SHA-256</span>
-                      <span className="text-[12px] text-[#466083]">Cryptographic Vault</span>
+                      <span className="font-code-sm text-[10px] text-[#747686] uppercase font-semibold">
+                        Tamper Audits
+                      </span>
+                      <span className="font-headline-md text-2xl text-[#0037b0] font-bold mt-1">
+                        SHA-256
+                      </span>
+                      <span className="text-[12px] text-[#466083]">
+                        Cryptographic Vault
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -198,8 +304,18 @@ export default function LandingPage() {
                     className="inline-flex items-center justify-center gap-2 bg-[#0b1c30] text-white text-[14px] font-semibold px-4 py-2.5 rounded-lg hover:bg-[#213145] transition-colors shadow-sm"
                   >
                     <span>Sign In to Dashboard</span>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-4 h-4">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth={2}
+                      className="w-4 h-4"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
+                      />
                     </svg>
                   </Link>
                   <Link
@@ -215,7 +331,10 @@ export default function LandingPage() {
         </div>
 
         {/* SECTION 2: CORE PLATFORM PILLARS (ABOUT) */}
-        <section id="about" className="w-full px-4 sm:px-8 py-16 max-w-7xl mx-auto scroll-mt-24">
+        <section
+          id="about"
+          className="w-full px-4 sm:px-8 py-16 max-w-7xl mx-auto scroll-mt-24"
+        >
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
             <div>
               <span className="font-code-sm text-[11px] uppercase tracking-wider text-[#0037b0] font-semibold">
@@ -226,7 +345,8 @@ export default function LandingPage() {
               </h2>
             </div>
             <p className="text-[14px] text-[#434655] max-w-md leading-relaxed">
-              Designed from the ground up to respect human judgment, survive unstable power infrastructure, and protect student privacy.
+              Designed from the ground up to respect human judgment, survive
+              unstable power infrastructure, and protect student privacy.
             </p>
           </div>
 
@@ -235,8 +355,18 @@ export default function LandingPage() {
             <div className="bg-white rounded-2xl p-6 shadow-sm flex flex-col justify-between border border-[#e5eeff]">
               <div>
                 <div className="w-12 h-12 rounded-xl bg-[#eff4ff] text-[#0037b0] flex items-center justify-center mb-4">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} className="w-6 h-6">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 10.5V6.75a4.5 4.5 0 119 0v3.75M3.75 21.75h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H3.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={1.75}
+                    className="w-6 h-6"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M13.5 10.5V6.75a4.5 4.5 0 119 0v3.75M3.75 21.75h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H3.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"
+                    />
                   </svg>
                 </div>
                 <span className="font-code-sm text-[11px] text-[#466083] font-semibold uppercase tracking-wider">
@@ -246,12 +376,19 @@ export default function LandingPage() {
                   Zero-Friction Hall Access
                 </h3>
                 <p className="mt-2 text-[14px] text-[#434655] leading-relaxed">
-                  Invigilators enter via temporary 8-character hall tokens without complex passwords or IT overhead. Temporary delegations prevent account sharing while keeping audit trails linked to specific schedules.
+                  Invigilators enter via temporary 8-character hall tokens
+                  without complex passwords or IT overhead. Temporary
+                  delegations prevent account sharing while keeping audit trails
+                  linked to specific schedules.
                 </p>
               </div>
               <div className="mt-6 pt-3 bg-[#eff4ff] rounded-lg p-3 flex items-center justify-between">
-                <span className="font-code-sm text-[11px] text-[#466083]">Authentication overhead</span>
-                <span className="font-code-sm text-[11px] text-[#0037b0] font-bold">&lt; 15 seconds</span>
+                <span className="font-code-sm text-[11px] text-[#466083]">
+                  Authentication overhead
+                </span>
+                <span className="font-code-sm text-[11px] text-[#0037b0] font-bold">
+                  &lt; 15 seconds
+                </span>
               </div>
             </div>
 
@@ -259,9 +396,23 @@ export default function LandingPage() {
             <div className="bg-white rounded-2xl p-6 shadow-sm flex flex-col justify-between border border-[#e5eeff]">
               <div>
                 <div className="w-12 h-12 rounded-xl bg-[#eff4ff] text-[#0037b0] flex items-center justify-center mb-4">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} className="w-6 h-6">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={1.75}
+                    className="w-6 h-6"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"
+                    />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                    />
                   </svg>
                 </div>
                 <span className="font-code-sm text-[11px] text-[#466083] font-semibold uppercase tracking-wider">
@@ -271,12 +422,19 @@ export default function LandingPage() {
                   Real-Time Edge Computer Vision
                 </h3>
                 <p className="mt-2 text-[14px] text-[#434655] leading-relaxed">
-                  Localized camera detection of prohibited materials and communication with zero permanent biometrics stored. Candidate privacy is enforced by redaction algorithms right on the hall edge device.
+                  Localized camera detection of prohibited materials and
+                  communication with zero permanent biometrics stored. Candidate
+                  privacy is enforced by redaction algorithms right on the hall
+                  edge device.
                 </p>
               </div>
               <div className="mt-6 pt-3 bg-[#eff4ff] rounded-lg p-3 flex items-center justify-between">
-                <span className="font-code-sm text-[11px] text-[#466083]">Data storage policy</span>
-                <span className="font-code-sm text-[11px] text-[#0037b0] font-bold">Ephemeral / No Biometrics</span>
+                <span className="font-code-sm text-[11px] text-[#466083]">
+                  Data storage policy
+                </span>
+                <span className="font-code-sm text-[11px] text-[#0037b0] font-bold">
+                  Ephemeral / No Biometrics
+                </span>
               </div>
             </div>
 
@@ -284,8 +442,18 @@ export default function LandingPage() {
             <div className="bg-white rounded-2xl p-6 shadow-sm flex flex-col justify-between border border-[#e5eeff]">
               <div>
                 <div className="w-12 h-12 rounded-xl bg-[#eff4ff] text-[#0037b0] flex items-center justify-center mb-4">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} className="w-6 h-6">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={1.75}
+                    className="w-6 h-6"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99"
+                    />
                   </svg>
                 </div>
                 <span className="font-code-sm text-[11px] text-[#466083] font-semibold uppercase tracking-wider">
@@ -295,12 +463,19 @@ export default function LandingPage() {
                   Offline-Resilient Supervision
                 </h3>
                 <p className="mt-2 text-[14px] text-[#434655] leading-relaxed">
-                  Continues local edge logging during internet fluctuations, automatically synchronising when restored. Hall operations run uninterrupted even during localized power or cellular blackouts.
+                  Continues local edge logging during internet fluctuations,
+                  automatically synchronising when restored. Hall operations run
+                  uninterrupted even during localized power or cellular
+                  blackouts.
                 </p>
               </div>
               <div className="mt-6 pt-3 bg-[#eff4ff] rounded-lg p-3 flex items-center justify-between">
-                <span className="font-code-sm text-[11px] text-[#466083]">Local buffer capacity</span>
-                <span className="font-code-sm text-[11px] text-[#0037b0] font-bold">Up to 72 Hours Offline</span>
+                <span className="font-code-sm text-[11px] text-[#466083]">
+                  Local buffer capacity
+                </span>
+                <span className="font-code-sm text-[11px] text-[#0037b0] font-bold">
+                  Up to 72 Hours Offline
+                </span>
               </div>
             </div>
           </div>
@@ -317,25 +492,58 @@ export default function LandingPage() {
                 Human-in-the-Loop Integrity Architecture
               </h2>
               <p className="mt-2 text-[15px] text-[#434655] leading-relaxed">
-                EyeX empowers human decision-makers rather than automating disciplinary sanctions. AI assists vigilance; educators retain sovereignty.
+                EyeX empowers human decision-makers rather than automating
+                disciplinary sanctions. AI assists vigilance; educators retain
+                sovereignty.
               </p>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {[
-                { stage: 'STAGE 01', title: 'Detection', desc: 'Edge vision triggers telemetry flag when unauthorized physical artifacts or atypical gaze angles appear.', footer: 'Passive Inference' },
-                { stage: 'STAGE 02', title: 'Real-Time Evidence', desc: 'System encapsulates an un-editable 3-second frame clip with time-stamp and camera hardware signature.', footer: 'SHA-256 Checksum' },
-                { stage: 'STAGE 03', title: 'Human Review', desc: 'Floor Invigilator receives subtle notification on hall tablet to discreetly assess candidate behavior on-site.', footer: 'Hall Invigilator Step' },
-                { stage: 'STAGE 04', title: 'Discipline Confirmation', desc: 'Discipline Master and Center Chief countersign or dismiss incidents before submission to the GCE Board.', footer: 'Final Human Authority' },
+                {
+                  stage: "STAGE 01",
+                  title: "Detection",
+                  desc: "Edge vision triggers telemetry flag when unauthorized physical artifacts or atypical gaze angles appear.",
+                  footer: "Passive Inference",
+                },
+                {
+                  stage: "STAGE 02",
+                  title: "Real-Time Evidence",
+                  desc: "System encapsulates an un-editable 3-second frame clip with time-stamp and camera hardware signature.",
+                  footer: "SHA-256 Checksum",
+                },
+                {
+                  stage: "STAGE 03",
+                  title: "Human Review",
+                  desc: "Floor Invigilator receives subtle notification on hall tablet to discreetly assess candidate behavior on-site.",
+                  footer: "Hall Invigilator Step",
+                },
+                {
+                  stage: "STAGE 04",
+                  title: "Discipline Confirmation",
+                  desc: "Discipline Master and Center Chief countersign or dismiss incidents before submission to the GCE Board.",
+                  footer: "Final Human Authority",
+                },
               ].map((step, idx) => (
-                <div key={step.stage} className="bg-[#eff4ff] rounded-xl p-5 flex flex-col justify-between">
+                <div
+                  key={step.stage}
+                  className="bg-[#eff4ff] rounded-xl p-5 flex flex-col justify-between"
+                >
                   <div>
                     <div className="flex items-center justify-between mb-2">
-                      <span className="font-code-sm text-[11px] text-[#466083] font-bold">{step.stage}</span>
-                      <span className="font-code-sm text-[12px] text-[#0037b0] font-bold">0{idx + 1}</span>
+                      <span className="font-code-sm text-[11px] text-[#466083] font-bold">
+                        {step.stage}
+                      </span>
+                      <span className="font-code-sm text-[12px] text-[#0037b0] font-bold">
+                        0{idx + 1}
+                      </span>
                     </div>
-                    <h4 className="font-headline-md text-lg text-[#0b1c30] font-semibold mb-2">{step.title}</h4>
-                    <p className="text-[13px] text-[#434655] leading-relaxed">{step.desc}</p>
+                    <h4 className="font-headline-md text-lg text-[#0b1c30] font-semibold mb-2">
+                      {step.title}
+                    </h4>
+                    <p className="text-[13px] text-[#434655] leading-relaxed">
+                      {step.desc}
+                    </p>
                   </div>
                   <div className="mt-5 pt-2 flex items-center gap-1.5 font-code-sm text-[11px] text-[#004870] font-semibold">
                     <span className="w-1.5 h-1.5 rounded-full bg-[#1d4ed8]" />
@@ -358,7 +566,8 @@ export default function LandingPage() {
                 Ready to equip your examination center with EyeX?
               </h3>
               <p className="mt-2 text-[15px] text-[#434655] leading-relaxed">
-                Register your secondary school today for administrative credentials and certified invigilator terminal provisioning.
+                Register your secondary school today for administrative
+                credentials and certified invigilator terminal provisioning.
               </p>
             </div>
             <div className="flex items-center gap-3 shrink-0">
@@ -391,7 +600,9 @@ export default function LandingPage() {
                 </span>
               </div>
               <p className="text-[14px] text-[#434655] max-w-lg leading-relaxed">
-                Certified national digital examination telemetry platform powering high-integrity invigilation and script tracking across Anglophone Cameroon Secondary Examination Centers.
+                Certified national digital examination telemetry platform
+                powering high-integrity invigilation and script tracking across
+                Anglophone Cameroon Secondary Examination Centers.
               </p>
               <div className="flex flex-wrap items-center gap-4 pt-1 font-code-sm text-[11px] text-[#466083]">
                 <span className="flex items-center gap-1.5">
@@ -410,10 +621,38 @@ export default function LandingPage() {
                 Supervision Portals
               </div>
               <ul className="space-y-1.5 text-[14px] text-[#434655]">
-                <li><Link href="/hall-access" className="hover:text-[#0037b0] transition-colors">Invigilator Hall Code Access</Link></li>
-                <li><Link href="/login" className="hover:text-[#0037b0] transition-colors">Center Chief Admin Login</Link></li>
-                <li><Link href="/signup" className="hover:text-[#0037b0] transition-colors">New Examination Center Registry</Link></li>
-                <li><Link href="/api/docs" className="hover:text-[#0037b0] transition-colors">Hardware Driver API Docs</Link></li>
+                <li>
+                  <Link
+                    href="/hall-access"
+                    className="hover:text-[#0037b0] transition-colors"
+                  >
+                    Invigilator Hall Code Access
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/login"
+                    className="hover:text-[#0037b0] transition-colors"
+                  >
+                    Center Chief Admin Login
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/signup"
+                    className="hover:text-[#0037b0] transition-colors"
+                  >
+                    New Examination Center Registry
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/api/docs"
+                    className="hover:text-[#0037b0] transition-colors"
+                  >
+                    Hardware Driver API Docs
+                  </Link>
+                </li>
               </ul>
             </div>
 
@@ -432,7 +671,8 @@ export default function LandingPage() {
 
           <div className="pt-6 flex flex-col md:flex-row items-center justify-between gap-4 font-code-sm text-[11px] text-[#747686]">
             <div>
-              © 2025 Republic of Cameroon • Ministry of Secondary Education (MINESEC) &amp; GCE Board.
+              © 2025 Republic of Cameroon • Ministry of Secondary Education
+              (MINESEC) &amp; GCE Board.
             </div>
             <div className="flex items-center gap-4">
               <span>EN 29001 Identity Assurance</span>
@@ -442,5 +682,5 @@ export default function LandingPage() {
         </div>
       </footer>
     </div>
-  )
+  );
 }
