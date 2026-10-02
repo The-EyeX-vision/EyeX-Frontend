@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import type { Classroom, HallSession, Violation } from '@/types'
+import { DemoModeBadge } from '@/components/DemoModeLabel'
 
 export const dynamic = 'force-dynamic'
 
@@ -9,7 +10,7 @@ interface DashboardExecutiveData {
   schoolName: string
   totalHalls: number
   activeSessionsCount: number
-  totalTrackersDetected: number
+  totalTrackersDetected: string
   totalViolations: number
   halls: (Classroom & { active_session?: HallSession | null })[]
   recentViolations: (Violation & { session?: { course_name: string } | null })[]
@@ -31,7 +32,7 @@ async function getExecutiveData(): Promise<DashboardExecutiveData> {
       schoolName: 'Institution',
       totalHalls: 0,
       activeSessionsCount: 0,
-      totalTrackersDetected: 0,
+      totalTrackersDetected: 'Unavailable',
       totalViolations: 0,
       halls: [],
       recentViolations: [],
@@ -47,17 +48,7 @@ async function getExecutiveData(): Promise<DashboardExecutiveData> {
     .eq('school_id', schoolId)
     .order('created_at', { ascending: false })
 
-  let halls: Classroom[] = rawHalls ?? []
-
-  // Fallback: If no classrooms in DB yet, auto-provision 2 demo halls for this school
-  if (halls.length === 0) {
-    const demoHalls = [
-      { school_id: schoolId, name: 'Main Hall A', access_code: '7K4P92XM' },
-      { school_id: schoolId, name: 'Science Auditorium', access_code: '9X2M4K7P' },
-    ]
-    const { data: inserted } = await supabase.from('classrooms').insert(demoHalls).select()
-    if (inserted) halls = inserted
-  }
+  const halls: Classroom[] = rawHalls ?? []
 
   // 2. Fetch Sessions
   const { data: sessions } = await supabase
@@ -79,30 +70,33 @@ async function getExecutiveData(): Promise<DashboardExecutiveData> {
   // 3. Fetch Violations
   const sessionIds = (sessions ?? []).map((s) => s.id)
   let violations: (Violation & { session?: { course_name: string } | null })[] = []
+  let totalViolations = 0
 
   if (sessionIds.length > 0) {
-    const { data: vList } = await supabase
-      .from('violations')
-      .select('*, session:exam_hall_sessions(course_name)')
-      .in('session_id', sessionIds)
-      .order('created_at', { ascending: false })
-      .limit(10)
+    const [{ data: vList }, { count }] = await Promise.all([
+      supabase
+        .from('violations')
+        .select('*, session:exam_hall_sessions(course_name)')
+        .in('session_id', sessionIds)
+        .order('created_at', { ascending: false })
+        .limit(10),
+      supabase
+        .from('violations')
+        .select('id', { count: 'exact', head: true })
+        .in('session_id', sessionIds)
+        .eq('demo_mode', false),
+    ])
 
     if (vList) violations = vList as unknown as (Violation & { session?: { course_name: string } | null })[]
+    totalViolations = count ?? 0
   }
-
-  // Calculate total detected trackers across active sessions
-  const totalTrackersDetected = activeSessions.reduce(
-    (acc, curr) => acc + (curr.expected_students ? Math.max(1, curr.expected_students - 1) : 24),
-    0
-  )
 
   return {
     schoolName: school.school_name,
     totalHalls: halls.length,
-    activeSessionsCount: activeSessions.length,
-    totalTrackersDetected,
-    totalViolations: violations.length,
+    activeSessionsCount: activeSessions.filter((session) => !session.demo_mode).length,
+    totalTrackersDetected: 'Unavailable',
+    totalViolations,
     halls: hallsWithSession,
     recentViolations: violations,
   }
@@ -164,11 +158,11 @@ export default async function ExecutiveDashboardPage() {
             badge: 'Live Proctoring Now',
           },
           {
-            label: 'Detected Trackers',
+            label: 'Live Trackers',
             value: data.totalTrackersDetected,
             color: 'blue',
             href: '/monitoring',
-            badge: 'Candidates Monitored',
+            badge: 'No detection source connected',
           },
           {
             label: 'Total Violations',
@@ -338,6 +332,7 @@ export default async function ExecutiveDashboardPage() {
                     <tr key={v.id} className="hover:bg-gray-800/40 transition-colors">
                       <td className="px-4 py-3.5 font-bold text-white font-mono">
                         {v.tracker_label}
+                        {v.demo_mode && <span className="ml-2"><DemoModeBadge /></span>}
                       </td>
                       <td className="px-4 py-3.5 text-gray-300">
                         {v.session?.course_name || 'Exam Session'}

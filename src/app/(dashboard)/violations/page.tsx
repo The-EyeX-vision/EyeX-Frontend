@@ -1,8 +1,9 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { createClient } from '@/lib/supabase/client'
-import type { Violation, ViolationActivityType, ViolationSeverity, ViolationStatus } from '@/types'
+import { DemoModeBanner, DemoModeBadge } from '@/components/DemoModeLabel'
+import { AlertReviewCard } from '@/components/alerts/AlertReviewCard'
+import type { Violation } from '@/types'
 
 export default function ViolationsLedgerPage() {
   const [violations, setViolations] = useState<Violation[]>([])
@@ -34,7 +35,7 @@ export default function ViolationsLedgerPage() {
   }, [])
 
   // Calculate occurrence counts per tracker
-  const trackerCounts = violations.reduce<Record<string, Record<string, number>>>((acc, curr) => {
+  const trackerCounts = violations.filter((violation) => !violation.demo_mode).reduce<Record<string, Record<string, number>>>((acc, curr) => {
     const tracker = curr.tracker_label || 'Tracker'
     if (!acc[tracker]) acc[tracker] = {}
     const act = curr.activity_type
@@ -57,26 +58,9 @@ export default function ViolationsLedgerPage() {
     return true
   })
 
-  // Status Update (Confirm / Dismiss)
-  async function handleUpdateStatus(id: string, newStatus: ViolationStatus) {
-    const supabase = createClient()
-    const { error } = await supabase
-      .from('violations')
-      .update({ status: newStatus })
-      .eq('id', id)
-
-    if (!error) {
-      setViolations((prev) =>
-        prev.map((v) => (v.id === id ? { ...v, status: newStatus } : v))
-      )
-      if (selectedViolation?.id === id) {
-        setSelectedViolation((prev) => (prev ? { ...prev, status: newStatus } : null))
-      }
-    }
-  }
-
   return (
     <div className="p-4 sm:p-6 lg:p-8 space-y-6 max-w-7xl mx-auto selection:bg-teal-900 selection:text-teal-100">
+      {violations.some((violation) => violation.demo_mode) && <DemoModeBanner />}
       {/* ── Page Header ── */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-2 border-b border-gray-800/80">
         <div>
@@ -228,8 +212,9 @@ export default function ViolationsLedgerPage() {
               </thead>
               <tbody className="divide-y divide-gray-800/60">
                 {filtered.map((v) => {
-                  const sevColor =
-                    v.severity === 'CRITICAL'
+                  const sevColor = v.demo_mode
+                    ? 'text-gray-300 bg-gray-900 border-gray-700'
+                    : v.severity === 'CRITICAL'
                       ? 'text-red-300 bg-red-950 border-red-800'
                       : v.severity === 'HIGH'
                       ? 'text-rose-300 bg-rose-950 border-rose-800'
@@ -241,6 +226,7 @@ export default function ViolationsLedgerPage() {
                     <tr key={v.id} className="hover:bg-gray-800/40 transition-colors">
                       <td className="px-5 py-4 font-bold text-white font-mono">
                         {v.tracker_label}
+                        {v.demo_mode && <span className="ml-2"><DemoModeBadge /></span>}
                       </td>
 
                       <td className="px-5 py-4 font-semibold text-gray-200">
@@ -264,7 +250,9 @@ export default function ViolationsLedgerPage() {
                       <td className="px-5 py-4">
                         <span
                           className={`px-2 py-0.5 rounded text-[10px] font-mono font-semibold border ${
-                            v.status === 'CONFIRMED'
+                            v.demo_mode
+                              ? 'bg-gray-800 text-gray-300 border-gray-700'
+                              : v.status === 'CONFIRMED'
                               ? 'bg-emerald-950 text-emerald-300 border-emerald-800'
                               : v.status === 'FLAGGED'
                               ? 'bg-red-950 text-red-300 border-red-800'
@@ -297,89 +285,16 @@ export default function ViolationsLedgerPage() {
         </div>
       )}
 
-      {/* ── Evidence Viewer Modal ── */}
       {selectedViolation && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-xs animate-in fade-in">
-          <div className="w-full max-w-lg rounded-2xl border border-gray-800 bg-gray-900 p-6 sm:p-7 shadow-2xl space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-gray-800">
-              <div>
-                <h3 className="text-base font-bold text-white">
-                  Evidence Snapshot • {selectedViolation.tracker_label}
-                </h3>
-                <p className="text-xs text-red-400 font-semibold mt-0.5">
-                  {selectedViolation.activity_type.replace(/_/g, ' ')}
-                </p>
-              </div>
-              <button
-                type="button"
-                onClick={() => setSelectedViolation(null)}
-                className="text-gray-400 hover:text-white p-1"
-              >
-                ✕
-              </button>
-            </div>
-
-            {/* Snapshot Photo Display */}
-            <div className="rounded-xl border border-gray-800 bg-gray-950 overflow-hidden relative min-h-[220px] flex items-center justify-center">
-              {selectedViolation.evidence_url ? (
-                <img
-                  src={selectedViolation.evidence_url}
-                  alt="Incident Snapshot"
-                  className="w-full h-auto object-cover max-h-[300px]"
-                />
-              ) : (
-                <div className="p-8 text-center text-gray-500 text-xs">
-                  <span className="text-3xl block mb-2">📸</span>
-                  Encrypted frame archived in edge hardware buffer
-                </div>
-              )}
-              <div className="absolute bottom-2 left-2 px-2 py-0.5 rounded bg-black/80 font-mono text-[10px] text-teal-400">
-                Timestamp: {new Date(selectedViolation.created_at).toISOString()}
-              </div>
-            </div>
-
-            {/* Event Metadata Breakdown */}
-            <div className="grid grid-cols-2 gap-3 text-xs font-mono p-3 rounded-xl bg-gray-950 border border-gray-800">
-              <div>
-                <span className="text-gray-500 block text-[10px]">DETECTION CONFIDENCE</span>
-                <span className="text-white font-bold">{Math.round(selectedViolation.confidence * 100)}%</span>
-              </div>
-              <div>
-                <span className="text-gray-500 block text-[10px]">SEVERITY INDEX</span>
-                <span className="text-red-400 font-bold">{selectedViolation.severity}</span>
-              </div>
-              <div>
-                <span className="text-gray-500 block text-[10px]">CURRENT STATUS</span>
-                <span className="text-teal-400 font-bold">{selectedViolation.status}</span>
-              </div>
-              <div>
-                <span className="text-gray-500 block text-[10px]">EVIDENCE ID</span>
-                <span className="text-gray-400 truncate block">{selectedViolation.id.slice(0, 10)}…</span>
-              </div>
-            </div>
-
-            {/* Status Modification Buttons */}
-            <div className="pt-2 flex items-center justify-between gap-2">
-              <span className="text-xs text-gray-400">Triage Decision:</span>
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => handleUpdateStatus(selectedViolation.id, 'DISMISSED')}
-                  className="min-h-[40px] px-3.5 py-1.5 rounded-lg border border-gray-700 bg-gray-800 hover:bg-gray-700 text-gray-300 text-xs font-medium"
-                >
-                  Dismiss Flag
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleUpdateStatus(selectedViolation.id, 'CONFIRMED')}
-                  className="min-h-[40px] px-4 py-1.5 rounded-lg bg-red-950 hover:bg-red-900 border border-red-800 text-red-200 text-xs font-semibold"
-                >
-                  Confirm Violation
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
+        <AlertReviewCard
+          violation={selectedViolation}
+          hallSessionId={selectedViolation.session_id}
+          onClose={() => setSelectedViolation(null)}
+          onUpdated={(updated) => {
+            setViolations((previous) => previous.map((item) => item.id === updated.id ? updated : item))
+            setSelectedViolation(updated)
+          }}
+        />
       )}
     </div>
   )

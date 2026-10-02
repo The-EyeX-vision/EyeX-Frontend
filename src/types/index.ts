@@ -170,6 +170,7 @@ export interface HallSession {
   course_code?: string | null
   duration_minutes: number
   expected_students: number
+  demo_mode?: boolean
   status: HallSessionStatus
   started_at?: string | null
   ended_at?: string | null
@@ -199,6 +200,13 @@ export interface Violation {
   severity: ViolationSeverity
   status: ViolationStatus
   confidence: number
+  threshold_score?: number
+  demo_mode?: boolean
+  review_action?: 'CONFIRM' | 'DISMISS' | 'ESCALATE' | null
+  reviewed_by_type?: 'examiner' | null
+  reviewed_by_session_id?: string | null
+  reviewed_at?: string | null
+  review_note?: string | null
   evidence_url?: string | null
   metadata?: Record<string, unknown>
   created_at: string

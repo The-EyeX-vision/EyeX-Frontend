@@ -5,6 +5,9 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
 import type { HallSession, Violation, ViolationActivityType } from '@/types'
+import { DemoModeBanner, DemoModeBadge } from '@/components/DemoModeLabel'
+import { createFrameSource } from '@/lib/frame-source'
+import { AlertReviewCard } from '@/components/alerts/AlertReviewCard'
 
 // Web Audio API chime sound
 function playChime() {
@@ -46,13 +49,13 @@ export default function ExaminerLiveConsolePage({
 
   const [session, setSession] = useState<HallSession | null>(null)
   const [violations, setViolations] = useState<Violation[]>([])
-  const [trackers, setTrackers] = useState<TrackerCardData[]>([])
-  const [detectedCount, setDetectedCount] = useState<number>(0)
   const [selectedViolation, setSelectedViolation] = useState<Violation | null>(null)
   const [soundEnabled, setSoundEnabled] = useState(true)
   const [elapsed, setElapsed] = useState('00:00:00')
   const [isEnding, setIsEnding] = useState(false)
   const [simulating, setSimulating] = useState(false)
+  const isDemoMode = session?.demo_mode === true
+  const frameSource = createFrameSource(isDemoMode)
 
   // Timer calculation
   useEffect(() => {
@@ -86,19 +89,6 @@ export default function ExaminerLiveConsolePage({
 
       if (s) {
         setSession(s)
-      } else {
-        // Fallback demo session if direct migration record isn't found
-        setSession({
-          id: sessionId,
-          school_id: 'default',
-          classroom_id: 'default',
-          course_name: 'Examination Session',
-          duration_minutes: 120,
-          expected_students: 24,
-          status: 'ACTIVE',
-          started_at: new Date().toISOString(),
-          created_at: new Date().toISOString(),
-        })
       }
 
       // 2. Fetch Violations
@@ -116,8 +106,8 @@ export default function ExaminerLiveConsolePage({
     loadData()
   }, [sessionId])
 
-  // Compute tracker grid based on expected students and violations
-  useEffect(() => {
+  // Derive the simulated tracker preview from current demo-session data.
+  const trackers: TrackerCardData[] = (() => {
     const total = session?.expected_students || 20
     const list: TrackerCardData[] = []
 
@@ -135,10 +125,12 @@ export default function ExaminerLiveConsolePage({
       })
     }
 
-    setTrackers(list)
-    // Simulated active detection: all trackers currently in camera frame
-    setDetectedCount(Math.min(total, Math.max(1, total - (total > 5 ? 1 : 0))))
-  }, [session, violations])
+    return list
+  })()
+  const detectedCount = Math.min(
+    session?.expected_students || 20,
+    Math.max(1, (session?.expected_students || 20) - ((session?.expected_students || 20) > 5 ? 1 : 0))
+  )
 
   // Real-time listener for violations
   const supabaseRef = useRef(createClient())
@@ -232,7 +224,14 @@ export default function ExaminerLiveConsolePage({
           severity: severityMap[activityType],
           confidence: Math.round((0.75 + Math.random() * 0.22) * 100) / 100,
           evidenceUrl: 'https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=600&auto=format&fit=crop&q=80',
-          metadata: { simulated: true, hall: session?.classroom?.name || 'Hall' },
+          thresholdScore: 0.75,
+          metadata: {
+            simulated: true,
+            hall: session?.classroom?.name || 'Hall',
+            zone: `Seat ${randTrackerNum}`,
+            contributing_behaviors: ['phone_like_object_visible'],
+            frame_region: { x: 0.38, y: 0.22, width: 0.2, height: 0.34 },
+          },
         }),
       })
     } catch (err) {
@@ -244,6 +243,7 @@ export default function ExaminerLiveConsolePage({
 
   return (
     <div className="min-h-screen bg-gray-950 text-gray-100 flex flex-col selection:bg-teal-900 selection:text-teal-100">
+      {isDemoMode && <DemoModeBanner />}
       {/* ── Top Bar ── */}
       <header className="border-b border-gray-800 bg-gray-900/95 backdrop-blur-md px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-4 sticky top-0 z-30">
         <div className="flex items-center gap-3">
@@ -310,49 +310,29 @@ export default function ExaminerLiveConsolePage({
             {/* Cam Header */}
             <div className="p-3 border-b border-gray-800 bg-gray-950/80 flex items-center justify-between text-xs font-mono">
               <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                <span className={`w-2 h-2 rounded-full ${frameSource.status === 'configured' ? 'bg-gray-400' : 'bg-gray-600'}`} />
                 <span className="text-gray-200 font-bold">
-                  OVERHEAD CAMERA 1 • {session?.classroom?.name || 'Main Hall'}
+                  {session?.classroom?.name || 'Examination Hall'}
                 </span>
               </div>
               <div className="flex items-center gap-3 text-[11px] text-gray-400">
-                <span>1080p • 30 FPS</span>
-                <span className="text-teal-400 font-bold bg-teal-950 px-2 py-0.5 rounded border border-teal-800">
-                  CV BOUND
+                <span>Source: {frameSource.label}</span>
+                <span className="text-gray-300 font-bold bg-gray-800 px-2 py-0.5 rounded border border-gray-700">
+                  {frameSource.status === 'configured' ? 'DEMO SOURCE CONFIGURED' : 'NO SIGNAL'}
                 </span>
               </div>
             </div>
 
-            {/* Video Viewport Simulated Canvas */}
+            {/* Frame source is replaceable without changing the surrounding UI. */}
             <div className="relative min-h-[300px] sm:min-h-[360px] bg-gradient-to-b from-gray-950 via-gray-900 to-gray-950 flex flex-col items-center justify-center p-6">
-              {/* Surveillance Grid Overlay */}
-              <div className="absolute inset-0 opacity-10 pointer-events-none grid grid-cols-6 grid-rows-4 divide-x divide-y divide-teal-500" />
-
-              {/* Center Lens Marker */}
-              <div className="relative z-10 text-center max-w-sm p-6 rounded-2xl border border-dashed border-gray-700 bg-gray-950/85 backdrop-blur-md">
-                <div className="w-12 h-12 rounded-xl bg-teal-950/80 border border-teal-700 text-teal-400 flex items-center justify-center mx-auto mb-3 text-2xl shadow-inner">
-                  📹
+              {frameSource.videoUrl ? (
+                <video className="h-full max-h-[360px] w-full object-contain" src={frameSource.videoUrl} controls muted playsInline />
+              ) : (
+                <div className="text-center text-sm text-gray-300">
+                  <p className="font-semibold">{frameSource.label} unavailable</p>
+                  <p className="mt-1 text-xs text-gray-500">No video source is configured for this session.</p>
                 </div>
-                <p className="font-mono text-xs font-bold uppercase tracking-widest text-gray-200">
-                  Live Overhead Surveillance Feed
-                </p>
-                <p className="text-[11px] text-teal-400/90 font-mono mt-1">
-                  Autonomous Pose &amp; Object Detection Active
-                </p>
-                <div className="mt-3 pt-3 border-t border-gray-800 text-[10px] text-gray-500">
-                  Zero biometric face models retained • Non-invasive behavioral observation only
-                </div>
-              </div>
-
-              {/* Bottom HUD Metrics */}
-              <div className="absolute bottom-3 left-4 right-4 flex items-center justify-between text-[11px] font-mono text-gray-400">
-                <span className="bg-gray-950/80 px-2 py-1 rounded border border-gray-800">
-                  FOV: 115° Wide
-                </span>
-                <span className="bg-gray-950/80 px-2 py-1 rounded border border-gray-800 text-emerald-400">
-                  Latency: 42ms
-                </span>
-              </div>
+              )}
             </div>
 
             {/* Cam Footer: Expected vs Detected Trackers Counter */}
@@ -365,12 +345,7 @@ export default function ExaminerLiveConsolePage({
                   </span>
                 </div>
                 <span className="text-gray-700">|</span>
-                <div className="flex items-center gap-1.5">
-                  <span className="text-gray-400">Currently Detected:</span>
-                  <span className="font-mono font-bold text-emerald-400 text-sm">
-                    {detectedCount} Trackers
-                  </span>
-                </div>
+                {isDemoMode && <span className="text-xs text-gray-400">{detectedCount} simulated trackers <DemoModeBadge /></span>}
               </div>
 
               <div className="text-[11px] font-mono text-gray-500">
@@ -379,18 +354,17 @@ export default function ExaminerLiveConsolePage({
             </div>
           </div>
 
-          {/* ── Dev Simulation Panel ── */}
-          <div className="rounded-xl border border-amber-900/60 bg-amber-950/20 p-4 space-y-3">
+          {isDemoMode && <div className="rounded-xl border border-gray-700 bg-gray-900 p-4 space-y-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-amber-900/80 text-amber-200 border border-amber-700">
-                  DEV TOOL
+                <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-gray-800 text-gray-200 border border-gray-700">
+                  DEMO TOOL
                 </span>
-                <span className="text-xs font-bold text-amber-300 uppercase tracking-wide">
+                <span className="text-xs font-bold text-gray-200 uppercase tracking-wide">
                   Simulate Incident Violation
                 </span>
               </div>
-              <span className="text-[11px] text-amber-400/80 font-mono">
+              <span className="text-[11px] text-gray-400 font-mono">
                 Writes to DB &amp; Broadcasts WebSocket
               </span>
             </div>
@@ -400,7 +374,7 @@ export default function ExaminerLiveConsolePage({
                 type="button"
                 onClick={() => triggerSimulation('PHONE_DETECTED')}
                 disabled={simulating}
-                className="min-h-[44px] px-3 py-2 rounded-lg bg-red-950/80 hover:bg-red-900/80 border border-red-800 text-red-200 text-xs font-semibold transition-colors disabled:opacity-50"
+                className="min-h-[44px] px-3 py-2 rounded-lg bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-200 text-xs font-semibold transition-colors disabled:opacity-50"
               >
                 📱 Phone Detected
               </button>
@@ -408,7 +382,7 @@ export default function ExaminerLiveConsolePage({
                 type="button"
                 onClick={() => triggerSimulation('SUSPICIOUS_MOVEMENT')}
                 disabled={simulating}
-                className="min-h-[44px] px-3 py-2 rounded-lg bg-amber-950/80 hover:bg-amber-900/80 border border-amber-800 text-amber-200 text-xs font-semibold transition-colors disabled:opacity-50"
+                className="min-h-[44px] px-3 py-2 rounded-lg bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-200 text-xs font-semibold transition-colors disabled:opacity-50"
               >
                 🔄 Movement Anomaly
               </button>
@@ -416,7 +390,7 @@ export default function ExaminerLiveConsolePage({
                 type="button"
                 onClick={() => triggerSimulation('POSSIBLE_COMMUNICATION')}
                 disabled={simulating}
-                className="min-h-[44px] px-3 py-2 rounded-lg bg-indigo-950/80 hover:bg-indigo-900/80 border border-indigo-800 text-indigo-200 text-xs font-semibold transition-colors disabled:opacity-50"
+                className="min-h-[44px] px-3 py-2 rounded-lg bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-200 text-xs font-semibold transition-colors disabled:opacity-50"
               >
                 💬 Communication
               </button>
@@ -424,19 +398,19 @@ export default function ExaminerLiveConsolePage({
                 type="button"
                 onClick={() => triggerSimulation('UNAUTHORIZED_MATERIAL')}
                 disabled={simulating}
-                className="min-h-[44px] px-3 py-2 rounded-lg bg-rose-950/80 hover:bg-rose-900/80 border border-rose-800 text-rose-200 text-xs font-semibold transition-colors disabled:opacity-50"
+                className="min-h-[44px] px-3 py-2 rounded-lg bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-200 text-xs font-semibold transition-colors disabled:opacity-50"
               >
                 📄 Paper / Material
               </button>
             </div>
-          </div>
+          </div>}
 
-          {/* ── Real-Time Tracker Cards Grid ── */}
-          <div className="space-y-3">
+          {/* Tracker preview exists only in explicitly labeled demo sessions. */}
+          {isDemoMode && <div className="space-y-3">
             <div className="flex items-center justify-between">
               <div>
                 <h3 className="text-xs font-bold uppercase tracking-wider text-gray-300">
-                  Desk &amp; Tracker Monitoring Grid
+                  Demo Tracker Preview <DemoModeBadge />
                 </h3>
                 <p className="text-[11px] text-gray-400 mt-0.5">
                   Tracker cards turn red immediately when candidate behavior is flagged.
@@ -461,7 +435,7 @@ export default function ExaminerLiveConsolePage({
                     onClick={() => t.latestViolation && setSelectedViolation(t.latestViolation)}
                     className={`rounded-xl p-3.5 border transition-all cursor-pointer ${
                       isFlagged
-                        ? 'border-red-600 bg-red-950/50 shadow-lg shadow-red-950/50 ring-1 ring-red-500'
+                        ? 'border-gray-600 bg-gray-800/70'
                         : 'border-gray-800 bg-gray-900/60 hover:border-gray-700'
                     }`}
                   >
@@ -470,7 +444,7 @@ export default function ExaminerLiveConsolePage({
                         {t.label}
                       </span>
                       {isFlagged ? (
-                        <span className="w-2.5 h-2.5 rounded-full bg-red-500 animate-ping" />
+                          <span className="w-2.5 h-2.5 rounded-full bg-gray-400" />
                       ) : (
                         <span className="w-2 h-2 rounded-full bg-emerald-500" />
                       )}
@@ -479,10 +453,10 @@ export default function ExaminerLiveConsolePage({
                     <div className="mt-2 text-xs">
                       {isFlagged ? (
                         <div>
-                          <p className="text-[11px] font-bold text-red-300 truncate">
+                          <p className="text-[11px] font-bold text-gray-200 truncate">
                             {t.latestViolation?.activity_type.replace(/_/g, ' ')}
                           </p>
-                          <p className="text-[10px] text-red-400/90 font-mono mt-0.5">
+                          <p className="text-[10px] text-gray-400 font-mono mt-0.5">
                             {t.violationsCount} incident{t.violationsCount !== 1 ? 's' : ''} • Inspect &rarr;
                           </p>
                         </div>
@@ -494,7 +468,7 @@ export default function ExaminerLiveConsolePage({
                 )
               })}
             </div>
-          </div>
+          </div>}
         </div>
 
         {/* Right: Live Violation Feed & Evidence Drawer (4 Cols) */}
@@ -527,8 +501,9 @@ export default function ExaminerLiveConsolePage({
               </div>
             ) : (
               violations.map((v) => {
-                const sevColor =
-                  v.severity === 'CRITICAL'
+                const sevColor = v.demo_mode
+                  ? 'border-gray-700 bg-gray-900 text-gray-300'
+                  : v.severity === 'CRITICAL'
                     ? 'border-red-600 bg-red-950/60 text-red-300'
                     : v.severity === 'HIGH'
                     ? 'border-rose-700 bg-rose-950/50 text-rose-300'
@@ -544,7 +519,7 @@ export default function ExaminerLiveConsolePage({
                   >
                     <div className="flex items-center justify-between text-[11px]">
                       <span className="font-bold uppercase tracking-wider font-mono">
-                        {v.activity_type.replace(/_/g, ' ')}
+                          {v.activity_type.replace(/_/g, ' ')} {v.demo_mode && <DemoModeBadge />}
                       </span>
                       <span className="text-[10px] opacity-75 font-mono">
                         {new Date(v.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
@@ -577,104 +552,16 @@ export default function ExaminerLiveConsolePage({
         </div>
       </div>
 
-      {/* ── Slide-Over Evidence Preview Drawer ── */}
       {selectedViolation && (
-        <div className="fixed inset-0 z-50 flex items-center justify-end bg-black/80 backdrop-blur-xs animate-in fade-in">
-          <div className="w-full max-w-md h-full bg-gray-900 border-l border-gray-800 p-6 flex flex-col justify-between overflow-y-auto space-y-5 animate-in slide-in-from-right duration-200">
-            <div>
-              <div className="flex items-center justify-between pb-4 border-b border-gray-800">
-                <div className="flex items-center gap-2">
-                  <span className="text-xs font-bold uppercase tracking-wider text-white">
-                    Violation Evidence Snapshot
-                  </span>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => setSelectedViolation(null)}
-                  className="min-h-[44px] min-w-[44px] flex items-center justify-center text-gray-400 hover:text-white"
-                >
-                  ✕
-                </button>
-              </div>
-
-              {/* Event Metadata */}
-              <div className="mt-4 space-y-3 text-xs">
-                <div className="flex items-center justify-between">
-                  <span className="text-gray-400">Target Candidate:</span>
-                  <strong className="text-white font-mono text-sm">{selectedViolation.tracker_label}</strong>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-gray-400">Incident Event:</span>
-                  <span className="text-red-400 font-bold">{selectedViolation.activity_type.replace(/_/g, ' ')}</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-gray-400">Detection Confidence:</span>
-                  <span className="font-mono font-bold text-white">{Math.round(selectedViolation.confidence * 100)}%</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-gray-400">Time Recorded:</span>
-                  <span className="text-gray-300 font-mono">{new Date(selectedViolation.created_at).toLocaleString()}</span>
-                </div>
-              </div>
-
-              {/* Snapshot Image Container */}
-              <div className="mt-5 space-y-2">
-                <p className="text-xs font-bold text-gray-300">Camera Snapshot Capture</p>
-                <div className="rounded-xl border border-gray-800 bg-gray-950 overflow-hidden relative min-h-[220px] flex items-center justify-center">
-                  {selectedViolation.evidence_url ? (
-                    <img
-                      src={selectedViolation.evidence_url}
-                      alt="Violation Evidence"
-                      className="w-full h-auto object-cover max-h-[280px]"
-                      loading="lazy"
-                    />
-                  ) : (
-                    <div className="text-center p-6 text-gray-500 text-xs">
-                      <span className="text-3xl block mb-2">📸</span>
-                      Local edge camera buffer archived
-                    </div>
-                  )}
-                  <div className="absolute bottom-2 left-2 px-2 py-0.5 rounded bg-black/80 font-mono text-[10px] text-teal-400">
-                    Timestamp SHA-256 Verified
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Invigilator Decision Actions */}
-            <div className="pt-4 border-t border-gray-800 space-y-2">
-              <p className="text-xs text-gray-400">Invigilator Review</p>
-              <div className="grid grid-cols-2 gap-2">
-                <button
-                  type="button"
-                  onClick={() => {
-                    // Update local state to DISMISSED
-                    setViolations((prev) =>
-                      prev.map((v) => (v.id === selectedViolation.id ? { ...v, status: 'DISMISSED' } : v))
-                    )
-                    setSelectedViolation(null)
-                  }}
-                  className="min-h-[44px] py-2.5 px-3 rounded-lg border border-gray-700 bg-gray-800 hover:bg-gray-700 text-gray-300 text-xs font-medium"
-                >
-                  Dismiss Incident
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    // Update local state to CONFIRMED
-                    setViolations((prev) =>
-                      prev.map((v) => (v.id === selectedViolation.id ? { ...v, status: 'CONFIRMED' } : v))
-                    )
-                    setSelectedViolation(null)
-                  }}
-                  className="min-h-[44px] py-2.5 px-3 rounded-lg bg-[#0e5a4d] hover:bg-[#0b483d] text-white text-xs font-semibold shadow-sm"
-                >
-                  Confirm Flag
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
+        <AlertReviewCard
+          violation={selectedViolation}
+          hallSessionId={sessionId}
+          onClose={() => setSelectedViolation(null)}
+          onUpdated={(updated) => {
+            setViolations((previous) => previous.map((item) => item.id === updated.id ? updated : item))
+            setSelectedViolation(updated)
+          }}
+        />
       )}
     </div>
   )

@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
 import type { Classroom, Camera, HallSession } from '@/types'
+import { DemoModeBanner } from '@/components/DemoModeLabel'
 
 export default function HallWorkspacePage({
   params,
@@ -42,15 +43,6 @@ export default function HallWorkspacePage({
 
       if (hall) {
         setClassroom(hall)
-      } else {
-        // Fallback default mock representation if database table not yet populated
-        setClassroom({
-          id: classroomId,
-          school_id: 'default',
-          name: 'Examination Hall',
-          access_code: 'ACTIVE',
-          created_at: new Date().toISOString(),
-        })
       }
 
       // 2. Fetch Cameras
@@ -60,29 +52,7 @@ export default function HallWorkspacePage({
         .eq('classroom_id', classroomId)
         .order('camera_number', { ascending: true })
 
-      if (cams && cams.length > 0) {
-        setCameras(cams)
-      } else {
-        // Default simulated cameras for this hall
-        setCameras([
-          {
-            id: 'c1',
-            classroom_id: classroomId,
-            camera_number: 1,
-            name: 'Camera 1 (Front Wide)',
-            status: 'ACTIVE',
-            created_at: new Date().toISOString(),
-          },
-          {
-            id: 'c2',
-            classroom_id: classroomId,
-            camera_number: 2,
-            name: 'Camera 2 (Overhead Desk Grid)',
-            status: 'ACTIVE',
-            created_at: new Date().toISOString(),
-          },
-        ])
-      }
+      setCameras(cams ?? [])
 
       // 3. Fetch Sessions
       const { data: sessions } = await supabase
@@ -177,6 +147,7 @@ export default function HallWorkspacePage({
 
   return (
     <div className="min-h-screen bg-gray-950 text-gray-100 flex flex-col justify-between selection:bg-teal-900 selection:text-teal-100">
+      {activeSession?.demo_mode && <DemoModeBanner />}
       {/* ── Top Bar ── */}
       <header className="border-b border-gray-800 bg-gray-900/90 backdrop-blur-md px-4 sm:px-6 lg:px-8 py-3.5 flex flex-wrap items-center justify-between gap-4">
         <div className="flex items-center gap-3">
@@ -197,7 +168,7 @@ export default function HallWorkspacePage({
         <div className="flex items-center gap-2 sm:gap-3">
           <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg border border-teal-900/60 bg-teal-950/40 text-teal-400 text-xs font-mono">
             <span className="w-1.5 h-1.5 rounded-full bg-teal-400 animate-pulse" />
-            <span>Code: {classroom?.access_code || 'ACTIVE'}</span>
+            <span>Code: {classroom?.access_code || 'Unavailable'}</span>
           </div>
 
           <button
@@ -238,7 +209,7 @@ export default function HallWorkspacePage({
                 <span>•</span>
                 <span>Expected Candidates: <strong>{activeSession.expected_students}</strong></span>
                 <span>•</span>
-                <span>Started: <strong>{new Date(activeSession.started_at || Date.now()).toLocaleTimeString()}</strong></span>
+                  {activeSession.started_at && <span>Started: <strong>{new Date(activeSession.started_at).toLocaleTimeString()}</strong></span>}
               </div>
             </div>
 
@@ -326,7 +297,7 @@ export default function HallWorkspacePage({
             </span>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {cameras.length > 0 ? <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {cameras.map((cam) => {
               const isOnline = cam.status === 'ACTIVE'
               return (
@@ -360,12 +331,12 @@ export default function HallWorkspacePage({
                         isOnline ? 'bg-emerald-400 animate-pulse' : 'bg-red-400'
                       }`}
                     />
-                    {cam.status}
+                    {cam.status === 'ACTIVE' ? 'Registered, feed not verified' : 'Offline'}
                   </span>
                 </div>
               )
             })}
-          </div>
+          </div> : <p className="rounded-lg border border-gray-800 bg-gray-900/50 p-4 text-sm text-gray-400">No camera sources are registered for this hall.</p>}
         </section>
       </main>
 

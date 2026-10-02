@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
+import { isDemoModeEnabled } from '@/lib/demo-mode'
 import { NextResponse, type NextRequest } from 'next/server'
 
 /**
@@ -125,6 +126,7 @@ export async function POST(request: NextRequest) {
         duration_minutes: Number(durationMinutes) || 120,
         expected_students: Number(expectedStudents) || 0,
         status: initialStatus,
+        demo_mode: isDemoModeEnabled(),
         started_at: startImmediately ? now : null,
       })
       .select()

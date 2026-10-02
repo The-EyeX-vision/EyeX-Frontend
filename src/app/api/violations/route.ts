@@ -16,9 +16,14 @@ export async function POST(request: NextRequest) {
       activityType = 'PHONE_DETECTED',
       severity = 'MEDIUM',
       confidence = 0.88,
+      thresholdScore = 0.75,
       evidenceUrl,
       metadata = {},
     } = body
+
+    const safeMetadata = metadata && typeof metadata === 'object' && !Array.isArray(metadata)
+      ? metadata as Record<string, unknown>
+      : {}
 
     if (!sessionId) {
       return NextResponse.json({ error: 'sessionId is required.' }, { status: 400 })
@@ -28,7 +33,23 @@ export async function POST(request: NextRequest) {
     const supabase = await createClient()
     const db = admin || supabase
 
+    const { data: session, error: sessionError } = await db
+      .from('exam_hall_sessions')
+      .select('id, demo_mode')
+      .eq('id', sessionId)
+      .maybeSingle()
+
+    if (sessionError || !session) {
+      return NextResponse.json({ error: 'Examination session not found.' }, { status: 404 })
+    }
+
+    const demoMode = session.demo_mode === true
+    if (safeMetadata.simulated === true && !demoMode) {
+      return NextResponse.json({ error: 'Simulated alerts are only allowed in demo sessions.' }, { status: 409 })
+    }
+
     const clampedConfidence = Math.min(1, Math.max(0, Number(confidence) || 0))
+    const clampedThreshold = Math.min(1, Math.max(0, Number(thresholdScore) || 0.75))
 
     const { data: violation, error } = await db
       .from('violations')
@@ -40,8 +61,10 @@ export async function POST(request: NextRequest) {
         severity,
         status: 'FLAGGED',
         confidence: clampedConfidence,
+        threshold_score: clampedThreshold,
+        demo_mode: demoMode,
         evidence_url: evidenceUrl || null,
-        metadata,
+        metadata: { ...safeMetadata, demo_mode: demoMode },
       })
       .select()
       .single()
@@ -56,7 +79,7 @@ export async function POST(request: NextRequest) {
           severity,
           status: 'FLAGGED',
           confidence: clampedConfidence,
-          metadata: { ...metadata, tracker_label: trackerLabel, evidence_url: evidenceUrl },
+          metadata: { ...safeMetadata, tracker_label: trackerLabel, evidence_url: evidenceUrl, demo_mode: demoMode },
         })
         .select()
         .single()
@@ -96,6 +119,11 @@ export async function GET(request: NextRequest) {
       .select('*, session:exam_hall_sessions(id, course_name, classroom:classrooms(name))')
       .order('created_at', { ascending: false })
       .limit(limit)
+
+    const demoMode = searchParams.get('demoMode')
+    if (demoMode === 'true' || demoMode === 'false') {
+      query = query.eq('demo_mode', demoMode === 'true')
+    }
 
     if (sessionId) {
       query = query.eq('session_id', sessionId)
