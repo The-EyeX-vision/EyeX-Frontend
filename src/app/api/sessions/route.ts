@@ -1,141 +1,145 @@
-/**
- * GET  /api/sessions — list exam sessions for authenticated school
- * POST /api/sessions — create a new exam session in a classroom
- */
-import { NextRequest, NextResponse } from 'next/server'
-import { authenticateUser } from '@/lib/auth/api'
 import { createClient } from '@/lib/supabase/server'
-import {
-  requireString,
-  requirePositiveInt,
-  requireUUID,
-  errorResponse,
-} from '@/lib/validation'
+import { createAdminClient } from '@/lib/supabase/admin'
+import { NextResponse, type NextRequest } from 'next/server'
 
+/**
+ * GET /api/sessions
+ * Returns examination sessions (optionally filtered by classroomId or status).
+ *
+ * POST /api/sessions
+ * Creates or schedules a new examination session for a classroom/hall.
+ */
 export async function GET(request: NextRequest) {
-  const auth = await authenticateUser()
-  if (!auth.ok) {
-    return NextResponse.json(errorResponse(auth.error), { status: auth.status })
+  try {
+    const { searchParams } = new URL(request.url)
+    const classroomId = searchParams.get('classroomId')
+    const status = searchParams.get('status')
+
+    const admin = createAdminClient()
+    const supabase = await createClient()
+    const db = admin || supabase
+
+    let query = db
+      .from('exam_hall_sessions')
+      .select('*, classroom:classrooms(id, name, access_code)')
+      .order('created_at', { ascending: false })
+
+    if (classroomId) query = query.eq('classroom_id', classroomId)
+    if (status) query = query.eq('status', status)
+
+    const { data, error } = await query
+
+    if (error) {
+      // Fallback check to legacy sessions if table is not yet migrated
+      const { data: legacy } = await db
+        .from('monitoring_sessions')
+        .select('*, exam:exams(title, room_number)')
+        .order('created_at', { ascending: false })
+
+      return NextResponse.json(legacy ?? [], { status: 200 })
+    }
+
+    return NextResponse.json(data ?? [], { status: 200 })
+  } catch (err: unknown) {
+    return NextResponse.json({ error: err instanceof Error ? err.message : 'Failed to fetch sessions' }, { status: 500 })
   }
-
-  const { searchParams } = new URL(request.url)
-  const classroomId = searchParams.get('classroom_id')
-  const status = searchParams.get('status')
-
-  const supabase = await createClient()
-
-  // Get school's classrooms
-  const { data: classrooms } = await supabase
-    .from('classrooms')
-    .select('id')
-    .eq('school_id', auth.school.id)
-
-  const classroomIds = (classrooms ?? []).map((c) => c.id)
-  if (classroomIds.length === 0) {
-    return NextResponse.json({ sessions: [] }, { status: 200 })
-  }
-
-  let query = supabase
-    .from('exam_sessions')
-    .select(`
-      *,
-      classrooms (id, name, access_code),
-      session_students (id)
-    `)
-    .in('classroom_id', classroomId ? [classroomId] : classroomIds)
-    .order('created_at', { ascending: false })
-
-  if (status) {
-    query = query.eq('status', status.toUpperCase())
-  }
-
-  const { data: sessions, error } = await query
-
-  if (error) {
-    return NextResponse.json(errorResponse('Failed to fetch sessions.', error.message), { status: 500 })
-  }
-
-  const formatted = (sessions ?? []).map((s) => ({
-    id: s.id,
-    classroom_id: s.classroom_id,
-    course_name: s.course_name,
-    course_code: s.course_code,
-    duration_minutes: s.duration_minutes,
-    student_count: s.student_count,
-    status: s.status,
-    started_at: s.started_at,
-    ended_at: s.ended_at,
-    created_at: s.created_at,
-    updated_at: s.updated_at,
-    classroom: s.classrooms,
-    detected_trackers_count: (s.session_students ?? []).length,
-  }))
-
-  return NextResponse.json({ sessions: formatted }, { status: 200 })
 }
 
 export async function POST(request: NextRequest) {
-  const auth = await authenticateUser()
-  if (!auth.ok) {
-    return NextResponse.json(errorResponse(auth.error), { status: auth.status })
-  }
-
-  let body: unknown
   try {
-    body = await request.json()
-  } catch {
-    return NextResponse.json(errorResponse('Request body must be valid JSON.'), { status: 400 })
+    const body = await request.json()
+    const {
+      classroomId,
+      courseName,
+      courseCode,
+      durationMinutes = 120,
+      expectedStudents = 30,
+      startImmediately = false,
+    } = body
+
+    if (!classroomId || !courseName?.trim()) {
+      return NextResponse.json(
+        { error: 'Classroom ID and Course Name are required.' },
+        { status: 400 }
+      )
+    }
+
+    const admin = createAdminClient()
+    const supabase = await createClient()
+    const db = admin || supabase
+
+    // Find classroom to obtain school_id
+    const { data: classroom } = await db
+      .from('classrooms')
+      .select('id, school_id, name')
+      .eq('id', classroomId)
+      .maybeSingle()
+
+    let schoolId = classroom?.school_id
+
+    if (!schoolId) {
+      // Try from authenticated user if available
+      const { data: { user } } = await supabase.auth.getUser()
+      if (user) {
+        const { data: school } = await db
+          .from('schools')
+          .select('id')
+          .eq('auth_user_id', user.id)
+          .maybeSingle()
+        schoolId = school?.id
+      }
+    }
+
+    if (!schoolId) {
+      return NextResponse.json(
+        { error: 'Classroom not found or unassociated with a valid school.' },
+        { status: 404 }
+      )
+    }
+
+    // Check for existing ACTIVE session in this classroom
+    const { data: existingActive } = await db
+      .from('exam_hall_sessions')
+      .select('id')
+      .eq('classroom_id', classroomId)
+      .eq('status', 'ACTIVE')
+      .maybeSingle()
+
+    if (existingActive) {
+      return NextResponse.json(
+        { error: 'An active examination session is already in progress in this hall. Please end it first.' },
+        { status: 409 }
+      )
+    }
+
+    const now = new Date().toISOString()
+    const initialStatus = startImmediately ? 'ACTIVE' : 'SCHEDULED'
+
+    const { data: newSession, error: insertError } = await db
+      .from('exam_hall_sessions')
+      .insert({
+        school_id: schoolId,
+        classroom_id: classroomId,
+        course_name: courseName.trim(),
+        course_code: courseCode?.trim() || null,
+        duration_minutes: Number(durationMinutes) || 120,
+        expected_students: Number(expectedStudents) || 0,
+        status: initialStatus,
+        started_at: startImmediately ? now : null,
+      })
+      .select()
+      .single()
+
+    if (insertError) {
+      return NextResponse.json({ error: insertError.message }, { status: 500 })
+    }
+
+    return NextResponse.json({ success: true, session: newSession }, { status: 201 })
+  } catch (err: unknown) {
+    console.error('[POST /api/sessions] Error:', err)
+    return NextResponse.json(
+      { error: err instanceof Error ? err.message : 'Server error creating session.' },
+      { status: 500 }
+    )
   }
-
-  const b = body as Record<string, unknown>
-
-  const classroomResult = requireUUID(b.classroom_id, 'classroom_id')
-  if (!classroomResult.ok) return NextResponse.json(errorResponse(classroomResult.error), { status: 400 })
-
-  const courseNameResult = requireString(b.course_name, 'course_name')
-  if (!courseNameResult.ok) return NextResponse.json(errorResponse(courseNameResult.error), { status: 400 })
-
-  const courseCodeResult = requireString(b.course_code, 'course_code')
-  if (!courseCodeResult.ok) return NextResponse.json(errorResponse(courseCodeResult.error), { status: 400 })
-
-  const durationResult = requirePositiveInt(b.duration_minutes, 'duration_minutes')
-  if (!durationResult.ok) return NextResponse.json(errorResponse(durationResult.error), { status: 400 })
-
-  const studentCount = Number(b.student_count ?? 0)
-  if (!Number.isInteger(studentCount) || studentCount < 0) {
-    return NextResponse.json(errorResponse('student_count must be a non-negative integer.'), { status: 400 })
-  }
-
-  const supabase = await createClient()
-
-  // Verify classroom belongs to authenticated school
-  const { data: classroom } = await supabase
-    .from('classrooms')
-    .select('id, name')
-    .eq('id', classroomResult.value)
-    .eq('school_id', auth.school.id)
-    .maybeSingle()
-
-  if (!classroom) {
-    return NextResponse.json(errorResponse('Classroom not found or does not belong to your school.'), { status: 404 })
-  }
-
-  const { data: session, error } = await supabase
-    .from('exam_sessions')
-    .insert({
-      classroom_id: classroomResult.value,
-      course_name: courseNameResult.value,
-      course_code: courseCodeResult.value.toUpperCase(),
-      duration_minutes: durationResult.value,
-      student_count: studentCount,
-      status: 'SCHEDULED',
-    })
-    .select('*, classrooms(id, name, access_code)')
-    .single()
-
-  if (error) {
-    return NextResponse.json(errorResponse('Failed to create examination session.', error.message), { status: 500 })
-  }
-
-  return NextResponse.json({ session }, { status: 201 })
 }

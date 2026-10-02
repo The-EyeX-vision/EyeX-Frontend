@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
+import { ClipboardIcon } from '@/components/ui/Icons'
 import type { Exam } from '@/types'
 
 export const dynamic = 'force-dynamic'
@@ -63,7 +64,7 @@ export default async function ExamsPage() {
       {/* Empty state */}
       {exams.length === 0 && (
         <div className="rounded-xl border border-gray-800 bg-gray-900/40 p-16 text-center">
-          <div className="text-4xl mb-4">📋</div>
+          <ClipboardIcon className="w-10 h-10 text-gray-600 mx-auto mb-4" />
           <h3 className="text-lg font-semibold text-white mb-2">No examinations yet</h3>
           <p className="text-gray-400 text-sm mb-6">Create your first examination to begin monitoring.</p>
           <Link

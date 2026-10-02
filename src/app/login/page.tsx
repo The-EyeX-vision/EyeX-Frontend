@@ -199,7 +199,10 @@ export default function LoginPage() {
 
           {/* Security note footer */}
           <div className="mt-4 text-center text-[11px] text-slate-400 flex items-center justify-center gap-2">
-            <span>🔒 256-bit Encrypted</span>
+            <span className="inline-flex items-center gap-1">
+              <LockIcon />
+              <span>256-bit Encrypted</span>
+            </span>
             <span>•</span>
             <span>Row-Level Security (RLS) Active</span>
             <span>•</span>

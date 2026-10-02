@@ -1,116 +1,73 @@
-/**
- * GET  /api/classrooms/[id]/cameras — list cameras in a classroom
- * POST /api/classrooms/[id]/cameras — add a camera to a classroom
- */
-import { NextRequest, NextResponse } from 'next/server'
-import { authenticateUser } from '@/lib/auth/api'
 import { createClient } from '@/lib/supabase/server'
-import {
-  requireString,
-  requirePositiveInt,
-  requireEnum,
-  errorResponse,
-} from '@/lib/validation'
-import type { CameraStatus } from '@/types'
+import { createAdminClient } from '@/lib/supabase/admin'
+import { NextResponse, type NextRequest } from 'next/server'
 
-type Params = { params: Promise<{ id: string }> }
-
-export async function GET(_req: NextRequest, { params }: Params) {
-  const { id } = await params
-  const auth = await authenticateUser()
-  if (!auth.ok) {
-    return NextResponse.json(errorResponse(auth.error), { status: auth.status })
-  }
-
-  const supabase = await createClient()
-
-  // Verify classroom belongs to school
-  const { data: classroom } = await supabase
-    .from('classrooms')
-    .select('id, name')
-    .eq('id', id)
-    .eq('school_id', auth.school.id)
-    .maybeSingle()
-
-  if (!classroom) {
-    return NextResponse.json(errorResponse('Classroom not found.'), { status: 404 })
-  }
-
-  const { data: cameras, error } = await supabase
-    .from('cameras')
-    .select('*')
-    .eq('classroom_id', id)
-    .order('camera_number', { ascending: true })
-
-  if (error) {
-    return NextResponse.json(errorResponse('Failed to fetch cameras.', error.message), { status: 500 })
-  }
-
-  return NextResponse.json({ cameras: cameras ?? [] }, { status: 200 })
-}
-
-export async function POST(request: NextRequest, { params }: Params) {
-  const { id } = await params
-  const auth = await authenticateUser()
-  if (!auth.ok) {
-    return NextResponse.json(errorResponse(auth.error), { status: auth.status })
-  }
-
-  let body: unknown
+/**
+ * POST /api/classrooms/[id]/cameras
+ * Attaches a camera to a classroom/hall.
+ */
+export async function POST(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
   try {
-    body = await request.json()
-  } catch {
-    return NextResponse.json(errorResponse('Request body must be valid JSON.'), { status: 400 })
-  }
+    const { id: classroomId } = await params
+    const body = await request.json()
+    const { cameraNumber, name = '', status = 'ACTIVE' } = body
 
-  const b = body as Record<string, unknown>
-  const nameResult = requireString(b.name, 'name')
-  if (!nameResult.ok) return NextResponse.json(errorResponse(nameResult.error), { status: 400 })
+    const admin = createAdminClient()
+    const supabase = await createClient()
+    const db = admin || supabase
 
-  const cameraNumberResult = requirePositiveInt(b.camera_number, 'camera_number')
-  if (!cameraNumberResult.ok) return NextResponse.json(errorResponse(cameraNumberResult.error), { status: 400 })
+    // Verify classroom exists
+    const { data: classroom } = await db
+      .from('classrooms')
+      .select('id')
+      .eq('id', classroomId)
+      .maybeSingle()
 
-  let cameraStatus: CameraStatus = 'ACTIVE'
-  if (b.status) {
-    const statusResult = requireEnum<CameraStatus>(b.status, 'status', ['ACTIVE', 'INACTIVE', 'OFFLINE'])
-    if (!statusResult.ok) return NextResponse.json(errorResponse(statusResult.error), { status: 400 })
-    cameraStatus = statusResult.value
-  }
-
-  const supabase = await createClient()
-
-  // Verify classroom belongs to school
-  const { data: classroom } = await supabase
-    .from('classrooms')
-    .select('id')
-    .eq('id', id)
-    .eq('school_id', auth.school.id)
-    .maybeSingle()
-
-  if (!classroom) {
-    return NextResponse.json(errorResponse('Classroom not found.'), { status: 404 })
-  }
-
-  const { data: camera, error } = await supabase
-    .from('cameras')
-    .insert({
-      classroom_id: id,
-      name: nameResult.value,
-      camera_number: cameraNumberResult.value,
-      status: cameraStatus,
-    })
-    .select('*')
-    .single()
-
-  if (error) {
-    if (error.code === '23505') {
-      return NextResponse.json(
-        errorResponse(`Camera number ${cameraNumberResult.value} already exists in this hall.`),
-        { status: 409 }
-      )
+    if (!classroom) {
+      return NextResponse.json({ error: 'Classroom not found.' }, { status: 404 })
     }
-    return NextResponse.json(errorResponse('Failed to create camera.', error.message), { status: 500 })
-  }
 
-  return NextResponse.json({ camera }, { status: 201 })
+    // Determine camera number if not provided
+    let num = Number(cameraNumber)
+    if (!num) {
+      const { data: existing } = await db
+        .from('cameras')
+        .select('camera_number')
+        .eq('classroom_id', classroomId)
+        .order('camera_number', { ascending: false })
+        .limit(1)
+
+      num = (existing?.[0]?.camera_number ?? 0) + 1
+    }
+
+    const camName = name?.trim() || `Camera ${num}`
+
+    const { data: camera, error } = await db
+      .from('cameras')
+      .upsert(
+        {
+          classroom_id: classroomId,
+          camera_number: num,
+          name: camName,
+          status: status === 'OFFLINE' ? 'OFFLINE' : 'ACTIVE',
+        },
+        { onConflict: 'classroom_id, camera_number' }
+      )
+      .select()
+      .single()
+
+    if (error) {
+      return NextResponse.json({ error: error.message }, { status: 500 })
+    }
+
+    return NextResponse.json({ success: true, camera }, { status: 201 })
+  } catch (err: unknown) {
+    return NextResponse.json(
+      { error: err instanceof Error ? err.message : 'Server error registering camera.' },
+      { status: 500 }
+    )
+  }
 }

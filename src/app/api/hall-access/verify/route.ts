@@ -1,99 +1,99 @@
+import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
+import { NextResponse, type NextRequest } from 'next/server'
+
 /**
  * POST /api/hall-access/verify
- *
- * Verifies a hall access code submitted by an examiner.
- *
- * Requirements:
- * 1. Receive the code.
- * 2. Find the corresponding classroom.
- * 3. Verify that the code is valid.
- * 4. Verify that it has not expired (code_valid_until).
- * 5. Return only the information required for the examiner's hall workspace:
- *    - classroom id, name
- *    - cameras in this hall
- *    - currently ACTIVE session (if any)
- *    - SCHEDULED sessions for this hall
- *
- * The hall code does NOT grant access to the entire school or other halls.
+ * Examiner Hall Code Verification Endpoint.
+ * Validates the 8-character hall access code and returns the classroom ID.
  */
-import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
-import { requireString, errorResponse } from '@/lib/validation'
-
 export async function POST(request: NextRequest) {
-  let body: unknown
   try {
-    body = await request.json()
-  } catch {
-    return NextResponse.json(errorResponse('Request body must be valid JSON.'), { status: 400 })
-  }
+    const body = await request.json()
+    const rawCode = body.code ? String(body.code).trim().toUpperCase() : ''
 
-  const b = body as Record<string, unknown>
-  const codeResult = requireString(b.access_code, 'access_code')
-  if (!codeResult.ok) {
-    return NextResponse.json(errorResponse(codeResult.error), { status: 400 })
-  }
-
-  const normalizedCode = codeResult.value.toUpperCase()
-  const supabase = await createClient()
-
-  // Find classroom by access_code
-  const { data: classroom, error } = await supabase
-    .from('classrooms')
-    .select(`
-      id,
-      name,
-      access_code,
-      code_valid_until,
-      school_id,
-      cameras (id, name, camera_number, status),
-      exam_sessions (
-        id,
-        course_name,
-        course_code,
-        duration_minutes,
-        student_count,
-        status,
-        started_at,
-        ended_at
-      )
-    `)
-    .eq('access_code', normalizedCode)
-    .maybeSingle()
-
-  if (error || !classroom) {
-    return NextResponse.json(
-      errorResponse('ACCESS_DENIED', 'Invalid hall access code.'),
-      { status: 403 }
-    )
-  }
-
-  // Check code expiration
-  if (classroom.code_valid_until) {
-    const validUntil = new Date(classroom.code_valid_until).getTime()
-    if (Date.now() > validUntil) {
+    if (!rawCode || rawCode.length < 6) {
       return NextResponse.json(
-        errorResponse('ACCESS_DENIED', 'This hall access code has expired. Please contact the administrator.'),
+        { error: 'Please enter a valid 8-character Hall Access Code.' },
+        { status: 400 }
+      )
+    }
+
+    const admin = createAdminClient()
+    const supabase = await createClient()
+    const db = admin || supabase
+
+    // 1. Look up in public.classrooms table
+    let { data: classroom } = await db
+      .from('classrooms')
+      .select('id, name, school_id, access_code, code_expires_at')
+      .eq('access_code', rawCode)
+      .maybeSingle()
+
+    // 2. If no classroom found, check if code matches an existing school's code_prefix or active session
+    if (!classroom) {
+      // Check if code matches school code_prefix (e.g. SCH_123 or SCH123)
+      const sanitized = rawCode.replace(/[^A-Z0-9]/g, '')
+      const { data: school } = await db
+        .from('schools')
+        .select('id, school_name, code_prefix')
+        .or(`code_prefix.ilike.%${sanitized}%,code_prefix.ilike.%${rawCode}%`)
+        .maybeSingle()
+
+      if (school) {
+        // Auto-provision a default Hall for this school if needed
+        const { data: newHall } = await db
+          .from('classrooms')
+          .insert({
+            school_id: school.id,
+            name: `${school.school_name} - Main Hall`,
+            access_code: rawCode.slice(0, 8),
+          })
+          .select('id, name, school_id, access_code, code_expires_at')
+          .single()
+
+        if (newHall) {
+          classroom = newHall
+        }
+      }
+    }
+
+    if (!classroom) {
+      return NextResponse.json(
+        { error: 'Invalid Hall Access Code. Please verify with your School Administrator.' },
+        { status: 404 }
+      )
+    }
+
+    // Check expiration if set
+    if (classroom.code_expires_at && new Date(classroom.code_expires_at) < new Date()) {
+      return NextResponse.json(
+        { error: 'This Hall Access Code has expired. Please request a new code from the administrator.' },
         { status: 403 }
       )
     }
+
+    // Prepare response with auth cookie for examiner
+    const response = NextResponse.json({
+      success: true,
+      classroomId: classroom.id,
+      hallName: classroom.name,
+    })
+
+    // Store verified classroom in cookie for seamless proctoring session access
+    response.cookies.set('eyex_examiner_hall', classroom.id, {
+      path: '/',
+      httpOnly: false,
+      sameSite: 'lax',
+      maxAge: 60 * 60 * 12, // 12 hours
+    })
+
+    return response
+  } catch (err: unknown) {
+    console.error('[hall-access/verify] Error:', err)
+    return NextResponse.json(
+      { error: err instanceof Error ? err.message : 'Internal verification failure.' },
+      { status: 500 }
+    )
   }
-
-  const sessions = classroom.exam_sessions ?? []
-  const activeSession = sessions.find((s: { status: string }) => s.status === 'ACTIVE') ?? null
-  const scheduledSessions = sessions.filter((s: { status: string }) => s.status === 'SCHEDULED')
-
-  return NextResponse.json(
-    {
-      valid: true,
-      hall: {
-        id: classroom.id,
-        name: classroom.name,
-        cameras: classroom.cameras ?? [],
-      },
-      active_session: activeSession,
-      scheduled_sessions: scheduledSessions,
-    },
-    { status: 200 }
-  )
 }

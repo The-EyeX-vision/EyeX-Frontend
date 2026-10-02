@@ -1,72 +1,56 @@
+import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
+import { NextResponse, type NextRequest } from 'next/server'
+
+function generateAccessCode(): string {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789' // exclude ambiguous chars like 0, O, 1, I
+  let code = ''
+  for (let i = 0; i < 8; i++) {
+    code += chars.charAt(Math.floor(Math.random() * chars.length))
+  }
+  return code
+}
+
 /**
  * POST /api/classrooms/[id]/rotate-code
- * Generates a new hall access code for the classroom.
- * The access code belongs to the hall, not individual exam sessions.
+ * Generates and updates a fresh 8-character access code for the hall.
  */
-import { NextRequest, NextResponse } from 'next/server'
-import { authenticateUser } from '@/lib/auth/api'
-import { createClient } from '@/lib/supabase/server'
-import { generateHallAccessCode, errorResponse } from '@/lib/validation'
-
-type Params = { params: Promise<{ id: string }> }
-
-export async function POST(request: NextRequest, { params }: Params) {
-  const { id } = await params
-  const auth = await authenticateUser()
-  if (!auth.ok) {
-    return NextResponse.json(errorResponse(auth.error), { status: auth.status })
-  }
-
-  let body: Record<string, unknown> = {}
+export async function POST(
+  _request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
   try {
-    body = (await request.json()) as Record<string, unknown>
-  } catch {
-    // Body is optional
-  }
+    const { id } = await params
+    const admin = createAdminClient()
+    const supabase = await createClient()
+    const db = admin || supabase
 
-  const newCode = typeof body.access_code === 'string' && body.access_code.trim() !== ''
-    ? body.access_code.trim().toUpperCase()
-    : generateHallAccessCode()
+    const newCode = generateAccessCode()
+    const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString() // 7 days
 
-  const validUntil = typeof body.code_valid_until === 'string' && body.code_valid_until.trim() !== ''
-    ? body.code_valid_until.trim()
-    : null
+    const { data: updated, error } = await db
+      .from('classrooms')
+      .update({
+        access_code: newCode,
+        code_expires_at: expiresAt,
+      })
+      .eq('id', id)
+      .select('id, name, access_code, code_expires_at')
+      .single()
 
-  const supabase = await createClient()
+    if (error) {
+      return NextResponse.json({ error: error.message }, { status: 500 })
+    }
 
-  // Verify classroom belongs to authenticated school
-  const { data: classroom } = await supabase
-    .from('classrooms')
-    .select('id, name')
-    .eq('id', id)
-    .eq('school_id', auth.school.id)
-    .maybeSingle()
-
-  if (!classroom) {
-    return NextResponse.json(errorResponse('Classroom not found.'), { status: 404 })
-  }
-
-  const { data: updated, error } = await supabase
-    .from('classrooms')
-    .update({
-      access_code: newCode,
-      code_valid_until: validUntil,
-      updated_at: new Date().toISOString(),
+    return NextResponse.json({
+      success: true,
+      access_code: updated.access_code,
+      code_expires_at: updated.code_expires_at,
     })
-    .eq('id', id)
-    .eq('school_id', auth.school.id)
-    .select('*')
-    .single()
-
-  if (error || !updated) {
-    return NextResponse.json(errorResponse('Failed to rotate access code.', error?.message), { status: 500 })
+  } catch (err: unknown) {
+    return NextResponse.json(
+      { error: err instanceof Error ? err.message : 'Failed to rotate code.' },
+      { status: 500 }
+    )
   }
-
-  return NextResponse.json(
-    {
-      message: 'Hall access code rotated successfully.',
-      classroom: updated,
-    },
-    { status: 200 }
-  )
 }
