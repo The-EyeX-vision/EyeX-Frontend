@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { signOutAction } from '@/app/actions/signout'
+import { EyeIcon } from '@/components/ui/Icons'
 
 
 export default function Header() {
@@ -9,8 +10,8 @@ export default function Header() {
         {/* Brand */}
         <Link href="/dashboard" className="flex items-center gap-3">
           {/* Camera icon */}
-          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-teal-700 text-white text-sm font-bold">
-            👁
+          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-teal-700 text-white font-bold">
+            <EyeIcon className="w-5 h-5 text-white" />
           </span>
           <div>
             <p className="text-sm font-bold text-white leading-none">The Eye X</p>
