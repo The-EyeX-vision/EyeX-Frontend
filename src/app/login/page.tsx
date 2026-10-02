@@ -2,6 +2,7 @@
 
 import { useActionState, useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { loginAction, type LoginState } from '@/app/actions/auth'
 
 const initial: LoginState = { error: null }
@@ -54,9 +55,13 @@ export default function LoginPage() {
       <header className="px-6 py-3.5 border-b border-slate-200/80 bg-white/80 backdrop-blur-md">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
-            <span className="flex h-7 w-7 items-center justify-center rounded-md bg-[#0e5a4d] text-white text-xs font-bold shadow-sm">
-              👁
-            </span>
+            <Image
+              src="/image.jpeg"
+              alt="The Eye X Logo"
+              width={28}
+              height={28}
+              className="h-7 w-7 rounded-md object-cover shadow-sm"
+            />
             <span className="font-bold text-slate-900 tracking-tight text-sm">The Eye X</span>
             <span className="text-[11px] text-slate-500 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded-full font-medium ml-1">
               Terminal Sign In
