@@ -10,14 +10,14 @@ export const dynamic = 'force-dynamic'
 
 function StatusBadge({ status }: { status: string }) {
   const map: Record<string, string> = {
-    scheduled: 'bg-blue-950 text-blue-300 border-blue-800',
-    active: 'bg-emerald-950 text-emerald-300 border-emerald-800',
-    completed: 'bg-gray-800 text-gray-400 border-gray-700',
-    archived: 'bg-gray-900 text-gray-500 border-gray-800',
-    cancelled: 'bg-red-950 text-red-400 border-red-800',
+    scheduled: 'bg-[#eff4ff] text-[#0037b0] border-[#bbd6ff]',
+    active: 'bg-emerald-50 text-emerald-700 border-emerald-200',
+    completed: 'bg-[#f8f9ff] text-[#747686] border-[#c4c5d7]',
+    archived: 'bg-[#f8f9ff] text-[#747686] border-[#c4c5d7]',
+    cancelled: 'bg-[#fef2f2] text-[#b91c1c] border-[#fecaca]',
   }
   return (
-    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold border ${map[status] ?? 'bg-gray-800 text-gray-400 border-gray-700'}`}>
+    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full font-code-sm text-[10px] font-bold border ${map[status] ?? 'bg-[#f8f9ff] text-[#747686] border-[#c4c5d7]'}`}>
       {status.charAt(0).toUpperCase() + status.slice(1)}
     </span>
   )
@@ -82,25 +82,25 @@ export default async function ExamDetailPage({ params }: { params: Promise<{ id:
   }
 
   return (
-    <div className="p-6 space-y-6 max-w-5xl mx-auto">
+    <div className="w-full px-4 sm:px-6 lg:px-8 py-6 max-w-5xl mx-auto space-y-6">
       {/* Header */}
-      <div className="flex items-start justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
         <div>
-          <Link href="/exams" className="text-xs text-gray-500 hover:text-gray-300 transition-colors mb-2 inline-flex items-center gap-1">
+          <Link href="/exams" className="text-[13px] text-[#747686] hover:text-[#0b1c30] transition-colors mb-1 inline-flex items-center gap-1">
             ← Back to Examinations
           </Link>
           <div className="flex items-center gap-3 mt-1">
-            <h1 className="text-xl font-bold text-white">{typedExam.title}</h1>
+            <h1 className="font-headline-lg text-[#0b1c30] tracking-tight">{typedExam.title}</h1>
             <StatusBadge status={typedExam.status} />
           </div>
           {typedExam.description && (
-            <p className="text-sm text-gray-400 mt-1">{typedExam.description}</p>
+            <p className="text-[14px] text-[#434655] mt-1">{typedExam.description}</p>
           )}
         </div>
         <div className="flex items-center gap-2 flex-shrink-0">
           <Link
             href={`/exams/${id}/edit`}
-            className="px-3 py-2 text-xs text-gray-400 hover:text-gray-200 border border-gray-700 hover:border-gray-600 rounded-lg transition-colors"
+            className="px-3.5 py-2 text-[13px] font-semibold text-[#434655] hover:text-[#0b1c30] border border-[#c4c5d7] bg-white hover:bg-[#eff4ff] rounded-lg transition-colors"
           >
             Edit
           </Link>
@@ -108,7 +108,7 @@ export default async function ExamDetailPage({ params }: { params: Promise<{ id:
             <form action={handleArchiveAction}>
               <button
                 type="submit"
-                className="px-3 py-2 text-xs text-red-400 hover:text-red-300 border border-red-900 hover:border-red-700 rounded-lg transition-colors"
+                className="px-3.5 py-2 text-[13px] font-semibold text-[#b91c1c] hover:text-[#93000a] border border-[#fecaca] bg-white hover:bg-[#fef2f2] rounded-lg transition-colors"
               >
                 Archive
               </button>
@@ -118,54 +118,57 @@ export default async function ExamDetailPage({ params }: { params: Promise<{ id:
       </div>
 
       {/* Exam Details */}
-      <div className="rounded-xl border border-gray-800 bg-gray-900/60 p-5">
-        <h2 className="text-sm font-semibold text-gray-200 mb-4">Exam Details</h2>
+      <div className="rounded-2xl border border-[#e5eeff] bg-white p-6 shadow-sm">
+        <h2 className="font-code-sm text-[11px] font-bold uppercase tracking-wider text-[#466083] mb-4">
+          Exam Configuration Parameters
+        </h2>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           {[
-            { label: 'Date', value: typedExam.exam_date },
+            { label: 'Exam Date', value: typedExam.exam_date },
             { label: 'Start Time', value: typedExam.start_time },
             { label: 'Duration', value: `${typedExam.duration_minutes} min` },
-            { label: 'Room', value: typedExam.room_number },
+            { label: 'Room / Hall', value: typedExam.room_number },
           ].map(({ label, value }) => (
-            <div key={label}>
-              <p className="text-[11px] text-gray-500 uppercase tracking-wider font-semibold">{label}</p>
-              <p className="text-sm text-white font-medium mt-0.5">{value}</p>
+            <div key={label} className="p-3 bg-[#eff4ff] rounded-xl border border-[#bbd6ff]">
+              <p className="font-code-sm text-[10px] text-[#747686] uppercase tracking-wider font-semibold">{label}</p>
+              <p className="text-[15px] text-[#0b1c30] font-bold mt-0.5">{value}</p>
             </div>
           ))}
         </div>
       </div>
 
       {/* Monitoring Session */}
-      <div className="rounded-xl border border-gray-800 bg-gray-900/60 p-5">
-        <div className="flex items-center justify-between">
+      <div className="rounded-2xl border border-[#e5eeff] bg-white p-6 shadow-sm">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h2 className="text-sm font-semibold text-gray-200">Monitoring Session</h2>
+            <h2 className="font-code-sm text-[11px] font-bold uppercase tracking-wider text-[#466083]">Live Proctoring Status</h2>
             {activeSession ? (
-              <p className="text-xs text-emerald-400 mt-0.5">
+              <p className="text-[13px] text-emerald-700 font-semibold mt-0.5 flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                 Active session started {new Date((activeSession as MonitoringSession).started_at).toLocaleString()}
               </p>
             ) : (
-              <p className="text-xs text-gray-500 mt-0.5">No active session</p>
+              <p className="text-[13px] text-[#747686] mt-0.5">No active monitoring session running right now.</p>
             )}
           </div>
           {activeSession ? (
             <Link
               href={`/monitoring/${activeSession.id}`}
-              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-emerald-900/40 border border-emerald-700 text-emerald-300 text-sm font-medium hover:bg-emerald-900/60 transition-colors"
+              className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-[13px] font-semibold transition-colors shadow-sm"
             >
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-              Open Session →
+              <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
+              Open Live Stream Console →
             </Link>
           ) : typedExam.status !== 'archived' && typedExam.status !== 'completed' ? (
             <form action={handleStartAction}>
               <button
                 type="submit"
-                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#0e5a4d] hover:bg-[#0b483d] text-white text-sm font-medium transition-colors shadow-sm"
+                className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[#1d4ed8] hover:bg-[#0037b0] text-white text-[13px] font-semibold transition-colors shadow-sm"
               >
                 <svg viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
                   <path fillRule="evenodd" d="M2 10a8 8 0 1116 0 8 8 0 01-16 0zm6.39-2.908a.75.75 0 01.766.027l3.5 2.25a.75.75 0 010 1.262l-3.5 2.25A.75.75 0 018 12.25v-4.5a.75.75 0 01.39-.658z" clipRule="evenodd" />
                 </svg>
-                Start Monitoring
+                Start Monitoring Session
               </button>
             </form>
           ) : null}

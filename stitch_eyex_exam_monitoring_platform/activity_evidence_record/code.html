@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_standard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;family=Plus+Jakarta+Sans:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"surface-container":"#e5eeff","surface":"#f8f9ff","on-primary-fixed":"#001551","surface-container-lowest":"#ffffff","surface-dim":"#cbdbf5","secondary-fixed-dim":"#aec8f0","surface-container-high":"#dce9ff","inverse-on-surface":"#eaf1ff","inverse-surface":"#213145","on-secondary-fixed":"#001c38","error":"#ba1a1a","on-tertiary-fixed":"#001d31","primary-container":"#1d4ed8","secondary-fixed":"#d3e4ff","outline":"#747686","on-secondary":"#ffffff","on-primary":"#ffffff","surface-container-highest":"#d3e4fe","surface-tint":"#2151da","primary-fixed-dim":"#b7c4ff","surface-container-low":"#eff4ff","on-background":"#0b1c30","on-tertiary":"#ffffff","on-primary-fixed-variant":"#0039b5","tertiary-fixed":"#cce5ff","error-container":"#ffdad6","tertiary":"#004870","surface-variant":"#d3e4fe","surface-bright":"#f8f9ff","secondary":"#466083","on-tertiary-fixed-variant":"#004b73","primary":"#0037b0","primary-fixed":"#dce1ff","inverse-primary":"#b7c4ff","on-surface-variant":"#434655","on-tertiary-container":"#b2d9ff","on-surface":"#0b1c30","background":"#f8f9ff","outline-variant":"#c4c5d7","on-secondary-fixed-variant":"#2d486a","on-secondary-container":"#435d80","secondary-container":"#bbd6ff","on-error":"#ffffff","on-error-container":"#93000a","on-primary-container":"#cad3ff","tertiary-container":"#006194","tertiary-fixed-dim":"#93ccff"},"borderRadius":{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},"spacing":{"space-md":"1rem","margin-mobile":"1rem","gutter":"1.25rem","space-xs":"0.25rem","space-sm":"0.5rem","space-lg":"1.5rem","space-xl":"2.5rem","gutter-mobile":"0.75rem","margin":"2rem"},"fontFamily":{"label-code-md":["JetBrains Mono"],"body-md":["Inter"],"body-lg":["Inter"],"label-code-lg":["JetBrains Mono"],"headline-xl-mobile":["Plus Jakarta Sans"],"headline-md":["Plus Jakarta Sans"],"label-code-sm":["JetBrains Mono"],"headline-xl":["Plus Jakarta Sans"],"headline-lg":["Plus Jakarta Sans"],"headline-lg-mobile":["Plus Jakarta Sans"],"body-sm":["Inter"]},"fontSize":{"label-code-md":["13px",{"lineHeight":"18px","letterSpacing":"0.02em","fontWeight":"500"}],"body-md":["14px",{"lineHeight":"20px","fontWeight":"400"}],"body-lg":["16px",{"lineHeight":"24px","fontWeight":"400"}],"label-code-lg":["18px",{"lineHeight":"24px","letterSpacing":"0.05em","fontWeight":"600"}],"headline-xl-mobile":["28px",{"lineHeight":"36px","letterSpacing":"-0.01em","fontWeight":"700"}],"headline-md":["20px",{"lineHeight":"28px","fontWeight":"600"}],"label-code-sm":["11px",{"lineHeight":"14px","letterSpacing":"0.02em","fontWeight":"500"}],"headline-xl":["36px",{"lineHeight":"44px","letterSpacing":"-0.02em","fontWeight":"700"}],"headline-lg":["28px",{"lineHeight":"36px","letterSpacing":"-0.015em","fontWeight":"600"}],"headline-lg-mobile":["22px",{"lineHeight":"30px","letterSpacing":"-0.01em","fontWeight":"600"}],"body-sm":["12px",{"lineHeight":"16px","fontWeight":"400"}]}}}}</script></head><body class="bg-background font-body-md text-on-surface antialiased"><header class="fixed top-0 w-full z-50 bg-surface-container-lowest border-b border-outline-variant shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="w-full px-margin"><div class="h-20 flex items-center justify-between gap-gutter"><div class="flex items-center gap-space-md"><div class="flex items-center gap-space-sm"><img alt="EyeX Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1Wv5E9vMugY93Vn-72z0pKpTXbC1UYgjFLiQgU2nNMvQz9zgs-OfynrVDXbXm54cSm77EddXb5rH8LqQdBcvnu-KEtoHP6Nc9Zu9STzA5FIvddcOpCbLudO8_lvUtbbAYY_0SscxDgZiQnGq2JtsLTqe2pkTPbIqwfN6Ah3TJvtOAhcxAwL9vX7EQOEjtWlvJ6XHnfHL9hw7hNACk28fOBLjVd_6Aw-n7te-1-kGPn2-FIjiwjwqXGWFD0O"/><span class="font-headline-md text-headline-md tracking-tight text-primary">EyeX</span></div><div class="h-7 w-px bg-outline-variant hidden xl:block"></div><div class="hidden xl:flex flex-col"><div class="flex items-center gap-space-xs"><span class="font-body-sm text-body-sm font-semibold text-on-surface">Government Bilingual High School (GBHS) Yaoundé</span><span class="font-label-code-sm text-label-code-sm bg-surface-container-high text-primary px-1.5 py-0.5 rounded">Centre #1042</span></div><div class="flex items-center gap-space-xs"><span class="font-body-sm text-body-sm text-on-surface-variant">First Term • Sequence 1 • GCE Mock Session</span></div></div></div><nav class="hidden lg:flex items-center gap-1 bg-surface-container-low p-1 rounded-lg border border-outline-variant" data-active-classes="bg-primary text-on-primary font-semibold shadow-sm"><a class="px-3 py-1.5 rounded-lg text-body-sm font-body-sm text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors" data-path="dashboard-overview" href="#">Dashboard</a><a class="px-3 py-1.5 rounded-lg text-body-sm font-body-sm text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors" data-path="live-monitoring" href="#">Live Monitoring</a><a class="px-3 py-1.5 rounded-lg text-body-sm font-body-sm text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors" data-path="examination-halls" href="#">Examination Halls</a><a class="px-3 py-1.5 rounded-lg text-body-sm font-body-sm text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors" data-path="examination-schedule" href="#">Schedule</a><a aria-current="page" class="px-3 py-1.5 rounded-lg transition-colors bg-primary text-on-primary font-semibold shadow-sm" data-path="activity-evidence" href="#">Evidence Record</a><a class="px-3 py-1.5 rounded-lg text-body-sm font-body-sm text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors" data-path="invigilator-fast-access" href="#">Invigilator Code</a></nav><div class="flex items-center gap-space-md"><div class="hidden md:flex items-center gap-space-xs bg-surface-container-lowest border border-outline-variant px-2.5 py-1 rounded"><span class="relative flex h-2 w-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span></span><span class="font-label-code-sm text-label-code-sm text-on-surface-variant uppercase tracking-wider">Online • Synchronised</span></div><button class="hidden sm:flex items-center gap-1.5 bg-error text-on-error px-3 py-1.5 rounded text-body-sm font-body-sm font-medium hover:bg-red-700 transition-colors" type="button"><span class="material-symbols-outlined text-[16px]">crisis_alert</span><span>Emergency</span></button><div class="h-7 w-px bg-outline-variant hidden sm:block"></div><div class="flex items-center gap-space-sm pl-1"><div class="hidden sm:flex flex-col text-right"><span class="font-body-sm text-body-sm font-semibold text-on-surface leading-snug">Mr. E. Mbella</span><span class="font-label-code-sm text-label-code-sm text-on-surface-variant">Chief Exam Officer</span></div><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></div></div></header><main class="w-full pt-20 bg-background min-h-screen"><div class="flex flex-col w-full">
+<div class="w-full px-margin py-space-lg flex flex-col gap-space-lg">
+<!-- Top System Verification Banner -->
+<div class="w-full bg-surface-container-low rounded-xl p-space-md shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-space-md">
+<div class="flex items-center gap-space-md">
+<div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined text-[22px]">verified_user</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-code-sm text-label-code-sm text-primary uppercase font-semibold tracking-wider">GCE Board Security Protocol • SEC-2026/YDE-1042</span>
+<span class="font-body-md text-body-md text-on-surface font-medium">All 7 activity records are digitally signed and local-cache backed. Synchronised with cloud at 10:45 AM.</span>
+</div>
+</div>
+<div class="flex items-center gap-space-sm self-end md:self-auto">
+<div class="flex items-center gap-1.5 px-3 py-1 bg-surface-container rounded-lg font-label-code-sm text-label-code-sm text-secondary">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+<span>SHA-256 Ledger: <span class="font-semibold text-on-surface">d9e4...8a21</span></span>
+</div>
+<button class="px-3 py-1.5 bg-surface-container-lowest text-primary rounded-lg text-body-sm font-body-sm font-medium hover:bg-surface-container transition-colors shadow-sm flex items-center gap-1" type="button">
+<span class="material-symbols-outlined text-[16px]">sync</span>
+<span>Verify Integrity</span>
+</button>
+</div>
+</div>
+<!-- Administrative Header & Context -->
+<div class="flex flex-col lg:flex-row lg:items-end justify-between gap-space-md">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-2">
+<span class="px-2 py-0.5 rounded bg-surface-container-high text-primary font-label-code-sm text-label-code-sm uppercase tracking-wide">Official Audit Trail</span>
+<span class="text-outline text-body-sm font-body-sm">•</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant font-medium">GBHS Yaoundé (Centre #1042)</span>
+</div>
+<h1 class="font-headline-xl text-headline-xl text-on-surface tracking-tight">Activity &amp; Evidence Record</h1>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-3xl">Official Examination Audit &amp; Malpractice Investigation Registry for the Principal, Vice Principal, and Discipline Master. Review machine-assisted visual telemetry and field invigilator certifications.</p>
+</div>
+<div class="flex items-center gap-space-sm flex-wrap">
+<button class="flex items-center gap-2 px-4 py-2 bg-surface-container-low text-primary rounded-lg text-body-sm font-body-sm font-medium hover:bg-surface-container shadow-sm transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">file_download</span>
+<span>Export Session Dossier (CSV/PDF)</span>
+</button>
+<button class="flex items-center gap-2 px-4 py-2 bg-primary text-on-primary rounded-lg text-body-sm font-body-sm font-medium hover:bg-primary-container shadow-md transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">verified</span>
+<span>Endorse Audit Log</span>
+</button>
+</div>
+</div>
+<!-- Telemetry Metric Cards Strip -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-gutter">
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between text-on-surface-variant">
+<span class="font-body-sm text-body-sm font-medium">Logged Incidents</span>
+<span class="material-symbols-outlined text-[20px] text-primary">analytics</span>
+</div>
+<div class="mt-space-sm flex items-baseline gap-2">
+<span class="font-headline-lg text-headline-lg font-bold text-on-surface">07</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Total active events</span>
+</div>
+<div class="mt-space-sm w-full bg-surface-container rounded-full h-1.5 overflow-hidden">
+<div class="bg-primary h-1.5 rounded-full" style="width: 100%"></div>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between text-on-surface-variant">
+<span class="font-body-sm text-body-sm font-medium">Confirmed Breaches</span>
+<span class="material-symbols-outlined text-[20px] text-error">gavel</span>
+</div>
+<div class="mt-space-sm flex items-baseline gap-2">
+<span class="font-headline-lg text-headline-lg font-bold text-error">02</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Formal sanctions applied</span>
+</div>
+<div class="mt-space-sm w-full bg-surface-container rounded-full h-1.5 overflow-hidden">
+<div class="bg-error h-1.5 rounded-full" style="width: 28%"></div>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between text-on-surface-variant">
+<span class="font-body-sm text-body-sm font-medium">Under Administrative Review</span>
+<span class="material-symbols-outlined text-[20px] text-secondary">pending_actions</span>
+</div>
+<div class="mt-space-sm flex items-baseline gap-2">
+<span class="font-headline-lg text-headline-lg font-bold text-secondary">04</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Awaiting chief officer</span>
+</div>
+<div class="mt-space-sm w-full bg-surface-container rounded-full h-1.5 overflow-hidden">
+<div class="bg-secondary h-1.5 rounded-full" style="width: 57%"></div>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between text-on-surface-variant">
+<span class="font-body-sm text-body-sm font-medium">Dismissed / Inconclusive</span>
+<span class="material-symbols-outlined text-[20px] text-primary-container">rule</span>
+</div>
+<div class="mt-space-sm flex items-baseline gap-2">
+<span class="font-headline-lg text-headline-lg font-bold text-on-surface">01</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Cleared of anomaly</span>
+</div>
+<div class="mt-space-sm w-full bg-surface-container rounded-full h-1.5 overflow-hidden">
+<div class="bg-outline-variant h-1.5 rounded-full" style="width: 14%"></div>
+</div>
+</div>
+</div>
+<!-- Filter Control Bar -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex flex-col gap-space-md">
+<!-- Activity Category Tabs -->
+<div class="flex items-center gap-2 overflow-x-auto pb-1" id="filterTabs">
+<button class="tab-btn px-3 py-1.5 rounded-lg font-label-code-sm text-label-code-sm uppercase tracking-wide bg-primary text-on-primary font-semibold shadow-sm transition-all" data-category="ALL" type="button">
+          All Activities (7)
+        </button>
+<button class="tab-btn px-3 py-1.5 rounded-lg font-label-code-sm text-label-code-sm uppercase tracking-wide bg-surface-container-low text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all" data-category="PHONE" type="button">
+          Phone Detected (2)
+        </button>
+<button class="tab-btn px-3 py-1.5 rounded-lg font-label-code-sm text-label-code-sm uppercase tracking-wide bg-surface-container-low text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all" data-category="MATERIAL" type="button">
+          Unauthorised Material (3)
+        </button>
+<button class="tab-btn px-3 py-1.5 rounded-lg font-label-code-sm text-label-code-sm uppercase tracking-wide bg-surface-container-low text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all" data-category="COMMUNICATION" type="button">
+          Suspicious Communication (2)
+        </button>
+<button class="tab-btn px-3 py-1.5 rounded-lg font-label-code-sm text-label-code-sm uppercase tracking-wide bg-surface-container-low text-outline hover:text-on-surface hover:bg-surface-container transition-all cursor-not-allowed opacity-60" data-category="OTHER" type="button">
+          Other Anomalies (0)
+        </button>
+</div>
+<!-- Selectors & Search Row -->
+<div class="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-space-sm pt-space-xs">
+<div class="flex flex-wrap items-center gap-space-sm">
+<!-- Hall Select -->
+<div class="flex items-center gap-1.5 bg-surface-container-low px-3 py-1.5 rounded-lg text-body-sm font-body-sm text-on-surface">
+<span class="material-symbols-outlined text-[16px] text-outline">meeting_room</span>
+<select class="bg-transparent font-medium text-on-surface focus:outline-none cursor-pointer">
+<option value="all">All Examination Halls (Halls A - F)</option>
+<option value="hall-a">Hall A (Main Pavilion - Form 5A)</option>
+<option value="hall-b">Hall B (Science Complex)</option>
+<option value="hall-c">Hall C (Amphi A)</option>
+</select>
+</div>
+<!-- Status Select -->
+<div class="flex items-center gap-1.5 bg-surface-container-low px-3 py-1.5 rounded-lg text-body-sm font-body-sm text-on-surface">
+<span class="material-symbols-outlined text-[16px] text-outline">tune</span>
+<select class="bg-transparent font-medium text-on-surface focus:outline-none cursor-pointer">
+<option value="all">Review Status: All</option>
+<option value="pending">Pending Examination Board Review</option>
+<option value="confirmed">Confirmed by Discipline Master</option>
+<option value="dismissed">Dismissed / Irregularity Cleared</option>
+</select>
+</div>
+<!-- Date Filter Badge -->
+<div class="flex items-center gap-1.5 bg-surface-container-high px-3 py-1.5 rounded-lg text-body-sm font-body-sm font-medium text-primary">
+<span class="material-symbols-outlined text-[16px]">calendar_today</span>
+<span>Today (Oct 14, 2026) • Term 1 Mock Session</span>
+</div>
+</div>
+<!-- ID Search Box -->
+<div class="relative w-full lg:w-72">
+<span class="material-symbols-outlined absolute left-3 top-2.5 text-outline text-[18px]">search</span>
+<input class="w-full pl-9 pr-3 py-1.5 bg-surface-container-low rounded-lg text-body-sm font-body-sm text-on-surface placeholder:text-outline focus:outline-none focus:bg-surface-container-lowest focus:ring-1 focus:ring-primary shadow-inner" placeholder="Search Tracker # or Candidate..." type="text"/>
+</div>
+</div>
+</div>
+<!-- Master Roster Table & Inline Inspector Layout -->
+<div class="w-full bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden flex flex-col">
+<div class="px-space-md py-space-sm bg-surface-container-low flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="font-headline-md text-headline-md text-on-surface">Audited Events Roster</span>
+<span class="px-2 py-0.5 rounded-full bg-surface-container text-primary font-label-code-sm text-label-code-sm">7 Records Registered</span>
+</div>
+<div class="flex items-center gap-2 font-label-code-sm text-label-code-sm text-on-surface-variant">
+<span>Sort By:</span>
+<span class="font-semibold text-primary cursor-pointer hover:underline">Timestamp (Recent First)</span>
+</div>
+</div>
+<!-- High-Density Data Table -->
+<div class="w-full overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low/50 text-secondary uppercase font-label-code-sm text-label-code-sm tracking-wider">
+<th class="py-3 px-space-md font-semibold">Timestamp &amp; Hall</th>
+<th class="py-3 px-space-md font-semibold">Subject &amp; Class</th>
+<th class="py-3 px-space-md font-semibold">Candidate Tracker</th>
+<th class="py-3 px-space-md font-semibold">Activity Classification</th>
+<th class="py-3 px-space-md font-semibold">Invigilator On-Site Action</th>
+<th class="py-3 px-space-md font-semibold">Administrative Status</th>
+<th class="py-3 px-space-md font-semibold text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container text-body-sm font-body-sm">
+<!-- Row 1 (Highlight - Phone Detected) -->
+<tr class="hover:bg-surface-container-low transition-colors cursor-pointer group bg-surface-container-lowest" onclick="openEvidenceModal(1)">
+<td class="py-3.5 px-space-md">
+<div class="flex flex-col">
+<span class="font-label-code-md text-label-code-md font-bold text-on-surface">10:42:18 AM</span>
+<span class="text-on-surface-variant font-medium">Hall A • Main Pavilion</span>
+</div>
+</td>
+<td class="py-3.5 px-space-md">
+<div class="flex flex-col">
+<span class="font-semibold text-on-surface">Mathematics (Paper 2)</span>
+<span class="font-label-code-sm text-label-code-sm text-secondary">Form 5A • Sitting #18</span>
+</div>
+</td>
+<td class="py-3.5 px-space-md">
+<div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-surface-container text-primary font-label-code-md text-label-code-md font-bold">
+<span class="w-1.5 h-1.5 rounded-full bg-error animate-pulse"></span>
+<span>TRACKER #07</span>
+</div>
+</td>
+<td class="py-3.5 px-space-md">
+<div class="flex flex-col gap-0.5">
+<div class="flex items-center gap-1 text-error font-medium">
+<span class="material-symbols-outlined text-[16px]">smartphone</span>
+<span>Phone Detected</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="font-label-code-sm text-label-code-sm font-semibold text-on-surface">94% Confidence</span>
+<span class="text-outline text-body-sm font-body-sm">•</span>
+<span class="text-on-surface-variant text-[11px]">Aggregated ×2</span>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-space-md">
+<div class="flex flex-col">
+<span class="font-medium text-on-surface">Flagged &amp; Device Confiscated</span>
+<span class="text-on-surface-variant text-body-sm">Mr. T. Nkemayang (Chief Hall A)</span>
+</div>
+</td>
+<td class="py-3.5 px-space-md">
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-error-container text-error text-[11px] font-semibold tracking-wide uppercase">
+<span class="w-1.5 h-1.5 rounded-full bg-error"></span>
+<span>Confirmed by Master</span>
+</span>
+</td>
+<td class="py-3.5 px-space-md text-right">
+<button class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary-container text-on-primary font-medium hover:bg-primary transition-all shadow-sm group-hover:shadow" type="button">
+<span class="material-symbols-outlined text-[16px]">visibility</span>
+<span>Inspect Evidence</span>
+</button>
+</td>
+</tr>
+<!-- Row 2 (Unauthorised Material) -->
+<tr class="hover:bg-surface-container-low transition-colors cursor-pointer group bg-surface-container-low/30" onclick="openEvidenceModal(2)">
+<td class="py-3.5 px-space-md">
+<div class="flex flex-col">
+<span class="font-label-code-md text-label-code-md font-bold text-on-surface">10:38:05 AM</span>
+<span class="text-on-surface-variant font-medium">Hall B • Science Wing</span>
+</div>
+</td>
+<td class="py-3.5 px-space-md">
+<div class="flex flex-col">
+<span class="font-semibold text-on-surface">Chemistry (Practical Prep)</span>
+<span class="font-label-code-sm text-label-code-sm text-secondary">Upper Sixth Sc. • Desk #41</span>
+</div>
+</td>
+<td class="py-3.5 px-space-md">
+<div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-surface-container text-primary font-label-code-md text-label-code-md font-bold">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+<span>TRACKER #12</span>
+</div>
+</td>
+<td class="py-3.5 px-space-md">
+<div class="flex flex-col gap-0.5">
+<div class="flex items-center gap-1 text-on-surface font-medium">
+<span class="material-symbols-outlined text-[16px] text-tertiary">description</span>
+<span>Unauthorised Formula Sheet</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="font-label-code-sm text-label-code-sm font-semibold text-on-surface">88% Confidence</span>
+<span class="text-outline text-body-sm font-body-sm">•</span>
+<span class="text-on-surface-variant text-[11px]">Aggregated ×1</span>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-space-md">
+<div class="flex flex-col">
+<span class="font-medium text-on-surface">Document Attached to Booklet</span>
+<span class="text-on-surface-variant text-body-sm">Mme. F. Awounfack</span>
+</div>
+</td>
+<td class="py-3.5 px-space-md">
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-secondary-container text-on-secondary-container text-[11px] font-semibold tracking-wide uppercase">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+<span>Pending Board Review</span>
+</span>
+</td>
+<td class="py-3.5 px-space-md text-right">
+<button class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-container text-primary font-medium hover:bg-surface-container-high transition-all" type="button">
+<span class="material-symbols-outlined text-[16px]">visibility</span>
+<span>Inspect Evidence</span>
+</button>
+</td>
+</tr>
+<!-- Row 3 (Suspicious Communication) -->
+<tr class="hover:bg-surface-container-low transition-colors cursor-pointer group bg-surface-container-lowest" onclick="openEvidenceModal(3)">
+<td class="py-3.5 px-space-md">
+<div class="flex flex-col">
+<span class="font-label-code-md text-label-code-md font-bold text-on-surface">10:29:40 AM</span>
+<span class="text-on-surface-variant font-medium">Hall A • Main Pavilion</span>
+</div>
+</td>
+<td class="py-3.5 px-space-md">
+<div class="flex flex-col">
+<span class="font-semibold text-on-surface">Mathematics (Paper 2)</span>
+<span class="font-label-code-sm text-label-code-sm text-secondary">Form 5A • Sitting #19 &amp; #20</span>
+</div>
+</td>
+<td class="py-3.5 px-space-md">
+<div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-surface-container text-primary font-label-code-md text-label-code-md font-bold">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+<span>TRACKER #08</span>
+</div>
+</td>
+<td class="py-3.5 px-space-md">
+<div class="flex flex-col gap-0.5">
+<div class="flex items-center gap-1 text-on-surface font-medium">
+<span class="material-symbols-outlined text-[16px] text-tertiary">record_voice_over</span>
+<span>Suspicious Communication</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="font-label-code-sm text-label-code-sm font-semibold text-on-surface">79% Confidence</span>
+<span class="text-outline text-body-sm font-body-sm">•</span>
+<span class="text-on-surface-variant text-[11px]">Spatial Audio Node 4</span>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-space-md">
+<div class="flex flex-col">
+<span class="font-medium text-on-surface">Verbal Admonition Issued</span>
+<span class="text-on-surface-variant text-body-sm">Mr. T. Nkemayang</span>
+</div>
+</td>
+<td class="py-3.5 px-space-md">
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-surface-container-high text-primary text-[11px] font-semibold tracking-wide uppercase">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+<span>Under Investigation</span>
+</span>
+</td>
+<td class="py-3.5 px-space-md text-right">
+<button class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-container text-primary font-medium hover:bg-surface-container-high transition-all" type="button">
+<span class="material-symbols-outlined text-[16px]">visibility</span>
+<span>Inspect Evidence</span>
+</button>
+</td>
+</tr>
+<!-- Row 4 (Unauthorised Material - Dismissed) -->
+<tr class="hover:bg-surface-container-low transition-colors cursor-pointer group bg-surface-container-low/30" onclick="openEvidenceModal(4)">
+<td class="py-3.5 px-space-md">
+<div class="flex flex-col">
+<span class="font-label-code-md text-label-code-md font-bold text-on-surface">10:15:12 AM</span>
+<span class="text-on-surface-variant font-medium">Hall C • Amphi A</span>
+</div>
+</td>
+<td class="py-3.5 px-space-md">
+<div class="flex flex-col">
+<span class="font-semibold text-on-surface">Economics (Paper 1)</span>
+<span class="font-label-code-sm text-label-code-sm text-secondary">Lower Sixth Arts • Row 3</span>
+</div>
+</td>
+<td class="py-3.5 px-space-md">
+<div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-surface-container text-primary font-label-code-md text-label-code-md font-bold">
+<span class="w-1.5 h-1.5 rounded-full bg-outline"></span>
+<span>TRACKER #33</span>
+</div>
+</td>
+<td class="py-3.5 px-space-md">
+<div class="flex flex-col gap-0.5">
+<div class="flex items-center gap-1 text-on-surface font-medium">
+<span class="material-symbols-outlined text-[16px] text-outline">notes</span>
+<span>Foreign Paper Item</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="font-label-code-sm text-label-code-sm font-semibold text-on-surface">62% Confidence</span>
+<span class="text-outline text-body-sm font-body-sm">•</span>
+<span class="text-on-surface-variant text-[11px]">Single Trigger</span>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-space-md">
+<div class="flex flex-col">
+<span class="font-medium text-on-surface">Official Identity Card Verified</span>
+<span class="text-on-surface-variant text-body-sm">Dr. B. Fondungallah</span>
+</div>
+</td>
+<td class="py-3.5 px-space-md">
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-surface-container-highest text-secondary text-[11px] font-semibold tracking-wide uppercase">
+<span class="w-1.5 h-1.5 rounded-full bg-outline"></span>
+<span>Dismissed / Cleared</span>
+</span>
+</td>
+<td class="py-3.5 px-space-md text-right">
+<button class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-container text-primary font-medium hover:bg-surface-container-high transition-all" type="button">
+<span class="material-symbols-outlined text-[16px]">visibility</span>
+<span>Inspect Evidence</span>
+</button>
+</td>
+</tr>
+<!-- Row 5 (Phone Detected - Confirmed) -->
+<tr class="hover:bg-surface-container-low transition-colors cursor-pointer group bg-surface-container-lowest" onclick="openEvidenceModal(1)">
+<td class="py-3.5 px-space-md">
+<div class="flex flex-col">
+<span class="font-label-code-md text-label-code-md font-bold text-on-surface">09:54:22 AM</span>
+<span class="text-on-surface-variant font-medium">Hall B • Science Wing</span>
+</div>
+</td>
+<td class="py-3.5 px-space-md">
+<div class="flex flex-col">
+<span class="font-semibold text-on-surface">Physics (Paper 1)</span>
+<span class="font-label-code-sm text-label-code-sm text-secondary">Upper Sixth Sc. • Desk #14</span>
+</div>
+</td>
+<td class="py-3.5 px-space-md">
+<div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-surface-container text-primary font-label-code-md text-label-code-md font-bold">
+<span class="w-1.5 h-1.5 rounded-full bg-error"></span>
+<span>TRACKER #04</span>
+</div>
+</td>
+<td class="py-3.5 px-space-md">
+<div class="flex flex-col gap-0.5">
+<div class="flex items-center gap-1 text-error font-medium">
+<span class="material-symbols-outlined text-[16px]">cell_tower</span>
+<span>Smart Watch Activity</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="font-label-code-sm text-label-code-sm font-semibold text-on-surface">91% Confidence</span>
+<span class="text-outline text-body-sm font-body-sm">•</span>
+<span class="text-on-surface-variant text-[11px]">Aggregated ×3</span>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-space-md">
+<div class="flex flex-col">
+<span class="font-medium text-on-surface">Device Extracted &amp; Bagged</span>
+<span class="text-on-surface-variant text-body-sm">Mme. F. Awounfack</span>
+</div>
+</td>
+<td class="py-3.5 px-space-md">
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-error-container text-error text-[11px] font-semibold tracking-wide uppercase">
+<span class="w-1.5 h-1.5 rounded-full bg-error"></span>
+<span>Confirmed by Master</span>
+</span>
+</td>
+<td class="py-3.5 px-space-md text-right">
+<button class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-container text-primary font-medium hover:bg-surface-container-high transition-all" type="button">
+<span class="material-symbols-outlined text-[16px]">visibility</span>
+<span>Inspect Evidence</span>
+</button>
+</td>
+</tr>
+<!-- Row 6 (Suspicious Communication) -->
+<tr class="hover:bg-surface-container-low transition-colors cursor-pointer group bg-surface-container-low/30" onclick="openEvidenceModal(3)">
+<td class="py-3.5 px-space-md">
+<div class="flex flex-col">
+<span class="font-label-code-md text-label-code-md font-bold text-on-surface">09:40:02 AM</span>
+<span class="text-on-surface-variant font-medium">Hall D • Technical Block</span>
+</div>
+</td>
+<td class="py-3.5 px-space-md">
+<div class="flex flex-col">
+<span class="font-semibold text-on-surface">Technical Drawing</span>
+<span class="font-label-code-sm text-label-code-sm text-secondary">Form 5 Tech • Bay 02</span>
+</div>
+</td>
+<td class="py-3.5 px-space-md">
+<div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-surface-container text-primary font-label-code-md text-label-code-md font-bold">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+<span>TRACKER #22</span>
+</div>
+</td>
+<td class="py-3.5 px-space-md">
+<div class="flex flex-col gap-0.5">
+<div class="flex items-center gap-1 text-on-surface font-medium">
+<span class="material-symbols-outlined text-[16px] text-tertiary">swap_horiz</span>
+<span>Instrument Passing</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="font-label-code-sm text-label-code-sm font-semibold text-on-surface">84% Confidence</span>
+<span class="text-outline text-body-sm font-body-sm">•</span>
+<span class="text-on-surface-variant text-[11px]">Hall Sensor Array</span>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-space-md">
+<div class="flex flex-col">
+<span class="font-medium text-on-surface">Seating Spacing Enforced</span>
+<span class="text-on-surface-variant text-body-sm">Mr. P. Asong</span>
+</div>
+</td>
+<td class="py-3.5 px-space-md">
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-secondary-container text-on-secondary-container text-[11px] font-semibold tracking-wide uppercase">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+<span>Pending Board Review</span>
+</span>
+</td>
+<td class="py-3.5 px-space-md text-right">
+<button class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-container text-primary font-medium hover:bg-surface-container-high transition-all" type="button">
+<span class="material-symbols-outlined text-[16px]">visibility</span>
+<span>Inspect Evidence</span>
+</button>
+</td>
+</tr>
+<!-- Row 7 (Unauthorised Material) -->
+<tr class="hover:bg-surface-container-low transition-colors cursor-pointer group bg-surface-container-lowest" onclick="openEvidenceModal(2)">
+<td class="py-3.5 px-space-md">
+<div class="flex flex-col">
+<span class="font-label-code-md text-label-code-md font-bold text-on-surface">09:12:44 AM</span>
+<span class="text-on-surface-variant font-medium">Hall A • Main Pavilion</span>
+</div>
+</td>
+<td class="py-3.5 px-space-md">
+<div class="flex flex-col">
+<span class="font-semibold text-on-surface">Mathematics (Paper 1)</span>
+<span class="font-label-code-sm text-label-code-sm text-secondary">Form 5A • Sitting #03</span>
+</div>
+</td>
+<td class="py-3.5 px-space-md">
+<div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-surface-container text-primary font-label-code-md text-label-code-md font-bold">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+<span>TRACKER #01</span>
+</div>
+</td>
+<td class="py-3.5 px-space-md">
+<div class="flex flex-col gap-0.5">
+<div class="flex items-center gap-1 text-on-surface font-medium">
+<span class="material-symbols-outlined text-[16px] text-tertiary">draft</span>
+<span>Inscribed Ruler / Calculator Lid</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="font-label-code-sm text-label-code-sm font-semibold text-on-surface">87% Confidence</span>
+<span class="text-outline text-body-sm font-body-sm">•</span>
+<span class="text-on-surface-variant text-[11px]">Stationery Inspection</span>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-space-md">
+<div class="flex flex-col">
+<span class="font-medium text-on-surface">Item Replaced with Standard Item</span>
+<span class="text-on-surface-variant text-body-sm">Mr. T. Nkemayang</span>
+</div>
+</td>
+<td class="py-3.5 px-space-md">
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-secondary-container text-on-secondary-container text-[11px] font-semibold tracking-wide uppercase">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+<span>Pending Board Review</span>
+</span>
+</td>
+<td class="py-3.5 px-space-md text-right">
+<button class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-container text-primary font-medium hover:bg-surface-container-high transition-all" type="button">
+<span class="material-symbols-outlined text-[16px]">visibility</span>
+<span>Inspect Evidence</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination / Ledger Verification Footer -->
+<div class="px-space-md py-space-sm bg-surface-container-low flex flex-col sm:flex-row items-center justify-between gap-space-sm font-body-sm text-body-sm text-on-surface-variant">
+<div class="flex items-center gap-2">
+<span>Showing 1 to 7 of 7 registered logs</span>
+<span class="text-outline">•</span>
+<span class="font-label-code-sm text-label-code-sm text-primary font-medium">All signatures verified by GCE Board Core Node</span>
+</div>
+<div class="flex items-center gap-1">
+<button class="px-2.5 py-1 rounded bg-surface-container text-outline text-body-sm cursor-not-allowed" type="button">Previous</button>
+<button class="px-2.5 py-1 rounded bg-primary text-on-primary font-semibold text-body-sm shadow-sm" type="button">1</button>
+<button class="px-2.5 py-1 rounded bg-surface-container text-outline text-body-sm cursor-not-allowed" type="button">Next</button>
+</div>
+</div>
+</div>
+<!-- Active Review & Fast Actions Section -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-gutter">
+<!-- Discipline Committee Summary Card -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<span class="font-headline-md text-headline-md text-on-surface">Discipline Master Directive</span>
+<span class="px-2 py-0.5 rounded bg-surface-container text-primary font-label-code-sm text-label-code-sm font-semibold">Active Cycle</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">Formal determinations made on this portal directly alter the candidate's provisional GCE eligibility dossier and are locked onto the Ministry of Secondary Education (MINESEC) audit ledger.</p>
+<div class="p-space-sm bg-surface-container-low rounded-lg flex items-start gap-space-sm">
+<span class="material-symbols-outlined text-primary text-[20px] mt-0.5">policy</span>
+<div class="flex flex-col">
+<span class="font-body-sm text-body-sm font-semibold text-on-surface">Article 32 Compliance Mandatory</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Invigilator witness statement and secondary confirmation are required prior to final exam script annulment.</span>
+</div>
+</div>
+</div>
+<!-- Live Hall Incident Distribution Chart -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<span class="font-headline-md text-headline-md text-on-surface">Hall Distribution</span>
+<span class="font-label-code-sm text-label-code-sm text-secondary">Spatial Density</span>
+</div>
+<div class="flex items-center gap-space-md my-auto">
+<!-- Inline SVG Minimal Distribution Bar Chart -->
+<svg class="w-24 h-24 shrink-0 -rotate-90" viewbox="0 0 36 36">
+<circle cx="18" cy="18" fill="transparent" r="15.915" stroke="#eff4ff" stroke-width="4"></circle>
+<!-- Hall A: 4 items (57%) -->
+<circle cx="18" cy="18" fill="transparent" r="15.915" stroke="#1d4ed8" stroke-dasharray="57 43" stroke-dashoffset="0" stroke-width="4"></circle>
+<!-- Hall B: 2 items (28%) -->
+<circle cx="18" cy="18" fill="transparent" r="15.915" stroke="#466083" stroke-dasharray="28 72" stroke-dashoffset="-57" stroke-width="4"></circle>
+<!-- Hall C: 1 item (15%) -->
+<circle cx="18" cy="18" fill="transparent" r="15.915" stroke="#dce9ff" stroke-dasharray="15 85" stroke-dashoffset="-85" stroke-width="4"></circle>
+</svg>
+<div class="flex flex-col gap-1 w-full text-body-sm font-body-sm">
+<div class="flex items-center justify-between">
+<span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-primary-container"></span>Hall A (Pavilion)</span>
+<span class="font-semibold text-on-surface">4 events (57%)</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-secondary"></span>Hall B (Science)</span>
+<span class="font-semibold text-on-surface">2 events (28%)</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-surface-container-high"></span>Hall C / Other</span>
+<span class="font-semibold text-on-surface">1 event (15%)</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Quick Certification Authority -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex flex-col justify-between">
+<div class="flex flex-col gap-1">
+<div class="flex items-center justify-between">
+<span class="font-headline-md text-headline-md text-on-surface">Supervising Authority</span>
+<span class="w-2 h-2 rounded-full bg-primary animate-ping"></span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Centre #1042 Active Examination Secretariat</span>
+</div>
+<div class="p-space-sm bg-surface-container-low rounded-lg flex items-center gap-space-sm mt-space-sm">
+<div class="w-9 h-9 rounded-full bg-surface-container-high flex items-center justify-center font-headline-md text-primary">
+            M
+          </div>
+<div class="flex flex-col">
+<span class="font-body-sm text-body-sm font-bold text-on-surface">M. Tamba Emmanuel</span>
+<span class="font-label-code-sm text-label-code-sm text-secondary">Chief Discipline Master • In Attendance</span>
+</div>
+</div>
+<div class="mt-space-sm flex items-center gap-2">
+<button class="w-full py-2 bg-primary text-on-primary rounded-lg text-body-sm font-body-sm font-medium hover:bg-primary-container transition-colors text-center shadow-sm" type="button">
+            Sign Full Sequence Audit
+          </button>
+</div>
+</div>
+</div>
+</div>
+<!-- EVIDENCE INSPECTION MODAL (EXPANDED DETAIL INSPECTOR VIEW) -->
+<div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-on-background/40 backdrop-blur-sm hidden" id="evidenceModal">
+<div class="bg-surface-container-lowest w-full max-w-5xl rounded-xl shadow-2xl overflow-hidden flex flex-col max-h-[942px]">
+<!-- Modal Header -->
+<div class="px-space-lg py-space-md bg-surface-container-low flex items-center justify-between border-b border-surface-container">
+<div class="flex items-center gap-space-md">
+<div class="w-10 h-10 rounded-full bg-error-container text-error flex items-center justify-center">
+<span class="material-symbols-outlined text-[24px]">crisis_alert</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<span class="font-headline-md text-headline-md text-on-surface">Evidence Dossier: TRACKER #07</span>
+<span class="px-2 py-0.5 rounded bg-error-container text-error font-label-code-sm text-label-code-sm font-semibold uppercase">Confirmed Irregularity</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">GBHS Yaoundé • Hall A (Main Pavilion) • Mathematics Paper 2 • Desk #18</span>
+</div>
+</div>
+<button class="w-8 h-8 rounded-lg bg-surface-container text-on-surface-variant hover:text-on-surface flex items-center justify-center hover:bg-surface-container-high transition-colors" onclick="closeEvidenceModal()" type="button">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+<!-- Modal Body (Two-Column Master Detail) -->
+<div class="p-space-lg overflow-y-auto flex-1 grid grid-cols-1 lg:grid-cols-12 gap-space-lg">
+<!-- Left Column: Video Evidence Frame & Sensor Telemetry (7 Cols) -->
+<div class="lg:col-span-7 flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<span class="font-body-md text-body-md font-semibold text-on-surface flex items-center gap-1.5">
+<span class="material-symbols-outlined text-primary text-[18px]">videocam</span>
+              Optical Camera Stream • Node 04-A (Time 10:42:18 AM)
+            </span>
+<span class="font-label-code-sm text-label-code-sm text-secondary">Frame #924082 • AI Confidence 94.2%</span>
+</div>
+<!-- Video Frame with Bounding Box Overlay Simulation -->
+<div class="relative w-full rounded-xl overflow-hidden bg-on-background aspect-video shadow-md">
+<img class="w-full h-full object-cover" data-alt="High angle examination hall security camera photo at GBHS Yaounde showing desks in uniform rows with African high school students in white shirts taking an exam, with an automated yellow and red target bounding box focused on a concealed electronic smartphone under desk eighteen in sharp contrast." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD9E6gsCESXibkcH0MzCmea08egSatMO5pEXmmdP7pnTkezp2LYovmgp8pp5K3qJjPzTgGJ4bGI7eLl7gjvbmIYwDgghnUaSHGxj1MQlYYkqHahuDzKt_8lS8MDm1h1HnCctkJXtJVtBwaZXZAMTfhMvpyxHyMNNixvCL-VFPGhOWi2Y1j2K-fELawm2Uq9uB6Ld6qnBvsdXBNmdme4vorPLgJ0PTcRQ0uC5cH1D_cceFX2lcb3_a7SPg"/>
+<!-- Simulated Computer Vision Detection Bounding Box -->
+<div class="absolute inset-0 pointer-events-none p-6 flex items-center justify-center">
+<div class="relative w-48 h-36 border-2 border-dashed border-red-500 rounded bg-red-500/10 flex flex-col justify-between p-1.5 shadow-lg">
+<div class="flex items-center justify-between">
+<span class="bg-error text-on-error text-[10px] font-label-code-sm px-1 rounded uppercase font-semibold">Phone Detected (94%)</span>
+<span class="bg-black/60 text-white text-[10px] font-label-code-sm px-1 rounded">X:482 Y:210</span>
+</div>
+<div class="self-end bg-black/70 text-amber-300 text-[10px] font-label-code-sm px-1 rounded">
+                  Aggregated: 2 events
+                </div>
+</div>
+</div>
+<!-- Cam HUD Overlay -->
+<div class="absolute bottom-2 left-3 right-3 flex items-center justify-between text-white text-[11px] font-label-code-sm bg-black/60 px-3 py-1.5 rounded-lg backdrop-blur-sm">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
+<span>REC LIVE • 1080p 60FPS</span>
+</div>
+<span>TAMPER-RESISTANT WATERMARK: 1042-HA-07-20261014</span>
+</div>
+</div>
+<!-- Secondary Evidence Thumbnails Strip -->
+<div class="grid grid-cols-3 gap-space-sm">
+<div class="relative rounded-lg overflow-hidden bg-surface-container aspect-video cursor-pointer ring-2 ring-primary">
+<img class="w-full h-full object-cover" data-alt="Secondary camera angle close-up of high school student desk drawer showing edge of smartphone screen in realistic examination classroom lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuArbd2GoKCSv3e6ZlwQHREAgtEB-VCurVspK5y4QFBH4ugZJLdeQkmnL9hNT8RBCmJ2f_71JrFJpffm9REIxVWdY9YA8_EInSOiRAjxydnaiey30B_dh5MW4_KOolRPdLFYQ4x05-0U11Hs4c0FJoeL-aQL9iF5QjRk-7fSdV65qlw56VyrOBz8VhHpFbMmTtcY7Gy4ZuGD3g8e37pRjHsOnOvP5WcvdODsKBAuqLsFhreIukUSg9-98A"/>
+<div class="absolute bottom-1 left-1 bg-black/70 text-white text-[10px] px-1 rounded font-label-code-sm">10:14 AM (T1)</div>
+</div>
+<div class="relative rounded-lg overflow-hidden bg-surface-container aspect-video cursor-pointer opacity-80 hover:opacity-100 transition-opacity">
+<img class="w-full h-full object-cover" data-alt="Overhead wide angle frame of hall showing invigilator walking down the aisle towards desk eighteen with hand raised." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAE32DMNqM44AVkzQgElbWe_f90lt8_CyLQMtKz-cuSNma05nwmxZtHAnFP4ZR7krDM4pffqrmFF9uaF9ojRFHlUOzpjOpsdksE5DXF2psM39RDrELEdGmNEqfu_2FDnmXjdFUIXBLpFYe8i1jmarkTaCznhWHMNMwt2JDm5-Izi5q93wKXztdOyhs45lKBhtNyB2Szp89V2-bv_eQBdqre0Pv28G5H88i565umREpEN10tgGfSJm_QdQ"/>
+<div class="absolute bottom-1 left-1 bg-black/70 text-white text-[10px] px-1 rounded font-label-code-sm">10:32 AM (T2)</div>
+</div>
+<div class="relative rounded-lg overflow-hidden bg-surface-container aspect-video cursor-pointer opacity-80 hover:opacity-100 transition-opacity">
+<img class="w-full h-full object-cover" data-alt="Macro photo evidence bag showing confiscated black Android smartphone sealed with official blue GCE Board security tape." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCSyhswNeyhUhftGivKd3EeZSB8sux3PqXf8qSW74HoLHIWmPUTDHq8iZsoKmn7cZENrVVB0WT2Kh6V12Oi_X9ns2_MQVdlkq_ZQ_i_RtE2qHEcnyppsmpr0iDExG8OPxZis5FAwUpMH_vKToxJl6oEBRLi1tPqtfcLxdQoeNFhcMIIJZqLeAUyzMumly73bpURQ6mC4qj-MzuBOr3XYBx5A4PEp5lzGBllpNQQGo-ovHnYaZKSpLRbFQ"/>
+<div class="absolute bottom-1 left-1 bg-black/70 text-white text-[10px] px-1 rounded font-label-code-sm">10:44 AM (Item)</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Chronology, Invigilator Certifications & Actions (5 Cols) -->
+<div class="lg:col-span-5 flex flex-col gap-space-md">
+<!-- Candidate & Subject Metadata Block -->
+<div class="p-space-md bg-surface-container-low rounded-xl flex flex-col gap-1.5">
+<span class="font-label-code-sm text-label-code-sm uppercase tracking-wide text-secondary font-semibold">Registered Candidate Particulars</span>
+<div class="flex items-center justify-between">
+<span class="font-headline-md text-headline-md text-on-surface">Candidate #1042-05A-18</span>
+<span class="font-label-code-md text-label-code-md text-primary font-bold">DESK 18</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface">Session: GCE Ordinary Level Mock • Mathematics Specimen 0570</span>
+<span class="font-label-code-sm text-label-code-sm text-outline">Candidate biometric barcode verified at entrance 07:48 AM</span>
+</div>
+<!-- Chronological Detection Timeline -->
+<div class="flex flex-col gap-2">
+<span class="font-body-md text-body-md font-semibold text-on-surface">Chronological Detection Timeline</span>
+<div class="flex flex-col pl-2 border-l-2 border-surface-container space-y-3 font-body-sm text-body-sm">
+<!-- Event 1 -->
+<div class="relative pl-4">
+<span class="absolute -left-[13px] top-1 w-2.5 h-2.5 rounded-full bg-surface-tint"></span>
+<div class="flex items-center justify-between">
+<span class="font-label-code-sm text-label-code-sm font-bold text-on-surface">10:14:02 AM</span>
+<span class="text-[11px] font-label-code-sm text-secondary">Telemetry Event #1</span>
+</div>
+<p class="text-on-surface-variant">Automated computer vision algorithm logged brief specular screen reflection under wooden desk rim (82% confidence threshold).</p>
+</div>
+<!-- Event 2 -->
+<div class="relative pl-4">
+<span class="absolute -left-[13px] top-1 w-2.5 h-2.5 rounded-full bg-surface-tint"></span>
+<div class="flex items-center justify-between">
+<span class="font-label-code-sm text-label-code-sm font-bold text-on-surface">10:32:45 AM</span>
+<span class="text-[11px] font-label-code-sm text-secondary">Telemetry Event #2</span>
+</div>
+<p class="text-on-surface-variant">Secondary confirmation: Hand articulation downward for 48 consecutive seconds. System dispatched silent alert to chief invigilator's tablet.</p>
+</div>
+<!-- Event 3 -->
+<div class="relative pl-4">
+<span class="absolute -left-[13px] top-1 w-2.5 h-2.5 rounded-full bg-error"></span>
+<div class="flex items-center justify-between">
+<span class="font-label-code-sm text-label-code-sm font-bold text-error">10:42:18 AM</span>
+<span class="text-[11px] font-label-code-sm text-error font-semibold">On-Site Interception</span>
+</div>
+<p class="text-on-surface font-medium">Mr. T. Nkemayang approached Sitting #18, intercepted Samsung device on candidate's lap, and applied tamper-proof evidence seal #GCE-9921.</p>
+</div>
+</div>
+</div>
+<!-- Official Invigilator & Discipline Determinations -->
+<div class="p-space-md bg-surface-container rounded-xl flex flex-col gap-2">
+<span class="font-body-sm text-body-sm font-semibold text-on-surface">Discipline Master's Formal Finding:</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant italic">"Confirmed deliberate introduction of prohibited telecommunication device into Mathematics Paper 2 examination environment. Candidate script seized at Question 4. Physical apparatus impounded."</p>
+<div class="flex items-center justify-between pt-1 border-t border-surface-container-high text-body-sm">
+<span class="font-semibold text-on-surface">Sign-off: M. Tamba Emmanuel</span>
+<span class="font-label-code-sm text-label-code-sm text-secondary">Logged 10:48 AM</span>
+</div>
+</div>
+<!-- Official Action Buttons -->
+<div class="flex flex-col gap-space-xs pt-space-xs">
+<button class="w-full py-2.5 bg-primary text-on-primary rounded-lg text-body-sm font-body-sm font-semibold hover:bg-primary-container shadow-md flex items-center justify-center gap-2 transition-all" type="button">
+<span class="material-symbols-outlined text-[18px]">picture_as_pdf</span>
+<span>Export GCE Board Evidence Dossier (PDF)</span>
+</button>
+<div class="grid grid-cols-2 gap-space-xs">
+<button class="py-2 bg-surface-container-low text-error rounded-lg text-body-sm font-body-sm font-medium hover:bg-surface-container transition-colors flex items-center justify-center gap-1" type="button">
+<span class="material-symbols-outlined text-[16px]">undo</span>
+<span>Revoke Sanction</span>
+</button>
+<button class="py-2 bg-surface-container-low text-on-surface-variant rounded-lg text-body-sm font-body-sm font-medium hover:bg-surface-container transition-colors flex items-center justify-center gap-1" type="button">
+<span class="material-symbols-outlined text-[16px]">archive</span>
+<span>Archive Record</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Modal Footer -->
+<div class="px-space-lg py-space-sm bg-surface-container-low border-t border-surface-container flex items-center justify-between text-body-sm font-body-sm text-on-surface-variant">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-primary">security</span>
+<span>Cryptographic Hash: 8b1f2379d0ec9c7e3aa02919bb11a2f643e2</span>
+</div>
+<button class="px-4 py-1.5 bg-surface-container text-on-surface font-medium rounded-lg hover:bg-surface-container-high transition-colors" onclick="closeEvidenceModal()" type="button">
+          Close Inspector
+        </button>
+</div>
+</div>
+</div>
+<script>
+    // Tab filter switching logic
+    const tabs = document.querySelectorAll('#filterTabs .tab-btn');
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => {
+          t.classList.remove('bg-primary', 'text-on-primary', 'font-semibold', 'shadow-sm');
+          t.classList.add('bg-surface-container-low', 'text-on-surface-variant');
+        });
+        tab.classList.remove('bg-surface-container-low', 'text-on-surface-variant');
+        tab.classList.add('bg-primary', 'text-on-primary', 'font-semibold', 'shadow-sm');
+      });
+    });
+
+    // Evidence Modal Toggle Functions
+    function openEvidenceModal(id) {
+      const modal = document.getElementById('evidenceModal');
+      if (modal) {
+        modal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+      }
+    }
+
+    function closeEvidenceModal() {
+      const modal = document.getElementById('evidenceModal');
+      if (modal) {
+        modal.classList.add('hidden');
+        document.body.style.overflow = 'auto';
+      }
+    }
+
+    // Close on backdrop escape or click
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeEvidenceModal();
+    });
+    
+    document.getElementById('evidenceModal').addEventListener('click', (e) => {
+      if (e.target.id === 'evidenceModal') {
+        closeEvidenceModal();
+      }
+    });
+  </script>
+</div></main><footer class="w-full bg-surface-container-lowest border-t border-outline-variant py-space-md"><div class="w-full px-margin flex flex-col md:flex-row items-center justify-between gap-space-sm"><div class="flex items-center gap-space-sm"><span class="font-body-sm text-body-sm text-on-surface-variant">© Republic of Cameroon • Ministry of Secondary Education • EyeX Secure Supervision</span></div><div class="flex items-center gap-space-md font-label-code-sm text-label-code-sm text-on-surface-variant"><span>GCE Board Certified Protocol</span><span>SHA-256 Tamper-Proof Audit</span></div></div></footer></body></html>

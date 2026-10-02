@@ -2,15 +2,26 @@
 
 import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase/client'
-import { RotateIcon, ShieldIcon, ImageIcon, CloseIcon } from '@/components/ui/Icons'
-import type { Violation, ViolationActivityType, ViolationSeverity, ViolationStatus } from '@/types'
+import type { Violation } from '@/types'
+
+const SEVERITY_STYLES: Record<string, string> = {
+  CRITICAL: 'bg-[#fef2f2] text-[#b91c1c] border-[#fecaca]',
+  HIGH: 'bg-[#fff7ed] text-[#c2410c] border-[#fed7aa]',
+  MEDIUM: 'bg-[#fffbeb] text-[#b45309] border-[#fde68a]',
+  LOW: 'bg-[#eff4ff] text-[#0037b0] border-[#bbd6ff]',
+}
+
+const STATUS_STYLES: Record<string, string> = {
+  CONFIRMED: 'bg-[#fef2f2] text-[#b91c1c]',
+  FLAGGED: 'bg-[#fffbeb] text-[#b45309]',
+  DISMISSED: 'bg-[#f8f9ff] text-[#747686]',
+  REVIEWED: 'bg-[#eff4ff] text-[#0037b0]',
+}
 
 export default function ViolationsLedgerPage() {
   const [violations, setViolations] = useState<Violation[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [selectedViolation, setSelectedViolation] = useState<Violation | null>(null)
-
-  // Filters
   const [search, setSearch] = useState('')
   const [activityFilter, setActivityFilter] = useState('')
   const [severityFilter, setSeverityFilter] = useState('')
@@ -20,276 +31,156 @@ export default function ViolationsLedgerPage() {
     try {
       const res = await fetch('/api/violations?limit=100')
       const data = await res.json()
-      if (Array.isArray(data)) {
-        setViolations(data)
-      }
-    } catch (err) {
-      console.error('Error fetching violations:', err)
-    } finally {
-      setIsLoading(false)
-    }
+      if (Array.isArray(data)) setViolations(data)
+    } catch (err) { console.error(err) }
+    finally { setIsLoading(false) }
   }
 
-  useEffect(() => {
-    loadViolations()
-  }, [])
+  useEffect(() => { loadViolations() }, [])
 
-  // Calculate occurrence counts per tracker
-  const trackerCounts = violations.reduce<Record<string, Record<string, number>>>((acc, curr) => {
-    const tracker = curr.tracker_label || 'Tracker'
-    if (!acc[tracker]) acc[tracker] = {}
-    const act = curr.activity_type
-    acc[tracker][act] = (acc[tracker][act] || 0) + 1
-    return acc
-  }, {})
+  async function handleUpdateStatus(id: string, status: string) {
+    try {
+      const supabase = createClient()
+      await supabase.from('violations').update({ status }).eq('id', id)
+      setViolations((prev) => prev.map((v) => v.id === id ? { ...v, status: status as Violation['status'] } : v))
+      if (selectedViolation?.id === id) setSelectedViolation((prev) => prev ? { ...prev, status: status as Violation['status'] } : null)
+    } catch { /* ignore */ }
+  }
 
-  // Filter application
   const filtered = violations.filter((v) => {
     if (activityFilter && v.activity_type !== activityFilter) return false
     if (severityFilter && v.severity !== severityFilter) return false
     if (statusFilter && v.status !== statusFilter) return false
     if (search) {
       const q = search.toLowerCase()
-      const matchTracker = v.tracker_label.toLowerCase().includes(q)
-      const matchActivity = v.activity_type.toLowerCase().includes(q)
-      const matchCourse = v.session?.course_name?.toLowerCase().includes(q)
-      if (!matchTracker && !matchActivity && !matchCourse) return false
+      if (!v.tracker_label?.toLowerCase().includes(q) && !v.activity_type?.toLowerCase().includes(q) && !(v as Violation & { session?: { course_name: string } }).session?.course_name?.toLowerCase().includes(q)) return false
     }
     return true
   })
 
-  // Status Update (Confirm / Dismiss)
-  async function handleUpdateStatus(id: string, newStatus: ViolationStatus) {
-    const supabase = createClient()
-    const { error } = await supabase
-      .from('violations')
-      .update({ status: newStatus })
-      .eq('id', id)
-
-    if (!error) {
-      setViolations((prev) =>
-        prev.map((v) => (v.id === id ? { ...v, status: newStatus } : v))
-      )
-      if (selectedViolation?.id === id) {
-        setSelectedViolation((prev) => (prev ? { ...prev, status: newStatus } : null))
-      }
-    }
-  }
+  const activityTypes = [...new Set(violations.map((v) => v.activity_type))]
+  const criticalCount = violations.filter((v) => v.severity === 'CRITICAL').length
+  const flaggedCount = violations.filter((v) => v.status === 'FLAGGED').length
+  const confirmedCount = violations.filter((v) => v.status === 'CONFIRMED').length
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8 space-y-6 max-w-7xl mx-auto selection:bg-teal-900 selection:text-teal-100">
-      {/* ── Page Header ── */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-2 border-b border-gray-800/80">
-        <div>
-          <h1 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
-            Violations &amp; Evidence Ledger
-          </h1>
-          <p className="text-xs sm:text-sm text-gray-400 mt-1">
-            Tamper-evident archive of camera snapshots, tracker occurrences, and behavioral flags.
-          </p>
-        </div>
+    <div className="w-full px-4 sm:px-6 lg:px-8 py-6 max-w-7xl mx-auto space-y-6">
 
-        <button
-          onClick={loadViolations}
-          className="min-h-[44px] px-4 py-2 rounded-xl border border-gray-700 bg-gray-900 hover:bg-gray-800 text-gray-300 text-xs sm:text-sm font-semibold transition-colors flex items-center gap-1.5 self-start sm:self-auto"
-        >
-          <RotateIcon className="w-3.5 h-3.5" />
-          <span>Refresh Ledger</span>
-        </button>
-      </div>
-
-      {/* ── Tracker Occurrence Summary Cards ── */}
-      {Object.keys(trackerCounts).length > 0 && (
-        <section className="space-y-3">
-          <h2 className="text-xs font-bold uppercase tracking-wider text-gray-400">
-            Candidate Tracker Frequency Aggregation
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-            {Object.entries(trackerCounts).slice(0, 4).map(([tracker, counts]) => {
-              const totalIncidents = Object.values(counts).reduce((a, b) => a + b, 0)
-              return (
-                <div
-                  key={tracker}
-                  className="rounded-xl border border-gray-800 bg-gray-900/60 p-4 space-y-2 shadow-sm"
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="font-mono text-xs font-bold text-white">{tracker}</span>
-                    <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-red-950 text-red-300 border border-red-800">
-                      {totalIncidents} Incident{totalIncidents !== 1 ? 's' : ''}
-                    </span>
-                  </div>
-                  <div className="text-[11px] text-gray-400 space-y-1">
-                    {Object.entries(counts).map(([type, cnt]) => (
-                      <div key={type} className="flex justify-between">
-                        <span>{type.replace(/_/g, ' ')}:</span>
-                        <strong className="text-gray-200 font-mono">{cnt}</strong>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )
-            })}
+      {/* ── Header ──────────────────────────────────────────────── */}
+      <div className="flex flex-col gap-1">
+        <nav className="flex items-center gap-1.5 text-[13px] text-[#747686]">
+          <span>Monitoring</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-3.5 h-3.5"><path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
+          <span className="font-medium text-[#0b1c30]">Activity Evidence Ledger</span>
+        </nav>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-1">
+          <div className="flex items-center gap-2.5">
+            <span className="w-2.5 h-6 bg-[#ba1a1a] rounded-sm" />
+            <div>
+              <h1 className="font-headline-lg text-[#0b1c30] tracking-tight">Flagged Activity Evidence Record</h1>
+              <p className="text-[13px] text-[#434655] mt-0.5">Complete audit trail of malpractice-flagged events detected during examination sessions.</p>
+            </div>
           </div>
-        </section>
-      )}
-
-      {/* ── Filter Controls Row ── */}
-      <div className="p-4 rounded-xl border border-gray-800 bg-gray-900/60 flex flex-wrap items-center gap-3">
-        {/* Search */}
-        <div className="flex-1 min-w-[220px]">
-          <input
-            type="text"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search by Tracker #, Course, or Activity…"
-            className="w-full px-3.5 py-2 text-xs rounded-lg border border-gray-700 bg-gray-950 text-white placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-teal-500 min-h-[40px]"
-          />
-        </div>
-
-        {/* Activity Filter */}
-        <select
-          value={activityFilter}
-          onChange={(e) => setActivityFilter(e.target.value)}
-          className="px-3 py-2 text-xs rounded-lg border border-gray-700 bg-gray-950 text-white focus:outline-none focus:ring-1 focus:ring-teal-500 min-h-[40px]"
-        >
-          <option value="">All Activity Types</option>
-          <option value="PHONE_DETECTED">Phone Detected</option>
-          <option value="SUSPICIOUS_MOVEMENT">Suspicious Movement</option>
-          <option value="POSSIBLE_COMMUNICATION">Possible Communication</option>
-          <option value="UNAUTHORIZED_MATERIAL">Unauthorized Material</option>
-          <option value="OTHER">Other</option>
-        </select>
-
-        {/* Severity Filter */}
-        <select
-          value={severityFilter}
-          onChange={(e) => setSeverityFilter(e.target.value)}
-          className="px-3 py-2 text-xs rounded-lg border border-gray-700 bg-gray-950 text-white focus:outline-none focus:ring-1 focus:ring-teal-500 min-h-[40px]"
-        >
-          <option value="">All Severities</option>
-          <option value="CRITICAL">Critical</option>
-          <option value="HIGH">High</option>
-          <option value="MEDIUM">Medium</option>
-          <option value="LOW">Low</option>
-        </select>
-
-        {/* Status Filter */}
-        <select
-          value={statusFilter}
-          onChange={(e) => setStatusFilter(e.target.value)}
-          className="px-3 py-2 text-xs rounded-lg border border-gray-700 bg-gray-950 text-white focus:outline-none focus:ring-1 focus:ring-teal-500 min-h-[40px]"
-        >
-          <option value="">All Statuses</option>
-          <option value="FLAGGED">Flagged</option>
-          <option value="CONFIRMED">Confirmed</option>
-          <option value="REVIEWED">Reviewed</option>
-          <option value="DISMISSED">Dismissed</option>
-        </select>
-
-        {(search || activityFilter || severityFilter || statusFilter) && (
-          <button
-            onClick={() => {
-              setSearch('')
-              setActivityFilter('')
-              setSeverityFilter('')
-              setStatusFilter('')
-            }}
-            className="px-3 py-2 text-xs text-gray-400 hover:text-white"
-          >
-            Clear
+          <button onClick={() => loadViolations()} className="flex items-center gap-2 border border-[#c4c5d7] bg-white px-3 py-2 rounded-lg text-[13px] font-medium text-[#434655] hover:bg-[#eff4ff] transition-colors self-start sm:self-auto">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} className="w-4 h-4">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+            </svg>
+            Refresh
           </button>
-        )}
+        </div>
       </div>
 
-      {/* ── Violations Table ── */}
-      {isLoading ? (
-        <div className="p-12 text-center text-gray-400 text-sm">
-          Loading Violations Archive…
+      {/* ── Stat Tiles ──────────────────────────────────────────── */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        {[
+          { label: 'Total Flagged', value: violations.length, style: 'text-[#0b1c30]' },
+          { label: 'Critical Events', value: criticalCount, style: 'text-[#b91c1c]' },
+          { label: 'Awaiting Review', value: flaggedCount, style: 'text-[#b45309]' },
+          { label: 'Confirmed Cases', value: confirmedCount, style: 'text-[#b91c1c]' },
+        ].map((s) => (
+          <div key={s.label} className="bg-white p-4 rounded-xl shadow-sm flex flex-col gap-1">
+            <span className="font-code-sm text-[11px] uppercase tracking-wider text-[#747686] font-semibold">{s.label}</span>
+            <span className={`font-headline-xl font-bold ${s.style}`}>{s.value}</span>
+          </div>
+        ))}
+      </div>
+
+      {/* ── Filter Bar ──────────────────────────────────────────── */}
+      <div className="bg-white rounded-xl shadow-sm p-4 flex flex-col sm:flex-row gap-3 flex-wrap">
+        <div className="flex-1 min-w-[180px] flex items-center gap-2 bg-[#eff4ff] px-3 py-2 rounded-lg">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} className="w-4 h-4 text-[#747686] shrink-0">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+          </svg>
+          <input type="text" placeholder="Search activity, tracker, course..." value={search} onChange={(e) => setSearch(e.target.value)}
+            className="bg-transparent outline-none w-full text-[14px] text-[#0b1c30] placeholder:text-[#747686]" />
         </div>
+        <select value={severityFilter} onChange={(e) => setSeverityFilter(e.target.value)}
+          className="bg-[#eff4ff] rounded-lg px-3 py-2 text-[13px] text-[#0b1c30] outline-none font-medium min-w-[130px]">
+          <option value="">All Severities</option>
+          {['CRITICAL', 'HIGH', 'MEDIUM', 'LOW'].map((s) => <option key={s} value={s}>{s}</option>)}
+        </select>
+        <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}
+          className="bg-[#eff4ff] rounded-lg px-3 py-2 text-[13px] text-[#0b1c30] outline-none font-medium min-w-[130px]">
+          <option value="">All Statuses</option>
+          {['FLAGGED', 'CONFIRMED', 'DISMISSED', 'REVIEWED'].map((s) => <option key={s} value={s}>{s}</option>)}
+        </select>
+        <select value={activityFilter} onChange={(e) => setActivityFilter(e.target.value)}
+          className="bg-[#eff4ff] rounded-lg px-3 py-2 text-[13px] text-[#0b1c30] outline-none font-medium min-w-[150px]">
+          <option value="">All Activities</option>
+          {activityTypes.map((a) => <option key={a} value={a}>{a.replace(/_/g, ' ')}</option>)}
+        </select>
+      </div>
+
+      {/* ── Ledger Table ────────────────────────────────────────── */}
+      {isLoading ? (
+        <div className="bg-white rounded-xl shadow-sm p-12 text-center text-[#747686] text-[14px]">Loading evidence records...</div>
       ) : filtered.length === 0 ? (
-        <div className="rounded-2xl border border-gray-800 bg-gray-900/40 p-12 text-center space-y-2">
-          <ShieldIcon className="w-8 h-8 text-gray-600 mx-auto mb-1" />
-          <p className="text-white font-semibold text-sm">No violations match the filter criteria</p>
-          <p className="text-xs text-gray-500">All examination sessions are operating within integrity bounds.</p>
+        <div className="bg-white rounded-xl shadow-sm p-12 text-center flex flex-col items-center gap-3">
+          <div className="w-14 h-14 rounded-xl bg-[#eff4ff] flex items-center justify-center text-[#1d4ed8]">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} className="w-7 h-7">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
+            </svg>
+          </div>
+          <h2 className="font-headline-md text-[#0b1c30]">System Clear</h2>
+          <p className="text-[14px] text-[#747686] max-w-sm">{search || activityFilter || severityFilter || statusFilter ? 'No violations match your filters.' : 'No flagged activities recorded yet. System is monitoring.'}</p>
         </div>
       ) : (
-        <div className="rounded-2xl border border-gray-800 bg-gray-900/60 overflow-hidden shadow-xl">
+        <div className="bg-white rounded-xl shadow-sm overflow-hidden">
           <div className="overflow-x-auto">
-            <table className="w-full text-xs text-left min-w-[750px]">
+            <table className="w-full text-left min-w-[760px]">
               <thead>
-                <tr className="border-b border-gray-800 bg-gray-950/70 text-gray-400 font-mono">
-                  <th className="px-5 py-4">Tracker Label</th>
-                  <th className="px-5 py-4">Incident Event</th>
-                  <th className="px-5 py-4">Examination / Hall</th>
-                  <th className="px-5 py-4">Severity</th>
-                  <th className="px-5 py-4">Confidence</th>
-                  <th className="px-5 py-4">Status</th>
-                  <th className="px-5 py-4">Recorded At</th>
-                  <th className="px-5 py-4 text-right">Evidence Snapshot</th>
+                <tr className="bg-[#eff4ff] font-code-sm text-[11px] text-[#747686] uppercase tracking-wider">
+                  <th className="py-3 px-5">Activity Type</th>
+                  <th className="py-3 px-5">Severity</th>
+                  <th className="py-3 px-5">Tracker / Seat</th>
+                  <th className="py-3 px-5 hidden md:table-cell">Session</th>
+                  <th className="py-3 px-5">Status</th>
+                  <th className="py-3 px-5 hidden lg:table-cell">Detected</th>
+                  <th className="py-3 px-5 text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-800/60">
+              <tbody className="divide-y divide-[#eff4ff]">
                 {filtered.map((v) => {
-                  const sevColor =
-                    v.severity === 'CRITICAL'
-                      ? 'text-red-300 bg-red-950 border-red-800'
-                      : v.severity === 'HIGH'
-                      ? 'text-rose-300 bg-rose-950 border-rose-800'
-                      : v.severity === 'MEDIUM'
-                      ? 'text-amber-300 bg-amber-950 border-amber-800'
-                      : 'text-blue-300 bg-blue-950 border-blue-800'
-
+                  const sevStyle = SEVERITY_STYLES[v.severity] || SEVERITY_STYLES.LOW
+                  const stStyle = STATUS_STYLES[v.status] || STATUS_STYLES.FLAGGED
                   return (
-                    <tr key={v.id} className="hover:bg-gray-800/40 transition-colors">
-                      <td className="px-5 py-4 font-bold text-white font-mono">
-                        {v.tracker_label}
+                    <tr key={v.id} className="hover:bg-[#f8f9ff] transition-colors cursor-pointer" onClick={() => setSelectedViolation(v)}>
+                      <td className="py-4 px-5 text-[13px] font-semibold text-[#0b1c30]">{v.activity_type.replace(/_/g, ' ')}</td>
+                      <td className="py-4 px-5">
+                        <span className={`font-code-sm text-[10px] px-1.5 py-0.5 rounded border font-bold ${sevStyle}`}>{v.severity}</span>
                       </td>
-
-                      <td className="px-5 py-4 font-semibold text-gray-200">
-                        {v.activity_type.replace(/_/g, ' ')}
+                      <td className="py-4 px-5 font-code-sm text-[12px] text-[#434655]">{v.tracker_label || '—'}</td>
+                      <td className="py-4 px-5 text-[13px] text-[#434655] hidden md:table-cell">
+                        {(v as Violation & { session?: { course_name: string } }).session?.course_name ?? '—'}
                       </td>
-
-                      <td className="px-5 py-4 text-gray-300">
-                        {v.session?.course_name || 'Classroom Session'}
+                      <td className="py-4 px-5">
+                        <span className={`text-[12px] font-semibold px-2 py-0.5 rounded ${stStyle}`}>{v.status}</span>
                       </td>
-
-                      <td className="px-5 py-4">
-                        <span className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold border ${sevColor}`}>
-                          {v.severity}
-                        </span>
+                      <td className="py-4 px-5 font-code-sm text-[11px] text-[#747686] hidden lg:table-cell">
+                        {new Date(v.created_at).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
                       </td>
-
-                      <td className="px-5 py-4 font-mono text-gray-300">
-                        {Math.round(v.confidence * 100)}%
-                      </td>
-
-                      <td className="px-5 py-4">
-                        <span
-                          className={`px-2 py-0.5 rounded text-[10px] font-mono font-semibold border ${
-                            v.status === 'CONFIRMED'
-                              ? 'bg-emerald-950 text-emerald-300 border-emerald-800'
-                              : v.status === 'FLAGGED'
-                              ? 'bg-red-950 text-red-300 border-red-800'
-                              : 'bg-gray-800 text-gray-400 border-gray-700'
-                          }`}
-                        >
-                          {v.status}
-                        </span>
-                      </td>
-
-                      <td className="px-5 py-4 text-gray-400 font-mono">
-                        {new Date(v.created_at).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' })}
-                      </td>
-
-                      <td className="px-5 py-4 text-right">
-                        <button
-                          type="button"
-                          onClick={() => setSelectedViolation(v)}
-                          className="min-h-[36px] px-3 py-1.5 rounded-lg bg-teal-950 hover:bg-teal-900 border border-teal-800 text-teal-300 text-xs font-semibold transition-colors inline-flex items-center gap-1.5"
-                        >
-                          <span>View Snapshot</span>
-                          <ImageIcon className="w-3.5 h-3.5" />
-                        </button>
+                      <td className="py-4 px-5 text-right">
+                        <button onClick={(e) => { e.stopPropagation(); setSelectedViolation(v) }} className="text-[13px] text-[#1d4ed8] hover:underline font-semibold">Review</button>
                       </td>
                     </tr>
                   )
@@ -297,89 +188,55 @@ export default function ViolationsLedgerPage() {
               </tbody>
             </table>
           </div>
+          <div className="px-5 py-3 bg-[#f8f9ff] border-t border-[#eff4ff] flex items-center justify-between">
+            <span className="font-code-sm text-[12px] text-[#747686]">Showing {filtered.length} of {violations.length} incidents</span>
+          </div>
         </div>
       )}
 
-      {/* ── Evidence Viewer Modal ── */}
+      {/* ── Detail Panel / Modal ─────────────────────────────────── */}
       {selectedViolation && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-xs animate-in fade-in">
-          <div className="w-full max-w-lg rounded-2xl border border-gray-800 bg-gray-900 p-6 sm:p-7 shadow-2xl space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-gray-800">
+        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-4 bg-black/40 backdrop-blur-sm" onClick={() => setSelectedViolation(null)}>
+          <div className="w-full sm:max-w-lg bg-white rounded-2xl shadow-2xl overflow-hidden" onClick={(e) => e.stopPropagation()}>
+            {/* Header */}
+            <div className={`px-5 py-4 border-b border-[#e5eeff] flex items-center justify-between ${selectedViolation.severity === 'CRITICAL' || selectedViolation.severity === 'HIGH' ? 'bg-[#fef2f2]' : 'bg-[#f8f9ff]'}`}>
               <div>
-                <h3 className="text-base font-bold text-white">
-                  Evidence Snapshot • {selectedViolation.tracker_label}
-                </h3>
-                <p className="text-xs text-red-400 font-semibold mt-0.5">
-                  {selectedViolation.activity_type.replace(/_/g, ' ')}
-                </p>
+                <h3 className="font-headline-md text-[#0b1c30]">{selectedViolation.activity_type.replace(/_/g, ' ')}</h3>
+                <div className="flex items-center gap-2 mt-1">
+                  <span className={`font-code-sm text-[10px] px-1.5 py-0.5 rounded border font-bold ${SEVERITY_STYLES[selectedViolation.severity] || ''}`}>{selectedViolation.severity}</span>
+                  <span className="font-code-sm text-[11px] text-[#747686]">{new Date(selectedViolation.created_at).toLocaleString()}</span>
+                </div>
               </div>
-              <button
-                type="button"
-                onClick={() => setSelectedViolation(null)}
-                className="text-gray-400 hover:text-white p-1"
-              >
-                <CloseIcon className="w-4 h-4" />
+              <button onClick={() => setSelectedViolation(null)} className="p-2 rounded-lg text-[#747686] hover:bg-white/60 transition-colors">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
               </button>
             </div>
 
-            {/* Snapshot Photo Display */}
-            <div className="rounded-xl border border-gray-800 bg-gray-950 overflow-hidden relative min-h-[220px] flex items-center justify-center">
-              {selectedViolation.evidence_url ? (
-                <img
-                  src={selectedViolation.evidence_url}
-                  alt="Incident Snapshot"
-                  className="w-full h-auto object-cover max-h-[300px]"
-                />
-              ) : (
-                <div className="p-8 text-center text-gray-500 text-xs">
-                  <ImageIcon className="w-8 h-8 text-gray-600 mx-auto mb-2" />
-                  Encrypted frame archived in edge hardware buffer
+            {/* Body */}
+            <div className="p-5 flex flex-col gap-3">
+              <div className="grid grid-cols-2 gap-3">
+                <div className="bg-[#f8f9ff] p-3 rounded-lg"><p className="font-code-sm text-[10px] text-[#747686] uppercase">Tracker / Seat</p><p className="text-[14px] font-semibold text-[#0b1c30] mt-0.5">{selectedViolation.tracker_label || '—'}</p></div>
+                <div className="bg-[#f8f9ff] p-3 rounded-lg"><p className="font-code-sm text-[10px] text-[#747686] uppercase">Status</p><p className={`text-[14px] font-semibold mt-0.5 ${STATUS_STYLES[selectedViolation.status]?.split(' ')[1] || ''}`}>{selectedViolation.status}</p></div>
+              </div>
+              {selectedViolation.metadata && (
+                <div className="bg-[#eff4ff] p-3 rounded-lg">
+                  <p className="font-code-sm text-[10px] text-[#747686] uppercase mb-1">Incident Metadata</p>
+                  <pre className="text-[12px] font-mono text-[#434655] whitespace-pre-wrap">{JSON.stringify(selectedViolation.metadata, null, 2)}</pre>
                 </div>
               )}
-              <div className="absolute bottom-2 left-2 px-2 py-0.5 rounded bg-black/80 font-mono text-[10px] text-teal-400">
-                Timestamp: {new Date(selectedViolation.created_at).toISOString()}
-              </div>
             </div>
 
-            {/* Event Metadata Breakdown */}
-            <div className="grid grid-cols-2 gap-3 text-xs font-mono p-3 rounded-xl bg-gray-950 border border-gray-800">
-              <div>
-                <span className="text-gray-500 block text-[10px]">DETECTION CONFIDENCE</span>
-                <span className="text-white font-bold">{Math.round(selectedViolation.confidence * 100)}%</span>
-              </div>
-              <div>
-                <span className="text-gray-500 block text-[10px]">SEVERITY INDEX</span>
-                <span className="text-red-400 font-bold">{selectedViolation.severity}</span>
-              </div>
-              <div>
-                <span className="text-gray-500 block text-[10px]">CURRENT STATUS</span>
-                <span className="text-teal-400 font-bold">{selectedViolation.status}</span>
-              </div>
-              <div>
-                <span className="text-gray-500 block text-[10px]">EVIDENCE ID</span>
-                <span className="text-gray-400 truncate block">{selectedViolation.id.slice(0, 10)}…</span>
-              </div>
-            </div>
-
-            {/* Status Modification Buttons */}
-            <div className="pt-2 flex items-center justify-between gap-2">
-              <span className="text-xs text-gray-400">Triage Decision:</span>
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => handleUpdateStatus(selectedViolation.id, 'DISMISSED')}
-                  className="min-h-[40px] px-3.5 py-1.5 rounded-lg border border-gray-700 bg-gray-800 hover:bg-gray-700 text-gray-300 text-xs font-medium"
-                >
-                  Dismiss Flag
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleUpdateStatus(selectedViolation.id, 'CONFIRMED')}
-                  className="min-h-[40px] px-4 py-1.5 rounded-lg bg-red-950 hover:bg-red-900 border border-red-800 text-red-200 text-xs font-semibold"
-                >
-                  Confirm Violation
-                </button>
-              </div>
+            {/* Actions */}
+            <div className="px-5 pb-5 flex flex-wrap gap-2">
+              {selectedViolation.status !== 'CONFIRMED' && (
+                <button onClick={() => handleUpdateStatus(selectedViolation.id, 'CONFIRMED')} className="flex-1 py-2.5 rounded-lg bg-[#ba1a1a] text-white text-[13px] font-semibold hover:bg-[#93000a] transition-colors">Confirm Violation</button>
+              )}
+              {selectedViolation.status !== 'DISMISSED' && (
+                <button onClick={() => handleUpdateStatus(selectedViolation.id, 'DISMISSED')} className="flex-1 py-2.5 rounded-lg bg-[#eff4ff] text-[#434655] text-[13px] font-semibold hover:bg-[#e5eeff] transition-colors">Dismiss</button>
+              )}
+              {selectedViolation.status === 'FLAGGED' && (
+                <button onClick={() => handleUpdateStatus(selectedViolation.id, 'REVIEWED')} className="w-full py-2.5 rounded-lg border border-[#c4c5d7] bg-white text-[13px] font-semibold text-[#434655] hover:bg-[#f8f9ff] transition-colors">Mark Reviewed</button>
+              )}
             </div>
           </div>
         </div>

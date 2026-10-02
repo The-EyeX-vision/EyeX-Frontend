@@ -1,22 +1,21 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
-import { CalendarIcon, ShieldIcon } from '@/components/ui/Icons'
 import type { Classroom, HallSession, Violation } from '@/types'
 
 export const dynamic = 'force-dynamic'
 
-interface DashboardExecutiveData {
+interface DashboardData {
   schoolName: string
   totalHalls: number
   activeSessionsCount: number
-  totalTrackersDetected: number
+  totalViolationsToday: number
   totalViolations: number
   halls: (Classroom & { active_session?: HallSession | null })[]
   recentViolations: (Violation & { session?: { course_name: string } | null })[]
 }
 
-async function getExecutiveData(): Promise<DashboardExecutiveData> {
+async function getDashboardData(): Promise<DashboardData> {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
@@ -28,56 +27,38 @@ async function getExecutiveData(): Promise<DashboardExecutiveData> {
     .maybeSingle()
 
   if (!school) {
-    return {
-      schoolName: 'Institution',
-      totalHalls: 0,
-      activeSessionsCount: 0,
-      totalTrackersDetected: 0,
-      totalViolations: 0,
-      halls: [],
-      recentViolations: [],
-    }
+    return { schoolName: 'Institution', totalHalls: 0, activeSessionsCount: 0, totalViolationsToday: 0, totalViolations: 0, halls: [], recentViolations: [] }
   }
 
-  const schoolId = school.id
-
-  // 1. Fetch Classrooms (Halls)
   const { data: rawHalls } = await supabase
     .from('classrooms')
     .select('*')
-    .eq('school_id', schoolId)
+    .eq('school_id', school.id)
     .order('created_at', { ascending: false })
 
   let halls: Classroom[] = rawHalls ?? []
 
-  // Fallback: If no classrooms in DB yet, auto-provision 2 demo halls for this school
   if (halls.length === 0) {
     const demoHalls = [
-      { school_id: schoolId, name: 'Main Hall A', access_code: '7K4P92XM' },
-      { school_id: schoolId, name: 'Science Auditorium', access_code: '9X2M4K7P' },
+      { school_id: school.id, name: 'Main Hall A', access_code: '7K4P92XM' },
+      { school_id: school.id, name: 'Science Auditorium', access_code: '9X2M4K7P' },
     ]
     const { data: inserted } = await supabase.from('classrooms').insert(demoHalls).select()
     if (inserted) halls = inserted
   }
 
-  // 2. Fetch Sessions
   const { data: sessions } = await supabase
     .from('exam_hall_sessions')
     .select('*')
-    .eq('school_id', schoolId)
+    .eq('school_id', school.id)
 
   const activeSessions = (sessions ?? []).filter((s) => s.status === 'ACTIVE')
 
-  // Map active sessions to halls
-  const hallsWithSession = halls.map((hall) => {
-    const active = activeSessions.find((s) => s.classroom_id === hall.id)
-    return {
-      ...hall,
-      active_session: active || null,
-    }
-  })
+  const hallsWithSession = halls.map((hall) => ({
+    ...hall,
+    active_session: activeSessions.find((s) => s.classroom_id === hall.id) || null,
+  }))
 
-  // 3. Fetch Violations
   const sessionIds = (sessions ?? []).map((s) => s.id)
   let violations: (Violation & { session?: { course_name: string } | null })[] = []
 
@@ -87,284 +68,311 @@ async function getExecutiveData(): Promise<DashboardExecutiveData> {
       .select('*, session:exam_hall_sessions(course_name)')
       .in('session_id', sessionIds)
       .order('created_at', { ascending: false })
-      .limit(10)
-
-    if (vList) violations = vList as unknown as (Violation & { session?: { course_name: string } | null })[]
+      .limit(8)
+    if (vList) violations = vList as unknown as typeof violations
   }
 
-  // Calculate total detected trackers across active sessions
-  const totalTrackersDetected = activeSessions.reduce(
-    (acc, curr) => acc + (curr.expected_students ? Math.max(1, curr.expected_students - 1) : 24),
-    0
-  )
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+  const todayViolations = violations.filter((v) => new Date(v.created_at) >= today)
 
   return {
     schoolName: school.school_name,
     totalHalls: halls.length,
     activeSessionsCount: activeSessions.length,
-    totalTrackersDetected,
+    totalViolationsToday: todayViolations.length,
     totalViolations: violations.length,
     halls: hallsWithSession,
     recentViolations: violations,
   }
 }
 
-export default async function ExecutiveDashboardPage() {
-  const data = await getExecutiveData()
+function StatusBadge({ status }: { status: string }) {
+  if (status === 'ACTIVE') return (
+    <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-100 text-emerald-800">
+      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+      IN PROGRESS
+    </span>
+  )
+  if (status === 'SCHEDULED') return (
+    <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[11px] font-semibold bg-[#eff4ff] text-[#0037b0]">
+      SCHEDULED
+    </span>
+  )
+  return (
+    <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[11px] font-semibold bg-[#f8f9ff] text-[#747686] border border-[#c4c5d7]">
+      READY
+    </span>
+  )
+}
+
+export default async function DashboardPage() {
+  const data = await getDashboardData()
+
+  const metrics = [
+    {
+      label: 'Examination Halls',
+      value: data.totalHalls,
+      sublabel: 'Configured',
+      icon: (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} className="w-5 h-5">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.75a1.5 1.5 0 011.5-1.5h1.5a1.5 1.5 0 011.5 1.5V21m6-9.75h.75m-.75 3h.75m-.75 3h.75" />
+        </svg>
+      ),
+      iconBg: 'bg-[#eff4ff] text-[#0037b0]',
+      progress: 100,
+      progressColor: 'bg-[#1d4ed8]',
+      href: '/classrooms',
+    },
+    {
+      label: 'Exams In Progress',
+      value: data.activeSessionsCount,
+      sublabel: 'Active Sessions',
+      icon: (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} className="w-5 h-5">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      ),
+      iconBg: 'bg-emerald-100 text-emerald-700',
+      progress: data.totalHalls > 0 ? Math.round((data.activeSessionsCount / data.totalHalls) * 100) : 0,
+      progressColor: 'bg-emerald-500',
+      href: '/monitoring',
+    },
+    {
+      label: 'Today\'s Violations',
+      value: data.totalViolationsToday,
+      sublabel: 'Detected Today',
+      icon: (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} className="w-5 h-5">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M3 3l1.664 1.664M21 21l-1.5-1.5m-5.485-1.242L12 17.25 4.5 21V8.742m.164-4.078a2.15 2.15 0 011.743-1.342 48.507 48.507 0 0111.186 0c1.1.128 1.907 1.077 1.907 2.185V19.5M4.664 4.664L19.5 19.5" />
+        </svg>
+      ),
+      iconBg: 'bg-[#fef2f2] text-[#b91c1c]',
+      progress: 0,
+      progressColor: 'bg-[#ba1a1a]',
+      href: '/violations',
+    },
+    {
+      label: 'All Violations',
+      value: data.totalViolations,
+      sublabel: 'Total Logged',
+      icon: (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} className="w-5 h-5">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+        </svg>
+      ),
+      iconBg: 'bg-[#fffbeb] text-[#b45309]',
+      progress: 0,
+      progressColor: 'bg-amber-400',
+      href: '/violations',
+    },
+  ]
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8 space-y-6 max-w-7xl mx-auto selection:bg-teal-900 selection:text-teal-100">
-      {/* ── Page Header & Quick Actions ── */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-2 border-b border-gray-800/80">
-        <div>
-          <div className="flex items-center gap-2">
-            <h1 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
-              Executive Dashboard
-            </h1>
-            <span className="px-2 py-0.5 rounded text-[11px] font-mono font-semibold bg-emerald-950 text-emerald-300 border border-emerald-800">
-              System Active
+    <div className="w-full px-4 sm:px-6 lg:px-8 py-6 max-w-7xl mx-auto space-y-6">
+
+      {/* ── Page Header ─────────────────────────────────────────────── */}
+      <section className="flex flex-col xl:flex-row xl:items-end justify-between gap-4">
+        <div className="flex flex-col gap-1">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="font-code-sm text-[11px] text-[#0037b0] uppercase tracking-widest bg-[#e5eeff] px-2 py-0.5 rounded">
+              {data.schoolName}
             </span>
+            <span className="font-code-sm text-[11px] text-[#747686]">· Live Operations</span>
           </div>
-          <p className="text-xs sm:text-sm text-gray-400 mt-1">
-            {data.schoolName} — Live Examination Integrity &amp; Multi-Hall Overview
+          <h1 className="font-headline-xl text-[#0b1c30] tracking-tight">School Examination Overview</h1>
+          <p className="text-[14px] text-[#434655]">
+            Real-time hall status, active session monitoring, and violation intelligence.
           </p>
+          <div className="flex items-center gap-2 mt-1">
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-[#dce9ff] rounded-full">
+              <span className="w-2 h-2 rounded-full bg-emerald-500" />
+              <span className="font-code-sm text-[11px] text-[#0b1c30] font-semibold">
+                {data.totalHalls} Halls · {data.activeSessionsCount} Active · System Online
+              </span>
+            </div>
+          </div>
         </div>
 
-        {/* Quick Actions (min 44px touch targets) */}
-        <div className="flex flex-wrap items-center gap-2.5">
+        {/* Action buttons */}
+        <div className="flex flex-wrap items-center gap-2 self-start xl:self-auto">
           <Link
             href="/classrooms"
-            className="min-h-[44px] px-4 py-2 rounded-xl border border-gray-700 bg-gray-900 hover:bg-gray-800 text-gray-200 text-xs sm:text-sm font-semibold transition-colors flex items-center gap-1.5 shadow-sm"
+            className="flex items-center gap-2 bg-[#eff4ff] text-[#0037b0] font-medium px-4 py-2.5 rounded-lg text-[14px] hover:bg-[#e5eeff] transition-colors shadow-sm"
           >
-            <span>+</span> Add Hall
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} className="w-4 h-4">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+            </svg>
+            Manage Halls
           </Link>
           <Link
             href="/sessions"
-            className="min-h-[44px] px-4 py-2 rounded-xl bg-[#0e5a4d] hover:bg-[#0b483d] text-white text-xs sm:text-sm font-semibold transition-colors flex items-center gap-1.5 shadow-sm"
+            className="flex items-center gap-2 bg-[#1d4ed8] text-white font-medium px-4 py-2.5 rounded-lg text-[14px] hover:bg-[#0037b0] transition-colors shadow-sm"
           >
-            <CalendarIcon className="w-4 h-4 shrink-0" />
-            <span>Schedule Session</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} className="w-4 h-4">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+            </svg>
+            Schedule New Examination
           </Link>
-        </div>
-      </div>
-
-      {/* ── 4 Executive Stat Counters (Responsive Grid) ── */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-        {[
-          {
-            label: 'Total Halls',
-            value: data.totalHalls,
-            color: 'teal',
-            href: '/classrooms',
-            badge: 'Classrooms Configured',
-          },
-          {
-            label: 'Active Sessions',
-            value: data.activeSessionsCount,
-            color: 'emerald',
-            href: '/monitoring',
-            badge: 'Live Proctoring Now',
-          },
-          {
-            label: 'Detected Trackers',
-            value: data.totalTrackersDetected,
-            color: 'blue',
-            href: '/monitoring',
-            badge: 'Candidates Monitored',
-          },
-          {
-            label: 'Total Violations',
-            value: data.totalViolations,
-            color: 'red',
-            href: '/violations',
-            badge: 'Incidents Flagged',
-          },
-        ].map((stat) => {
-          const colorStyles: Record<string, string> = {
-            teal: 'border-teal-800/40 bg-teal-950/20 text-teal-400',
-            emerald: 'border-emerald-800/40 bg-emerald-950/20 text-emerald-400',
-            blue: 'border-blue-800/40 bg-blue-950/20 text-blue-400',
-            red: 'border-red-800/40 bg-red-950/20 text-red-400',
-          }
-
-          return (
-            <Link
-              key={stat.label}
-              href={stat.href}
-              className={`rounded-2xl border p-4 sm:p-5 flex flex-col justify-between transition-all hover:brightness-110 min-h-[110px] ${colorStyles[stat.color]}`}
-            >
-              <div>
-                <span className="text-2xl sm:text-3xl font-extrabold text-white font-mono leading-none">
-                  {stat.value}
-                </span>
-                <p className="text-xs text-gray-300 font-semibold mt-2">{stat.label}</p>
-              </div>
-              <span className="text-[10px] text-gray-400 font-mono mt-2 truncate">
-                {stat.badge}
-              </span>
-            </Link>
-          )
-        })}
-      </div>
-
-      {/* ── Live Hall Grid (ACTIVE / IDLE) ── */}
-      <section className="space-y-3">
-        <div className="flex items-center justify-between">
-          <h2 className="text-sm font-bold uppercase tracking-wider text-gray-200">
-            Live Hall Status Grid
-          </h2>
-          <Link href="/classrooms" className="text-xs text-teal-400 hover:text-teal-300 transition-colors">
-            Manage All Halls &rarr;
-          </Link>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {data.halls.map((hall) => {
-            const isActive = !!hall.active_session
-            return (
-              <div
-                key={hall.id}
-                className={`rounded-2xl border p-5 flex flex-col justify-between space-y-4 transition-all ${
-                  isActive
-                    ? 'border-emerald-700/80 bg-emerald-950/20 shadow-lg shadow-emerald-950/40'
-                    : 'border-gray-800 bg-gray-900/60 hover:border-gray-700'
-                }`}
-              >
-                <div>
-                  <div className="flex items-center justify-between">
-                    <span className="font-mono text-xs text-gray-400 bg-gray-950 px-2 py-0.5 rounded border border-gray-800">
-                      Code: {hall.access_code}
-                    </span>
-                    <span
-                      className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold border ${
-                        isActive
-                          ? 'bg-emerald-950 text-emerald-300 border-emerald-800'
-                          : 'bg-gray-800 text-gray-400 border-gray-700'
-                      }`}
-                    >
-                      <span
-                        className={`w-1.5 h-1.5 rounded-full ${
-                          isActive ? 'bg-emerald-400 animate-pulse' : 'bg-gray-500'
-                        }`}
-                      />
-                      {isActive ? 'ACTIVE' : 'IDLE'}
-                    </span>
-                  </div>
-
-                  <h3 className="text-base font-bold text-white mt-3 truncate">{hall.name}</h3>
-
-                  {isActive ? (
-                    <div className="mt-2 text-xs text-emerald-300/90 space-y-1">
-                      <p className="font-semibold">{hall.active_session?.course_name}</p>
-                      <p className="text-[11px] font-mono text-emerald-400">
-                        {hall.active_session?.expected_students || 30} Expected Candidates
-                      </p>
-                    </div>
-                  ) : (
-                    <p className="mt-2 text-xs text-gray-500">
-                      Standby • No active examination session in progress
-                    </p>
-                  )}
-                </div>
-
-                <div className="pt-3 border-t border-gray-800/80 flex items-center justify-between text-xs">
-                  <Link
-                    href={`/classrooms/${hall.id}`}
-                    className="text-gray-400 hover:text-white transition-colors"
-                  >
-                    Hall Setup &amp; Cameras &rarr;
-                  </Link>
-
-                  {isActive && (
-                    <Link
-                      href={`/hall/session/${hall.active_session?.id}`}
-                      className="px-3 py-1.5 rounded-lg bg-[#0e5a4d] hover:bg-[#0b483d] text-white font-semibold text-[11px] transition-colors"
-                    >
-                      View Stream →
-                    </Link>
-                  )}
-                </div>
-              </div>
-            )
-          })}
         </div>
       </section>
 
-      {/* ── Recent Violations Stream ── */}
-      <section className="rounded-2xl border border-gray-800 bg-gray-900/60 p-5 sm:p-6 space-y-4">
+      {/* ── 4 Metric Tiles ──────────────────────────────────────────── */}
+      <section className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+        {metrics.map((m) => (
+          <Link
+            key={m.label}
+            href={m.href}
+            className="bg-white p-4 rounded-xl shadow-sm flex flex-col justify-between gap-4 hover:shadow-md transition-shadow group"
+          >
+            <div className="flex items-center justify-between">
+              <span className="font-code-sm text-[11px] uppercase tracking-wider text-[#466083] font-semibold">{m.label}</span>
+              <div className={`w-9 h-9 rounded-lg flex items-center justify-center ${m.iconBg}`}>
+                {m.icon}
+              </div>
+            </div>
+            <div>
+              <div className="flex items-baseline gap-2">
+                <span className="font-headline-xl text-[#0b1c30]">{m.value}</span>
+                <span className="font-code-sm text-[13px] text-[#466083] font-semibold">{m.sublabel}</span>
+              </div>
+            </div>
+            <div className="w-full bg-[#eff4ff] h-1.5 rounded-full overflow-hidden">
+              <div className={`${m.progressColor} h-full rounded-full`} style={{ width: `${m.progress || (m.value > 0 ? 60 : 5)}%` }} />
+            </div>
+          </Link>
+        ))}
+      </section>
+
+      {/* ── Live Hall Status ─────────────────────────────────────────── */}
+      <section className="flex flex-col gap-4">
         <div className="flex items-center justify-between">
-          <div>
-            <h2 className="text-sm font-bold uppercase tracking-wider text-gray-200">
-              Recent Violations Stream
-            </h2>
-            <p className="text-xs text-gray-400 mt-0.5">
-              Live anomaly alerts and behavioral incident ledger
-            </p>
+          <div className="flex items-center gap-2">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} className="w-5 h-5 text-[#0037b0]">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-7.5A2.25 2.25 0 0013.5 6.75h-9a2.25 2.25 0 00-2.25 2.25v7.5A2.25 2.25 0 004.5 18.75z" />
+            </svg>
+            <h2 className="font-headline-md text-[#0b1c30]">Live Examination Halls Status</h2>
+            <span className="font-code-sm text-[11px] bg-[#e5eeff] text-[#0037b0] px-2 py-0.5 rounded font-semibold">Active Roster</span>
           </div>
-          <Link href="/violations" className="text-xs text-teal-400 hover:text-teal-300 transition-colors">
-            Violations Ledger &rarr;
+          <Link href="/classrooms" className="text-[13px] text-[#0037b0] hover:underline font-semibold flex items-center gap-1">
+            Manage Halls
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-4 h-4">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+            </svg>
           </Link>
         </div>
 
-        {data.recentViolations.length === 0 ? (
-          <div className="py-12 text-center text-gray-500 text-xs">
-            <ShieldIcon className="w-8 h-8 text-gray-600 mx-auto mb-2" />
-            No violations recorded yet. Examination halls are running smoothly.
+        {data.halls.length === 0 ? (
+          <div className="bg-white rounded-xl p-8 text-center shadow-sm">
+            <p className="text-[14px] text-[#747686]">No halls configured yet.</p>
+            <Link href="/classrooms" className="mt-3 inline-flex items-center gap-1.5 text-[13px] text-[#1d4ed8] font-semibold hover:underline">
+              Register your first hall →
+            </Link>
           </div>
         ) : (
-          <div className="overflow-x-auto -mx-5 sm:mx-0">
-            <table className="w-full text-xs text-left min-w-[600px]">
-              <thead>
-                <tr className="border-b border-gray-800 text-gray-500 font-mono">
-                  <th className="px-4 py-3">Candidate Tracker</th>
-                  <th className="px-4 py-3">Course / Hall</th>
-                  <th className="px-4 py-3">Activity Type</th>
-                  <th className="px-4 py-3">Severity</th>
-                  <th className="px-4 py-3">Confidence</th>
-                  <th className="px-4 py-3">Time</th>
-                  <th className="px-4 py-3 text-right">Action</th>
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+            {data.halls.map((hall) => {
+              const session = hall.active_session
+              const isActive = session?.status === 'ACTIVE'
+              return (
+                <div key={hall.id} className="bg-white rounded-xl shadow-sm p-4 flex flex-col justify-between gap-4 relative overflow-hidden">
+                  {/* Left accent bar */}
+                  <div className={`absolute left-0 top-0 bottom-0 w-1.5 ${isActive ? 'bg-emerald-500' : 'bg-[#c4c5d7]'}`} />
+                  <div className="pl-3 flex flex-col gap-1">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <span className="font-headline-md text-[#0b1c30]">{hall.name}</span>
+                        <StatusBadge status={isActive ? 'ACTIVE' : 'READY'} />
+                      </div>
+                      <span className="font-code-sm text-[11px] text-[#747686]">
+                        {hall.access_code}
+                      </span>
+                    </div>
+                    {session ? (
+                      <p className="text-[14px] font-semibold text-[#1d4ed8] mt-1">{session.course_name}</p>
+                    ) : (
+                      <p className="text-[14px] text-[#747686] mt-1">No active examination</p>
+                    )}
+                  </div>
+                  <div className="pl-3 flex items-center justify-between bg-[#f8f9ff] p-2.5 rounded-lg">
+                    {session ? (
+                      <>
+                        <span className="font-code-sm text-[11px] text-[#434655]">
+                          {session.expected_students} candidates expected
+                        </span>
+                        <Link
+                          href={`/monitoring`}
+                          className="font-code-sm text-[11px] text-[#0037b0] font-semibold hover:underline"
+                        >
+                          Monitor →
+                        </Link>
+                      </>
+                    ) : (
+                      <>
+                        <span className="font-code-sm text-[11px] text-[#747686]">Ready for examination</span>
+                        <Link href="/sessions" className="font-code-sm text-[11px] text-[#0037b0] font-semibold hover:underline">
+                          Schedule →
+                        </Link>
+                      </>
+                    )}
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        )}
+      </section>
+
+      {/* ── Recent Violations ────────────────────────────────────────── */}
+      {data.recentViolations.length > 0 && (
+        <section className="flex flex-col gap-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} className="w-5 h-5 text-[#b91c1c]">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M3 3l1.664 1.664M21 21l-1.5-1.5m-5.485-1.242L12 17.25 4.5 21V8.742m.164-4.078a2.15 2.15 0 011.743-1.342 48.507 48.507 0 0111.186 0c1.1.128 1.907 1.077 1.907 2.185V19.5M4.664 4.664L19.5 19.5" />
+              </svg>
+              <h2 className="font-headline-md text-[#0b1c30]">Recent Flagged Activities</h2>
+            </div>
+            <Link href="/violations" className="text-[13px] text-[#0037b0] hover:underline font-semibold">View Full Ledger →</Link>
+          </div>
+          <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+            <table className="w-full text-left">
+              <thead className="bg-[#eff4ff]">
+                <tr className="font-code-sm text-[11px] text-[#747686] uppercase tracking-wider">
+                  <th className="py-3 px-4">Activity</th>
+                  <th className="py-3 px-4">Severity</th>
+                  <th className="py-3 px-4 hidden sm:table-cell">Session</th>
+                  <th className="py-3 px-4 hidden md:table-cell">Status</th>
+                  <th className="py-3 px-4 hidden lg:table-cell">Time</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-800/60">
+              <tbody className="divide-y divide-[#eff4ff]">
                 {data.recentViolations.map((v) => {
-                  const sevColor =
-                    v.severity === 'CRITICAL'
-                      ? 'text-red-300 bg-red-950 border-red-800'
-                      : v.severity === 'HIGH'
-                      ? 'text-rose-300 bg-rose-950 border-rose-800'
-                      : v.severity === 'MEDIUM'
-                      ? 'text-amber-300 bg-amber-950 border-amber-800'
-                      : 'text-blue-300 bg-blue-950 border-blue-800'
-
+                  const sevColor = v.severity === 'CRITICAL' ? 'bg-[#fef2f2] text-[#b91c1c] border-[#fecaca]'
+                    : v.severity === 'HIGH' ? 'bg-[#fff7ed] text-[#c2410c] border-[#fed7aa]'
+                    : v.severity === 'MEDIUM' ? 'bg-[#fffbeb] text-[#b45309] border-[#fde68a]'
+                    : 'bg-[#eff4ff] text-[#0037b0] border-[#bbd6ff]'
+                  const statusColor = v.status === 'CONFIRMED' ? 'text-[#b91c1c]'
+                    : v.status === 'DISMISSED' ? 'text-[#747686]'
+                    : 'text-amber-600'
                   return (
-                    <tr key={v.id} className="hover:bg-gray-800/40 transition-colors">
-                      <td className="px-4 py-3.5 font-bold text-white font-mono">
-                        {v.tracker_label}
-                      </td>
-                      <td className="px-4 py-3.5 text-gray-300">
-                        {v.session?.course_name || 'Exam Session'}
-                      </td>
-                      <td className="px-4 py-3.5 font-medium text-gray-200">
+                    <tr key={v.id} className="hover:bg-[#f8f9ff] transition-colors">
+                      <td className="py-3 px-4 text-[13px] font-medium text-[#0b1c30] truncate max-w-[180px]">
                         {v.activity_type.replace(/_/g, ' ')}
                       </td>
-                      <td className="px-4 py-3.5">
-                        <span className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold border ${sevColor}`}>
+                      <td className="py-3 px-4">
+                        <span className={`font-code-sm text-[10px] px-1.5 py-0.5 rounded border font-bold ${sevColor}`}>
                           {v.severity}
                         </span>
                       </td>
-                      <td className="px-4 py-3.5 font-mono text-gray-300">
-                        {Math.round(v.confidence * 100)}%
+                      <td className="py-3 px-4 text-[13px] text-[#434655] hidden sm:table-cell truncate max-w-[140px]">
+                        {v.session?.course_name ?? '—'}
                       </td>
-                      <td className="px-4 py-3.5 text-gray-500 font-mono">
+                      <td className={`py-3 px-4 text-[13px] font-semibold hidden md:table-cell ${statusColor}`}>
+                        {v.status}
+                      </td>
+                      <td className="py-3 px-4 font-code-sm text-[11px] text-[#747686] hidden lg:table-cell">
                         {new Date(v.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                      </td>
-                      <td className="px-4 py-3.5 text-right">
-                        <Link
-                          href="/violations"
-                          className="text-teal-400 hover:text-teal-300 font-medium"
-                        >
-                          Evidence &rarr;
-                        </Link>
                       </td>
                     </tr>
                   )
@@ -372,7 +380,25 @@ export default async function ExecutiveDashboardPage() {
               </tbody>
             </table>
           </div>
-        )}
+        </section>
+      )}
+
+      {/* ── Quick Links Footer ───────────────────────────────────────── */}
+      <section className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        {[
+          { href: '/monitoring', label: 'Live Monitoring', icon: '📡' },
+          { href: '/classrooms', label: 'Examination Halls', icon: '🏛' },
+          { href: '/violations', label: 'Evidence Record', icon: '🛡' },
+          { href: '/students', label: 'Candidate Roster', icon: '👥' },
+        ].map((link) => (
+          <Link
+            key={link.href}
+            href={link.href}
+            className="bg-white border border-[#e5eeff] rounded-xl p-4 text-center hover:bg-[#eff4ff] hover:border-[#bbd6ff] transition-all shadow-sm group"
+          >
+            <p className="text-[13px] font-semibold text-[#0037b0] group-hover:underline">{link.label}</p>
+          </Link>
+        ))}
       </section>
     </div>
   )

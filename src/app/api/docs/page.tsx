@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { EyeIcon, RocketIcon } from '@/components/ui/Icons'
+import { EyeXLogo } from '@/components/ui/EyeXLogo'
 
 interface EndpointSpec {
   method: 'GET' | 'POST' | 'PUT' | 'DELETE'
@@ -148,7 +148,6 @@ export default function ApiDocsPage() {
         const data = await res.json()
         setTestResponse(JSON.stringify(data, null, 2))
       } else {
-        // Run verification test if path is hall-access/verify
         const testPayload = selectedEndpoint.requestExample || {}
         const res = await fetch(selectedEndpoint.path, {
           method: 'POST',
@@ -166,32 +165,29 @@ export default function ApiDocsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-950 text-gray-100 flex flex-col selection:bg-teal-900 selection:text-teal-100">
+    <div className="min-h-screen bg-[#f8f9ff] text-[#0b1c30] flex flex-col antialiased">
       {/* ── Top Header ── */}
-      <header className="border-b border-gray-800 bg-gray-900/90 backdrop-blur-md px-4 sm:px-6 lg:px-8 py-3.5 flex flex-wrap items-center justify-between gap-4 sticky top-0 z-30">
+      <header className="border-b border-[#c4c5d7] bg-white px-4 sm:px-6 lg:px-8 py-3.5 flex flex-wrap items-center justify-between gap-4 sticky top-0 z-30" style={{ boxShadow: '0 1px 8px rgba(0,0,0,0.04)' }}>
         <div className="flex items-center gap-3">
           <Link href="/" className="flex items-center gap-2">
-            <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#0e5a4d] text-white">
-              <EyeIcon className="w-4 h-4 text-white" />
-            </span>
-            <span className="font-bold text-white tracking-tight text-sm">The Eye X</span>
+            <EyeXLogo width={100} showTagline={false} />
           </Link>
-          <span className="text-gray-700">/</span>
-          <span className="text-xs font-mono font-bold text-teal-400 bg-teal-950 px-2 py-0.5 rounded border border-teal-800">
-            OpenAPI / Swagger Docs v2.0
+          <span className="text-[#c4c5d7]">/</span>
+          <span className="font-code-sm text-[11px] font-bold text-[#0037b0] bg-[#eff4ff] px-2.5 py-1 rounded-md border border-[#bbd6ff]">
+            Hardware &amp; Computer Vision API v2.0
           </span>
         </div>
 
         <div className="flex items-center gap-3">
           <Link
             href="/hall-access"
-            className="text-xs text-gray-400 hover:text-white transition-colors"
+            className="text-[13px] text-[#434655] hover:text-[#0b1c30] transition-colors"
           >
             Examiner Flow &rarr;
           </Link>
           <Link
             href="/dashboard"
-            className="min-h-[36px] px-3.5 py-1.5 rounded-lg bg-[#0e5a4d] hover:bg-[#0b483d] text-white text-xs font-semibold transition-colors flex items-center gap-1"
+            className="px-4 py-2 rounded-lg bg-[#1d4ed8] hover:bg-[#0037b0] text-white text-[13px] font-semibold transition-colors shadow-sm"
           >
             School Portal
           </Link>
@@ -202,7 +198,7 @@ export default function ApiDocsPage() {
       <div className="flex-1 w-full max-w-7xl mx-auto p-4 sm:p-6 lg:p-8 grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Endpoint Selector Navigation (4 cols) */}
         <div className="lg:col-span-4 space-y-2">
-          <h2 className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-3">
+          <h2 className="font-code-sm text-[11px] font-bold uppercase tracking-wider text-[#466083] mb-3">
             Core Backend Endpoints
           </h2>
           <div className="space-y-1.5">
@@ -215,22 +211,22 @@ export default function ApiDocsPage() {
                     setSelectedEndpoint(ep)
                     setTestResponse(null)
                   }}
-                  className={`w-full text-left p-3 rounded-xl border text-xs transition-all flex items-start gap-2.5 cursor-pointer ${
+                  className={`w-full text-left p-3.5 rounded-xl border text-[13px] transition-all flex items-start gap-2.5 cursor-pointer ${
                     isSelected
-                      ? 'border-teal-700 bg-teal-950/40 text-white shadow-sm'
-                      : 'border-gray-800 bg-gray-900/60 text-gray-400 hover:text-gray-200 hover:bg-gray-800/40'
+                      ? 'border-[#0037b0] bg-[#eff4ff] text-[#0037b0] shadow-sm font-semibold'
+                      : 'border-[#e5eeff] bg-white text-[#434655] hover:border-[#bbd6ff]'
                   }`}
                 >
                   <span
                     className={`font-mono text-[10px] font-bold px-1.5 py-0.5 rounded ${
-                      ep.method === 'POST' ? 'bg-blue-950 text-blue-300 border border-blue-800' : 'bg-emerald-950 text-emerald-300 border border-emerald-800'
+                      ep.method === 'POST' ? 'bg-[#dce9ff] text-[#0037b0] border border-[#bbd6ff]' : 'bg-emerald-50 text-emerald-700 border border-emerald-200'
                     }`}
                   >
                     {ep.method}
                   </span>
                   <div className="flex-1 min-w-0">
-                    <p className="font-semibold truncate text-white">{ep.title}</p>
-                    <p className="font-mono text-[10px] text-gray-500 truncate mt-0.5">{ep.path}</p>
+                    <p className="truncate text-[#0b1c30] font-semibold">{ep.title}</p>
+                    <p className="font-mono text-[11px] text-[#747686] truncate mt-0.5">{ep.path}</p>
                   </div>
                 </button>
               )
@@ -239,24 +235,24 @@ export default function ApiDocsPage() {
         </div>
 
         {/* Endpoint Detail & Interactive Sandbox (8 cols) */}
-        <div className="lg:col-span-8 rounded-2xl border border-gray-800 bg-gray-900/60 p-6 space-y-6 shadow-xl">
+        <div className="lg:col-span-8 rounded-2xl border border-[#e5eeff] bg-white p-6 space-y-6 shadow-sm">
           <div>
             <div className="flex items-center gap-2 mb-2">
               <span
-                className={`font-mono text-xs font-bold px-2 py-0.5 rounded ${
+                className={`font-mono text-[11px] font-bold px-2 py-0.5 rounded ${
                   selectedEndpoint.method === 'POST'
-                    ? 'bg-blue-950 text-blue-300 border border-blue-800'
-                    : 'bg-emerald-950 text-emerald-300 border border-emerald-800'
+                    ? 'bg-[#dce9ff] text-[#0037b0] border border-[#bbd6ff]'
+                    : 'bg-emerald-50 text-emerald-700 border border-emerald-200'
                 }`}
               >
                 {selectedEndpoint.method}
               </span>
-              <span className="font-mono text-xs text-teal-300 bg-gray-950 px-2.5 py-1 rounded border border-gray-800">
+              <span className="font-mono text-[12px] text-[#0037b0] bg-[#eff4ff] px-2.5 py-1 rounded border border-[#bbd6ff] font-semibold">
                 {selectedEndpoint.path}
               </span>
             </div>
-            <h1 className="text-xl font-bold text-white">{selectedEndpoint.title}</h1>
-            <p className="text-xs sm:text-sm text-gray-400 mt-1 leading-relaxed">
+            <h1 className="font-headline-lg text-[#0b1c30] tracking-tight">{selectedEndpoint.title}</h1>
+            <p className="text-[14px] text-[#434655] mt-1 leading-relaxed">
               {selectedEndpoint.description}
             </p>
           </div>
@@ -264,10 +260,10 @@ export default function ApiDocsPage() {
           {/* Request Payload Example */}
           {selectedEndpoint.requestExample && (
             <div className="space-y-2">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-gray-300">
-                Request JSON Body
+              <h3 className="font-code-sm text-[11px] font-bold uppercase tracking-wider text-[#466083]">
+                Request JSON Payload
               </h3>
-              <pre className="p-4 rounded-xl bg-gray-950 border border-gray-800 text-teal-300 font-mono text-xs overflow-x-auto">
+              <pre className="p-4 rounded-xl bg-[#eff4ff] border border-[#bbd6ff] text-[#0037b0] font-mono text-[12px] overflow-x-auto">
                 {JSON.stringify(selectedEndpoint.requestExample, null, 2)}
               </pre>
             </div>
@@ -275,35 +271,34 @@ export default function ApiDocsPage() {
 
           {/* Expected Response */}
           <div className="space-y-2">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-gray-300">
+            <h3 className="font-code-sm text-[11px] font-bold uppercase tracking-wider text-[#466083]">
               Expected Response
             </h3>
-            <pre className="p-4 rounded-xl bg-gray-950 border border-gray-800 text-gray-300 font-mono text-xs overflow-x-auto">
+            <pre className="p-4 rounded-xl bg-[#f8f9ff] border border-[#e5eeff] text-[#0b1c30] font-mono text-[12px] overflow-x-auto">
               {JSON.stringify(selectedEndpoint.responseExample, null, 2)}
             </pre>
           </div>
 
           {/* Interactive Test Sandbox Button */}
-          <div className="pt-4 border-t border-gray-800 space-y-3">
+          <div className="pt-4 border-t border-[#e5eeff] space-y-3">
             <div className="flex items-center justify-between">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-gray-300">
+              <h3 className="font-code-sm text-[11px] font-bold uppercase tracking-wider text-[#466083]">
                 Live Interactive Sandbox
               </h3>
               <button
                 type="button"
                 onClick={handleTestCall}
                 disabled={isTesting}
-                className="min-h-[44px] px-5 py-2 rounded-xl bg-[#0e5a4d] hover:bg-[#0b483d] text-white text-xs sm:text-sm font-semibold transition-colors disabled:opacity-50 flex items-center gap-1.5 shadow-sm"
+                className="px-5 py-2.5 rounded-lg bg-[#1d4ed8] hover:bg-[#0037b0] text-white text-[13px] font-semibold transition-colors disabled:opacity-50 flex items-center gap-1.5 shadow-sm"
               >
                 <span>{isTesting ? 'Sending Request…' : 'Execute Test Call'}</span>
-                {!isTesting && <RocketIcon className="w-4 h-4" />}
               </button>
             </div>
 
             {testResponse && (
               <div className="space-y-1.5">
-                <span className="text-[11px] font-mono text-teal-400">Live API Response:</span>
-                <pre className="p-4 rounded-xl bg-gray-950 border border-teal-900/60 text-emerald-300 font-mono text-xs overflow-x-auto">
+                <span className="font-code-sm text-[11px] text-[#0037b0] font-semibold">Live API Response:</span>
+                <pre className="p-4 rounded-xl bg-[#eff4ff] border border-[#bbd6ff] text-[#0b1c30] font-mono text-[12px] overflow-x-auto">
                   {testResponse}
                 </pre>
               </div>

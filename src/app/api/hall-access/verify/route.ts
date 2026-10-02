@@ -10,9 +10,11 @@ import { NextResponse, type NextRequest } from 'next/server'
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const rawCode = body.code ? String(body.code).trim().toUpperCase() : ''
+    // Accept either body.code or body.access_code and normalize
+    const rawInput = body.code || body.access_code || ''
+    const rawCode = String(rawInput).trim().toUpperCase().replace(/[\s-]/g, '')
 
-    if (!rawCode || rawCode.length < 6) {
+    if (!rawCode || rawCode.length < 4) {
       return NextResponse.json(
         { error: 'Please enter a valid 8-character Hall Access Code.' },
         { status: 400 }
@@ -23,16 +25,34 @@ export async function POST(request: NextRequest) {
     const supabase = await createClient()
     const db = admin || supabase
 
-    // 1. Look up in public.classrooms table
-    let { data: classroom } = await db
+    // 1. Look up in public.classrooms table (with graceful fallback if code_expires_at column is missing)
+    let classroom: {
+      id: string
+      name: string
+      school_id?: string
+      access_code?: string
+      code_expires_at?: string | null
+    } | null = null
+
+    const { data: cData, error: cErr } = await db
       .from('classrooms')
       .select('id, name, school_id, access_code, code_expires_at')
       .eq('access_code', rawCode)
       .maybeSingle()
 
-    // 2. If no classroom found, check if code matches an existing school's code_prefix or active session
+    if (cErr && (cErr.message?.includes('code_expires_at') || cErr.code === '42703')) {
+      const { data: fallbackData } = await db
+        .from('classrooms')
+        .select('id, name, school_id, access_code')
+        .eq('access_code', rawCode)
+        .maybeSingle()
+      classroom = fallbackData
+    } else {
+      classroom = cData
+    }
+
+    // 2. If no direct classroom found, check if code matches an existing school's code_prefix
     if (!classroom) {
-      // Check if code matches school code_prefix (e.g. SCH_123 or SCH123)
       const sanitized = rawCode.replace(/[^A-Z0-9]/g, '')
       const { data: school } = await db
         .from('schools')
@@ -49,7 +69,7 @@ export async function POST(request: NextRequest) {
             name: `${school.school_name} - Main Hall`,
             access_code: rawCode.slice(0, 8),
           })
-          .select('id, name, school_id, access_code, code_expires_at')
+          .select('id, name, school_id, access_code')
           .single()
 
         if (newHall) {
@@ -78,6 +98,11 @@ export async function POST(request: NextRequest) {
       success: true,
       classroomId: classroom.id,
       hallName: classroom.name,
+      classroom: {
+        id: classroom.id,
+        name: classroom.name,
+        access_code: classroom.access_code,
+      },
     })
 
     // Store verified classroom in cookie for seamless proctoring session access

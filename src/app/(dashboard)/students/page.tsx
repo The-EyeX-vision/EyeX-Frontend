@@ -1,7 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
-import { UsersIcon } from '@/components/ui/Icons'
 import type { Student } from '@/types'
 import { StudentTable } from '@/components/students/StudentTable'
 
@@ -34,38 +33,53 @@ export default async function StudentsPage() {
   }
 
   return (
-    <div className="p-6 space-y-6 max-w-7xl mx-auto">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-xl font-bold text-white">Students</h1>
-          <p className="text-sm text-gray-400 mt-0.5">
-            {students.length} student{students.length !== 1 ? 's' : ''} enrolled in monitoring system
-          </p>
+    <div className="w-full px-4 sm:px-6 lg:px-8 py-6 max-w-7xl mx-auto space-y-6">
+      {/* ── Header ── */}
+      <div className="flex flex-col gap-1">
+        <nav className="flex items-center gap-1.5 text-[13px] text-[#747686]">
+          <span>Candidates</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-3.5 h-3.5"><path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
+          <span className="font-medium text-[#0b1c30]">Enrollment Roster</span>
+        </nav>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-1">
+          <div className="flex items-center gap-2.5">
+            <span className="w-2.5 h-6 bg-[#0037b0] rounded-sm" />
+            <div>
+              <h1 className="font-headline-lg text-[#0b1c30] tracking-tight">Candidate Roster &amp; Enrollment</h1>
+              <p className="text-[13px] text-[#434655] mt-0.5">
+                {students.length} candidate{students.length !== 1 ? 's' : ''} enrolled in institution supervision database.
+              </p>
+            </div>
+          </div>
+
+          <Link
+            href="/students/create"
+            className="flex items-center gap-2 bg-[#1d4ed8] text-white font-semibold px-4 py-2 rounded-lg text-[14px] hover:bg-[#0037b0] transition-colors shadow-sm self-start sm:self-auto"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-4 h-4">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+            </svg>
+            Add Candidate
+          </Link>
         </div>
-        <Link
-          href="/students/create"
-          className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#0e5a4d] hover:bg-[#0b483d] text-white text-sm font-medium transition-colors shadow-sm"
-        >
-          <svg viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
-            <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
-          </svg>
-          Add Student
-        </Link>
       </div>
 
       {students.length === 0 ? (
-        <div className="rounded-xl border border-gray-800 bg-gray-900/40 p-16 text-center">
-          <UsersIcon className="w-10 h-10 text-gray-600 mx-auto mb-4" />
-          <h3 className="text-lg font-semibold text-white mb-2">No students added yet</h3>
-          <p className="text-gray-400 text-sm mb-6 max-w-md mx-auto">
-            Add student records to your school so you can assign them to examination sessions and monitor them.
+        <div className="bg-white rounded-2xl border border-[#e5eeff] p-16 text-center shadow-sm">
+          <div className="w-14 h-14 rounded-xl bg-[#eff4ff] text-[#0037b0] flex items-center justify-center mx-auto mb-4">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} className="w-7 h-7">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" />
+            </svg>
+          </div>
+          <h3 className="font-headline-md text-lg font-bold text-[#0b1c30] mb-2">No candidates added yet</h3>
+          <p className="text-[#747686] text-[14px] mb-6 max-w-md mx-auto leading-relaxed">
+            Add candidate records to your institution so you can assign them to examination sessions and monitor seating.
           </p>
           <Link
             href="/students/create"
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#0e5a4d] hover:bg-[#0b483d] text-white text-sm font-medium transition-colors"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[#1d4ed8] hover:bg-[#0037b0] text-white text-[14px] font-semibold transition-colors shadow-sm"
           >
-            Add First Student
+            Add First Candidate
           </Link>
         </div>
       ) : (

@@ -14,7 +14,7 @@ function SubmitButton() {
     <button
       type="submit"
       disabled={pending}
-      className="px-4 py-2 rounded-lg bg-[#0e5a4d] hover:bg-[#0b483d] disabled:opacity-60 text-white text-xs font-semibold transition-colors"
+      className="px-4 py-2 rounded-lg bg-[#1d4ed8] hover:bg-[#0037b0] disabled:opacity-60 text-white text-[13px] font-semibold transition-colors shadow-sm"
     >
       {pending ? 'Saving…' : 'Update Details'}
     </button>
@@ -28,8 +28,8 @@ export function EditStudentForm({ student }: { student: Student }) {
   return (
     <form action={formAction} className="space-y-4">
       <div>
-        <label htmlFor="student_number" className="block text-xs font-medium text-gray-300 mb-1">
-          Student ID
+        <label htmlFor="student_number" className="block text-[13px] font-medium text-[#0b1c30] mb-1">
+          Candidate ID / Matricule
         </label>
         <input
           id="student_number"
@@ -37,13 +37,13 @@ export function EditStudentForm({ student }: { student: Student }) {
           type="text"
           required
           defaultValue={student.student_number}
-          className="w-full px-3 py-2 rounded-lg border border-gray-700 bg-gray-800 text-white text-xs font-mono focus:outline-none focus:ring-2 focus:ring-[#0e5a4d]/50"
+          className="w-full px-3 py-2 rounded-lg border border-[#c4c5d7] bg-[#eff4ff] text-[#0b1c30] text-[13px] font-mono focus:outline-none focus:ring-2 focus:ring-[#1d4ed8] focus:bg-white transition-all font-semibold"
         />
       </div>
 
       <div>
-        <label htmlFor="full_name" className="block text-xs font-medium text-gray-300 mb-1">
-          Full Name
+        <label htmlFor="full_name" className="block text-[13px] font-medium text-[#0b1c30] mb-1">
+          Full Legal Name
         </label>
         <input
           id="full_name"
@@ -51,13 +51,13 @@ export function EditStudentForm({ student }: { student: Student }) {
           type="text"
           required
           defaultValue={student.full_name}
-          className="w-full px-3 py-2 rounded-lg border border-gray-700 bg-gray-800 text-white text-xs focus:outline-none focus:ring-2 focus:ring-[#0e5a4d]/50"
+          className="w-full px-3 py-2 rounded-lg border border-[#c4c5d7] bg-[#eff4ff] text-[#0b1c30] text-[13px] focus:outline-none focus:ring-2 focus:ring-[#1d4ed8] focus:bg-white transition-all font-medium"
         />
       </div>
 
       <div>
-        <label htmlFor="email" className="block text-xs font-medium text-gray-300 mb-1">
-          Email
+        <label htmlFor="email" className="block text-[13px] font-medium text-[#0b1c30] mb-1">
+          Email Address
         </label>
         <input
           id="email"
@@ -65,17 +65,17 @@ export function EditStudentForm({ student }: { student: Student }) {
           type="email"
           defaultValue={student.email ?? ''}
           placeholder="optional"
-          className="w-full px-3 py-2 rounded-lg border border-gray-700 bg-gray-800 text-white text-xs focus:outline-none focus:ring-2 focus:ring-[#0e5a4d]/50"
+          className="w-full px-3 py-2 rounded-lg border border-[#c4c5d7] bg-[#eff4ff] text-[#0b1c30] text-[13px] focus:outline-none focus:ring-2 focus:ring-[#1d4ed8] focus:bg-white transition-all"
         />
       </div>
 
       {state && 'error' in state && state.error && (
-        <div className="rounded-lg border border-red-800 bg-red-950/40 p-2.5 text-xs text-red-300">
+        <div className="rounded-lg border border-[#fecaca] bg-[#fef2f2] p-2.5 text-[12px] text-[#b91c1c]">
           {state.error}
         </div>
       )}
 
-      <div>
+      <div className="pt-1">
         <SubmitButton />
       </div>
     </form>

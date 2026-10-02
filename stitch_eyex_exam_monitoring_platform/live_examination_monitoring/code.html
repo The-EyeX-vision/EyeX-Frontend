@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_standard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;family=Plus+Jakarta+Sans:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"surface-container":"#e5eeff","surface":"#f8f9ff","on-primary-fixed":"#001551","surface-container-lowest":"#ffffff","surface-dim":"#cbdbf5","secondary-fixed-dim":"#aec8f0","surface-container-high":"#dce9ff","inverse-on-surface":"#eaf1ff","inverse-surface":"#213145","on-secondary-fixed":"#001c38","error":"#ba1a1a","on-tertiary-fixed":"#001d31","primary-container":"#1d4ed8","secondary-fixed":"#d3e4ff","outline":"#747686","on-secondary":"#ffffff","on-primary":"#ffffff","surface-container-highest":"#d3e4fe","surface-tint":"#2151da","primary-fixed-dim":"#b7c4ff","surface-container-low":"#eff4ff","on-background":"#0b1c30","on-tertiary":"#ffffff","on-primary-fixed-variant":"#0039b5","tertiary-fixed":"#cce5ff","error-container":"#ffdad6","tertiary":"#004870","surface-variant":"#d3e4fe","surface-bright":"#f8f9ff","secondary":"#466083","on-tertiary-fixed-variant":"#004b73","primary":"#0037b0","primary-fixed":"#dce1ff","inverse-primary":"#b7c4ff","on-surface-variant":"#434655","on-tertiary-container":"#b2d9ff","on-surface":"#0b1c30","background":"#f8f9ff","outline-variant":"#c4c5d7","on-secondary-fixed-variant":"#2d486a","on-secondary-container":"#435d80","secondary-container":"#bbd6ff","on-error":"#ffffff","on-error-container":"#93000a","on-primary-container":"#cad3ff","tertiary-container":"#006194","tertiary-fixed-dim":"#93ccff"},"borderRadius":{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},"spacing":{"space-md":"1rem","margin-mobile":"1rem","gutter":"1.25rem","space-xs":"0.25rem","space-sm":"0.5rem","space-lg":"1.5rem","space-xl":"2.5rem","gutter-mobile":"0.75rem","margin":"2rem"},"fontFamily":{"label-code-md":["JetBrains Mono"],"body-md":["Inter"],"body-lg":["Inter"],"label-code-lg":["JetBrains Mono"],"headline-xl-mobile":["Plus Jakarta Sans"],"headline-md":["Plus Jakarta Sans"],"label-code-sm":["JetBrains Mono"],"headline-xl":["Plus Jakarta Sans"],"headline-lg":["Plus Jakarta Sans"],"headline-lg-mobile":["Plus Jakarta Sans"],"body-sm":["Inter"]},"fontSize":{"label-code-md":["13px",{"lineHeight":"18px","letterSpacing":"0.02em","fontWeight":"500"}],"body-md":["14px",{"lineHeight":"20px","fontWeight":"400"}],"body-lg":["16px",{"lineHeight":"24px","fontWeight":"400"}],"label-code-lg":["18px",{"lineHeight":"24px","letterSpacing":"0.05em","fontWeight":"600"}],"headline-xl-mobile":["28px",{"lineHeight":"36px","letterSpacing":"-0.01em","fontWeight":"700"}],"headline-md":["20px",{"lineHeight":"28px","fontWeight":"600"}],"label-code-sm":["11px",{"lineHeight":"14px","letterSpacing":"0.02em","fontWeight":"500"}],"headline-xl":["36px",{"lineHeight":"44px","letterSpacing":"-0.02em","fontWeight":"700"}],"headline-lg":["28px",{"lineHeight":"36px","letterSpacing":"-0.015em","fontWeight":"600"}],"headline-lg-mobile":["22px",{"lineHeight":"30px","letterSpacing":"-0.01em","fontWeight":"600"}],"body-sm":["12px",{"lineHeight":"16px","fontWeight":"400"}]}}}}</script></head><body class="bg-background font-body-md text-on-surface antialiased"><header class="fixed top-0 w-full z-50 bg-surface-container-lowest border-b border-outline-variant shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="w-full px-margin"><div class="h-20 flex items-center justify-between gap-gutter"><div class="flex items-center gap-space-md"><div class="flex items-center gap-space-sm"><img alt="EyeX Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1Wv5E9vMugY93Vn-72z0pKpTXbC1UYgjFLiQgU2nNMvQz9zgs-OfynrVDXbXm54cSm77EddXb5rH8LqQdBcvnu-KEtoHP6Nc9Zu9STzA5FIvddcOpCbLudO8_lvUtbbAYY_0SscxDgZiQnGq2JtsLTqe2pkTPbIqwfN6Ah3TJvtOAhcxAwL9vX7EQOEjtWlvJ6XHnfHL9hw7hNACk28fOBLjVd_6Aw-n7te-1-kGPn2-FIjiwjwqXGWFD0O"/><span class="font-headline-md text-headline-md tracking-tight text-primary">EyeX</span></div><div class="h-7 w-px bg-outline-variant hidden xl:block"></div><div class="hidden xl:flex flex-col"><div class="flex items-center gap-space-xs"><span class="font-body-sm text-body-sm font-semibold text-on-surface">Government Bilingual High School (GBHS) Yaoundé</span><span class="font-label-code-sm text-label-code-sm bg-surface-container-high text-primary px-1.5 py-0.5 rounded">Centre #1042</span></div><div class="flex items-center gap-space-xs"><span class="font-body-sm text-body-sm text-on-surface-variant">First Term • Sequence 1 • GCE Mock Session</span></div></div></div><nav class="hidden lg:flex items-center gap-1 bg-surface-container-low p-1 rounded-lg border border-outline-variant" data-active-classes="bg-primary text-on-primary font-semibold shadow-sm"><a class="px-3 py-1.5 rounded-lg text-body-sm font-body-sm text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors" data-path="dashboard-overview" href="#">Dashboard</a><a aria-current="page" class="px-3 py-1.5 rounded-lg transition-colors bg-primary text-on-primary font-semibold shadow-sm" data-path="live-monitoring" href="#">Live Monitoring</a><a class="px-3 py-1.5 rounded-lg text-body-sm font-body-sm text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors" data-path="examination-halls" href="#">Examination Halls</a><a class="px-3 py-1.5 rounded-lg text-body-sm font-body-sm text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors" data-path="examination-schedule" href="#">Schedule</a><a class="px-3 py-1.5 rounded-lg text-body-sm font-body-sm text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors" data-path="activity-evidence" href="#">Evidence Record</a><a class="px-3 py-1.5 rounded-lg text-body-sm font-body-sm text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors" data-path="invigilator-fast-access" href="#">Invigilator Code</a></nav><div class="flex items-center gap-space-md"><div class="hidden md:flex items-center gap-space-xs bg-surface-container-lowest border border-outline-variant px-2.5 py-1 rounded"><span class="relative flex h-2 w-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span></span><span class="font-label-code-sm text-label-code-sm text-on-surface-variant uppercase tracking-wider">Online • Synchronised</span></div><button class="hidden sm:flex items-center gap-1.5 bg-error text-on-error px-3 py-1.5 rounded text-body-sm font-body-sm font-medium hover:bg-red-700 transition-colors" type="button"><span class="material-symbols-outlined text-[16px]">crisis_alert</span><span>Emergency</span></button><div class="h-7 w-px bg-outline-variant hidden sm:block"></div><div class="flex items-center gap-space-sm pl-1"><div class="hidden sm:flex flex-col text-right"><span class="font-body-sm text-body-sm font-semibold text-on-surface leading-snug">Mr. E. Mbella</span><span class="font-label-code-sm text-label-code-sm text-on-surface-variant">Chief Exam Officer</span></div><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></div></div></header><main class="w-full pt-20 bg-background min-h-screen"><div class="flex flex-col w-full">
+<!-- Operational Sub-Header Bar (Session Specifics & Controls) -->
+<div class="w-full bg-surface-container-lowest shadow-sm px-margin py-space-sm flex flex-col xl:flex-row xl:items-center justify-between gap-space-md">
+<div class="flex flex-wrap items-center gap-space-md">
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs">
+<span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+<span class="font-headline-md text-headline-md text-on-surface">MATHEMATICS (Paper 2)</span>
+<span class="font-label-code-sm text-label-code-sm bg-surface-container text-primary px-2 py-0.5 rounded font-semibold">Form 5 • GCE Ordinary Level Mock</span>
+</div>
+<div class="flex items-center gap-space-sm text-on-surface-variant font-body-sm text-body-sm mt-0.5">
+<span class="flex items-center gap-1 font-semibold text-on-surface">
+<span class="material-symbols-outlined text-[16px] text-primary">apartment</span>
+            EXAMINATION HALL A
+          </span>
+<span class="text-outline-variant">•</span>
+<span>Capacity: 120</span>
+<span class="text-outline-variant">•</span>
+<span class="font-label-code-sm text-label-code-sm">Code: 7K4P92XM</span>
+<span class="text-outline-variant">•</span>
+<span class="font-label-code-sm text-label-code-sm bg-surface-container-high px-1.5 py-0.2 rounded text-primary">Session: sess-2026-mth05</span>
+</div>
+</div>
+</div>
+<!-- Center/Right Live Stats Controls -->
+<div class="flex flex-wrap items-center gap-space-md">
+<!-- Session Countdown Timer Component -->
+<div class="bg-inverse-surface text-inverse-on-surface px-space-md py-1.5 rounded-xl shadow-inner flex items-center gap-space-md">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[#38bdf8] text-[20px]">timer</span>
+<div class="flex flex-col">
+<span class="font-label-code-sm text-label-code-sm text-[#aec8f0] uppercase tracking-wider">Elapsed Time</span>
+<span class="font-label-code-lg text-label-code-lg tracking-wider text-surface-container-lowest font-bold" id="sessionTimer">01:24:18</span>
+</div>
+</div>
+<div class="h-6 w-px bg-secondary opacity-40"></div>
+<div class="flex flex-col">
+<span class="font-label-code-sm text-label-code-sm text-[#aec8f0] uppercase tracking-wider">Total Duration</span>
+<span class="font-label-code-sm text-label-code-sm text-[#93ccff]">02:30:00</span>
+</div>
+</div>
+<!-- Network State Pill / Interactive Offline Simulator -->
+<div class="flex items-center gap-2 bg-surface-container-low px-3 py-1.5 rounded-lg" id="networkPill">
+<span class="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-sm" id="networkDot"></span>
+<span class="font-label-code-sm text-label-code-sm font-semibold text-primary" id="networkStatusText">LOCAL MONITORING ACTIVE (ONLINE SYNCED)</span>
+<button class="ml-1 px-1.5 py-0.5 rounded bg-surface-container-highest hover:bg-surface-container font-label-code-sm text-label-code-sm text-on-surface-variant transition-colors" id="toggleNetworkBtn" title="Simulate regional ISP dropout" type="button">
+          Simulate Drop
+        </button>
+</div>
+<!-- Audio Alert Toggle -->
+<button class="flex items-center gap-1.5 bg-surface-container px-3 py-2 rounded-lg text-primary hover:bg-surface-container-high transition-colors font-body-sm text-body-sm font-medium" id="audioToggleBtn" type="button">
+<span class="material-symbols-outlined text-[18px]" id="audioIcon">volume_up</span>
+<span id="audioLabel">CHIME ON</span>
+</button>
+<!-- Primary Red Safety End Session Button -->
+<button class="flex items-center gap-1.5 bg-error text-on-error px-4 py-2 rounded-lg text-body-sm font-body-sm font-semibold hover:bg-red-700 transition-shadow shadow-sm active:translate-y-0.5" id="endExamTrigger" type="button">
+<span class="material-symbols-outlined text-[18px]">stop_circle</span>
+<span>END EXAMINATION</span>
+</button>
+</div>
+</div>
+<!-- Distance-Legible Overview Tickers -->
+<div class="w-full px-margin py-space-md grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<!-- Metric 1 -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-label-code-sm text-label-code-sm uppercase tracking-wider text-on-surface-variant font-semibold">Expected Candidates</span>
+<span class="font-headline-xl text-headline-xl text-on-surface mt-1">120</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Registered Hall Seating Quota</span>
+</div>
+<div class="w-12 h-12 rounded-xl bg-surface-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[28px]">groups</span>
+</div>
+</div>
+<!-- Metric 2 -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-label-code-sm text-label-code-sm uppercase tracking-wider text-on-surface-variant font-semibold">Candidates Seated &amp; Verified</span>
+<div class="flex items-baseline gap-2 mt-1">
+<span class="font-headline-xl text-headline-xl text-primary font-bold">117</span>
+<span class="font-body-md text-body-md text-on-surface-variant">/ 120 (97.5%)</span>
+</div>
+<span class="font-body-sm text-body-sm text-emerald-600 font-medium mt-0.5 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">check_circle</span> 3 Absentees marked in protocol
+        </span>
+</div>
+<div class="w-12 h-12 rounded-xl bg-surface-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[28px]">verified_user</span>
+</div>
+</div>
+<!-- Metric 3 -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex items-center justify-between">
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<span class="font-label-code-sm text-label-code-sm uppercase tracking-wider text-error font-semibold">Activities Flagged</span>
+<span class="px-2 py-0.5 bg-error-container text-on-error-container rounded-full font-label-code-sm text-label-code-sm font-bold animate-pulse">ACTION REQ</span>
+</div>
+<div class="flex items-baseline gap-2 mt-1">
+<span class="font-headline-xl text-headline-xl text-error font-extrabold">3</span>
+<span class="font-body-md text-body-md text-on-surface-variant">Unresolved Incidents</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">1 Severe Phone Alert • 2 Desk Inquiries</span>
+</div>
+<div class="w-12 h-12 rounded-xl bg-error-container flex items-center justify-center text-error">
+<span class="material-symbols-outlined text-[28px]">warning</span>
+</div>
+</div>
+</div>
+<!-- Offline Warning Banner (Revealed via toggle) -->
+<div class="hidden px-margin mb-space-sm" id="offlineNotice">
+<div class="bg-surface-container-high p-space-sm rounded-lg flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-primary text-[22px]">cloud_off</span>
+<div>
+<span class="font-body-sm text-body-sm font-semibold text-on-surface">Offline Fallback Mode Active:</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant"> Edge-AI processing active on Hall A Local Server. All candidate evidence frames cached locally in SHA-256 vault. Central sync pending uplink.</span>
+</div>
+</div>
+<span class="font-label-code-sm text-label-code-sm bg-surface-container-lowest px-2 py-1 rounded text-primary font-semibold">ZERO DATA LOSS</span>
+</div>
+</div>
+<!-- Main Split Canvas: 2/3 Dominant Monitoring Left + 1/3 Interactive Drawer Right -->
+<div class="w-full px-margin pb-space-xl grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<!-- LEFT DOMINANT COLUMN (8 Cols) -->
+<div class="lg:col-span-8 flex flex-col gap-space-md">
+<!-- Live Video Feed Container -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden flex flex-col">
+<!-- Feed Top Switcher & Tech Metadata -->
+<div class="bg-surface-container px-space-md py-space-sm flex flex-wrap items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-primary text-[20px]">videocam</span>
+<div class="flex items-center gap-1 bg-surface-container-lowest p-0.5 rounded-lg shadow-inner">
+<button class="px-3 py-1 rounded text-body-sm font-body-sm font-semibold bg-primary text-on-primary shadow-sm flex items-center gap-1.5" type="button">
+<span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+<span>Camera 01 (Front Hall)</span>
+</button>
+<button class="px-3 py-1 rounded text-body-sm font-body-sm text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-colors flex items-center gap-1.5" type="button">
+<span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+<span>Camera 02 (Rear Balcony)</span>
+</button>
+</div>
+</div>
+<div class="flex items-center gap-space-md font-label-code-sm text-label-code-sm text-on-surface-variant">
+<span class="hidden sm:inline">MAIN HALL PROSCENIUM VIEW</span>
+<span>•</span>
+<span class="text-on-surface font-semibold" id="liveFeedClock">10:42:16 AM</span>
+<span>•</span>
+<span class="bg-surface-container-high text-primary px-2 py-0.5 rounded">4 FPS • CV PIPELINE OPTIMIZED</span>
+</div>
+</div>
+<!-- Camera Visual Viewport with Computer Vision Bounding Overlays -->
+<div class="relative w-full aspect-video bg-black overflow-hidden flex items-center justify-center">
+<img class="w-full h-full object-cover opacity-85" data-alt="An expansive, brightly lit African high school examination hall filled with rows of individual wooden desks. Students in uniform are seated in strict exam conditions writing on answer sheets under high arched industrial windows. Overhead security viewpoint with subtle digital bounding overlays around student desks." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBIwkZzlGhUw5sADqhcPGIfkJM4iIOqAWP_AnFo4-IkRzraC_AzdYtJgZu_R_QqTkeZChC49dDCu3F-HnFHZ-BSQSHF1z1XqiOXzICUbx0H4y1VikC3017rj6s7dZCR8kXpWtRuo1zDk6naEyCb0ir0atyY9C3SwdyxMycDnv7RUTL9RslVyxVVjUh3u6972Go2EQF-gAkzrNLeQPG9Dw4mx0q-lt3k4vKkzwARqWeEHwHmhoKkQjJhxA"/>
+<!-- Live Visual HUD overlay scan lines -->
+<div class="absolute inset-0 pointer-events-none bg-gradient-to-b from-transparent via-transparent to-black/30"></div>
+<!-- Subtle CV Grid Overlay Layer -->
+<div class="absolute top-4 left-4 flex flex-col gap-1 pointer-events-none">
+<div class="bg-inverse-surface/85 backdrop-blur-sm text-inverse-on-surface px-2.5 py-1 rounded font-label-code-sm text-label-code-sm flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+<span>LIVE EDGE CV PIPELINE: INFERENCE ACTIVE</span>
+</div>
+<div class="bg-inverse-surface/75 text-inverse-on-surface px-2.5 py-0.5 rounded font-label-code-sm text-label-code-sm">
+<span>TARGETS IDENTIFIED: 117 DESKS</span>
+</div>
+</div>
+<!-- Highlighted Suspicious Desk Overlay (Tracker #07) -->
+<div class="absolute top-[38%] left-[44%] w-[18%] h-[28%] pointer-events-auto cursor-pointer group" onclick="selectTracker('07')">
+<div class="w-full h-full rounded bg-error/15 shadow-[0_0_15px_rgba(220,38,38,0.5)] flex flex-col justify-between p-1.5 transition-transform group-hover:scale-105">
+<div class="flex items-center justify-between">
+<span class="bg-error text-on-error font-label-code-sm text-label-code-sm px-1.5 py-0.5 rounded font-bold uppercase tracking-wider flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px]">priority_high</span>
+                  DESK #07
+                </span>
+<span class="bg-surface-container-lowest/90 text-error font-label-code-sm text-label-code-sm px-1 py-0.5 rounded font-semibold text-[10px]">94% CONF</span>
+</div>
+<div class="bg-inverse-surface/90 text-inverse-on-surface p-1 rounded backdrop-blur-sm text-center">
+<span class="font-label-code-sm text-label-code-sm text-[#ffdad6] font-semibold block leading-tight">PHONE DETECTED ×2</span>
+<span class="font-label-code-sm text-label-code-sm text-[#aec8f0] text-[10px]">Click to inspect</span>
+</div>
+</div>
+</div>
+<!-- Secondary Flag Overlay (Desk #12) -->
+<div class="absolute top-[48%] left-[72%] w-[15%] h-[24%] pointer-events-auto cursor-pointer group" onclick="selectTracker('12')">
+<div class="w-full h-full rounded bg-amber-500/15 flex flex-col justify-between p-1 transition-transform group-hover:scale-105">
+<span class="bg-amber-600 text-white font-label-code-sm text-label-code-sm px-1.5 py-0.5 rounded self-start font-bold uppercase text-[10px]">
+                DESK #12
+              </span>
+<div class="bg-inverse-surface/90 text-inverse-on-surface p-0.5 rounded text-center">
+<span class="font-label-code-sm text-label-code-sm text-amber-300 text-[10px] block">MATERIAL ×1</span>
+</div>
+</div>
+</div>
+<!-- Secondary Flag Overlay (Desk #21) -->
+<div class="absolute top-[28%] left-[20%] w-[14%] h-[22%] pointer-events-auto cursor-pointer group" onclick="selectTracker('21')">
+<div class="w-full h-full rounded bg-amber-500/15 flex flex-col justify-between p-1 transition-transform group-hover:scale-105">
+<span class="bg-amber-600 text-white font-label-code-sm text-label-code-sm px-1.5 py-0.5 rounded self-start font-bold uppercase text-[10px]">
+                DESK #21
+              </span>
+<div class="bg-inverse-surface/90 text-inverse-on-surface p-0.5 rounded text-center">
+<span class="font-label-code-sm text-label-code-sm text-amber-300 text-[10px] block">COMM ×1</span>
+</div>
+</div>
+</div>
+<!-- Camera Status Watermark Footer Inside Video -->
+<div class="absolute bottom-2 right-3 pointer-events-none flex items-center gap-2 bg-black/60 px-2.5 py-1 rounded backdrop-blur-sm text-white/80 font-label-code-sm text-label-code-sm">
+<span class="material-symbols-outlined text-[14px] text-emerald-400">fiber_manual_record</span>
+<span>STREAM ENCRYPTED • AES-256 HALL FEED</span>
+</div>
+</div>
+<!-- Video Control Bar / Quick Tools -->
+<div class="px-space-md py-2.5 bg-surface-container-low flex flex-wrap items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-md text-on-surface-variant font-body-sm text-body-sm">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-primary">visibility</span>
+              Real-time Vision Inference Stream
+            </span>
+<span class="text-outline-variant">•</span>
+<span>Edge Gateway: Hall A Node 01</span>
+</div>
+<div class="flex items-center gap-2">
+<button class="px-2.5 py-1 rounded bg-surface-container-lowest hover:bg-surface-container font-body-sm text-body-sm text-on-surface flex items-center gap-1 transition-colors" type="button">
+<span class="material-symbols-outlined text-[16px]">fullscreen</span>
+<span>Expand Grid</span>
+</button>
+<button class="px-2.5 py-1 rounded bg-surface-container-lowest hover:bg-surface-container font-body-sm text-body-sm text-on-surface flex items-center gap-1 transition-colors" type="button">
+<span class="material-symbols-outlined text-[16px]">tune</span>
+<span>Sensitivity (0.85)</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Candidate Tracker Grid (Anonymized AI Vision) -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col gap-space-sm">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between pb-space-xs gap-space-xs">
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface">Candidate Trackers</h3>
+<p class="font-label-code-sm text-label-code-sm text-on-surface-variant uppercase tracking-wider">
+              Temporary Vision Tokens • Anonymized CV Mesh • Zero Biometric Records Stored
+            </p>
+</div>
+<div class="flex items-center gap-2">
+<span class="font-label-code-sm text-label-code-sm bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded font-semibold flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-emerald-500"></span> 114 Normal
+            </span>
+<span class="font-label-code-sm text-label-code-sm bg-error-container text-on-error-container px-2 py-0.5 rounded font-semibold flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-error"></span> 3 Flagged
+            </span>
+</div>
+</div>
+<!-- Grid of Candidate Trackers -->
+<div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-2.5 pt-1">
+<!-- Tracker 01 -->
+<div class="bg-surface-container-low p-2 rounded-lg flex flex-col justify-between hover:bg-surface-container transition-colors">
+<div class="flex items-center justify-between">
+<span class="font-label-code-sm text-label-code-sm text-on-surface font-semibold">#01</span>
+<span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+</div>
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant text-[10px] mt-2">Desk R1-C1</span>
+<span class="font-body-sm text-body-sm text-emerald-700 text-[11px] font-medium">Normal</span>
+</div>
+<!-- Tracker 02 -->
+<div class="bg-surface-container-low p-2 rounded-lg flex flex-col justify-between hover:bg-surface-container transition-colors">
+<div class="flex items-center justify-between">
+<span class="font-label-code-sm text-label-code-sm text-on-surface font-semibold">#02</span>
+<span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+</div>
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant text-[10px] mt-2">Desk R1-C2</span>
+<span class="font-body-sm text-body-sm text-emerald-700 text-[11px] font-medium">Normal</span>
+</div>
+<!-- Tracker 03 -->
+<div class="bg-surface-container-low p-2 rounded-lg flex flex-col justify-between hover:bg-surface-container transition-colors">
+<div class="flex items-center justify-between">
+<span class="font-label-code-sm text-label-code-sm text-on-surface font-semibold">#03</span>
+<span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+</div>
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant text-[10px] mt-2">Desk R1-C3</span>
+<span class="font-body-sm text-body-sm text-emerald-700 text-[11px] font-medium">Normal</span>
+</div>
+<!-- Tracker 04 -->
+<div class="bg-surface-container-low p-2 rounded-lg flex flex-col justify-between hover:bg-surface-container transition-colors">
+<div class="flex items-center justify-between">
+<span class="font-label-code-sm text-label-code-sm text-on-surface font-semibold">#04</span>
+<span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+</div>
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant text-[10px] mt-2">Desk R1-C4</span>
+<span class="font-body-sm text-body-sm text-emerald-700 text-[11px] font-medium">Normal</span>
+</div>
+<!-- Tracker 07 (PULSING FLAG CARD) -->
+<div class="col-span-2 bg-error-container/30 p-2.5 rounded-lg flex flex-col justify-between cursor-pointer hover:bg-error-container/50 transition-all shadow-sm" onclick="selectTracker('07')">
+<div class="flex items-center justify-between">
+<span class="font-label-code-sm text-label-code-sm text-error font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">crisis_alert</span>
+                TRACKER #07
+              </span>
+<span class="flex h-2.5 w-2.5 relative">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-600"></span>
+</span>
+</div>
+<div class="my-1.5">
+<span class="font-label-code-sm text-label-code-sm text-error font-bold block">PHONE DETECTED ×2</span>
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant text-[11px]">Desk R3-C2 • Conf 94%</span>
+</div>
+<div class="flex items-center justify-between pt-1">
+<span class="font-body-sm text-body-sm text-error font-semibold">URGENT</span>
+<span class="font-label-code-sm text-label-code-sm bg-error text-on-error px-2 py-0.5 rounded text-[11px] font-bold uppercase">VIEW EVIDENCE</span>
+</div>
+</div>
+<!-- Tracker 08 -->
+<div class="bg-surface-container-low p-2 rounded-lg flex flex-col justify-between hover:bg-surface-container transition-colors">
+<div class="flex items-center justify-between">
+<span class="font-label-code-sm text-label-code-sm text-on-surface font-semibold">#08</span>
+<span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+</div>
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant text-[10px] mt-2">Desk R2-C4</span>
+<span class="font-body-sm text-body-sm text-emerald-700 text-[11px] font-medium">Normal</span>
+</div>
+<!-- Tracker 12 (AMBER FLAG CARD) -->
+<div class="col-span-2 bg-amber-50 p-2.5 rounded-lg flex flex-col justify-between cursor-pointer hover:bg-amber-100 transition-all" onclick="selectTracker('12')">
+<div class="flex items-center justify-between">
+<span class="font-label-code-sm text-label-code-sm text-amber-800 font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">menu_book</span>
+                TRACKER #12
+              </span>
+<span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+</div>
+<div class="my-1.5">
+<span class="font-label-code-sm text-label-code-sm text-amber-900 font-semibold block">UNAUTHORISED MATERIAL ×1</span>
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant text-[11px]">Desk R4-C1 • Conf 89%</span>
+</div>
+<div class="flex items-center justify-between pt-1">
+<span class="font-body-sm text-body-sm text-amber-800 font-medium">Pending Review</span>
+<span class="font-label-code-sm text-label-code-sm bg-amber-200 text-amber-900 px-2 py-0.5 rounded text-[11px] font-semibold uppercase">INSPECT</span>
+</div>
+</div>
+<!-- Tracker 15 -->
+<div class="bg-surface-container-low p-2 rounded-lg flex flex-col justify-between hover:bg-surface-container transition-colors">
+<div class="flex items-center justify-between">
+<span class="font-label-code-sm text-label-code-sm text-on-surface font-semibold">#15</span>
+<span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+</div>
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant text-[10px] mt-2">Desk R4-C4</span>
+<span class="font-body-sm text-body-sm text-emerald-700 text-[11px] font-medium">Normal</span>
+</div>
+<!-- Tracker 21 (COMMUNICATION CARD) -->
+<div class="col-span-2 bg-amber-50 p-2.5 rounded-lg flex flex-col justify-between cursor-pointer hover:bg-amber-100 transition-all" onclick="selectTracker('21')">
+<div class="flex items-center justify-between">
+<span class="font-label-code-sm text-label-code-sm text-amber-800 font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">record_voice_over</span>
+                TRACKER #21
+              </span>
+<span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+</div>
+<div class="my-1.5">
+<span class="font-label-code-sm text-label-code-sm text-amber-900 font-semibold block">COMMUNICATION ×1</span>
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant text-[11px]">Desk R5-C3 • Conf 91%</span>
+</div>
+<div class="flex items-center justify-between pt-1">
+<span class="font-body-sm text-body-sm text-amber-800 font-medium">Head Turn &gt;45°</span>
+<span class="font-label-code-sm text-label-code-sm bg-amber-200 text-amber-900 px-2 py-0.5 rounded text-[11px] font-semibold uppercase">INSPECT</span>
+</div>
+</div>
+<!-- Tracker 22 -->
+<div class="bg-surface-container-low p-2 rounded-lg flex flex-col justify-between hover:bg-surface-container transition-colors">
+<div class="flex items-center justify-between">
+<span class="font-label-code-sm text-label-code-sm text-on-surface font-semibold">#22</span>
+<span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+</div>
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant text-[10px] mt-2">Desk R5-C4</span>
+<span class="font-body-sm text-body-sm text-emerald-700 text-[11px] font-medium">Normal</span>
+</div>
+<!-- Compact Aggregated Badges for Trackers 23-30 -->
+<div class="col-span-2 sm:col-span-4 md:col-span-6 bg-surface-container-low/60 p-2.5 rounded-lg flex flex-wrap items-center justify-between gap-2">
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant font-medium">
+              Trackers #23 - #120 (Clear Status):
+            </span>
+<div class="flex flex-wrap gap-1.5">
+<span class="font-label-code-sm text-label-code-sm bg-surface-container-lowest px-2 py-0.5 rounded text-on-surface-variant">#23-#35: OK</span>
+<span class="font-label-code-sm text-label-code-sm bg-surface-container-lowest px-2 py-0.5 rounded text-on-surface-variant">#36-#60: OK</span>
+<span class="font-label-code-sm text-label-code-sm bg-surface-container-lowest px-2 py-0.5 rounded text-on-surface-variant">#61-#90: OK</span>
+<span class="font-label-code-sm text-label-code-sm bg-surface-container-lowest px-2 py-0.5 rounded text-on-surface-variant">#91-#120: OK</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- RIGHT INTERACTIVE DRAWER COLUMN (4 Cols) -->
+<div class="lg:col-span-4 flex flex-col gap-space-md">
+<!-- Real-Time Activity Feed Queue -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[20px]">notifications_active</span>
+<h3 class="font-headline-md text-headline-md text-on-surface">Recent Detections</h3>
+</div>
+<span class="font-label-code-sm text-label-code-sm bg-error-container text-on-error-container px-2 py-0.5 rounded font-bold">3 PENDING</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+          Live CV Detections awaiting human invigilator confirmation.
+        </p>
+<!-- Queue Item List -->
+<div class="flex flex-col gap-2 mt-1">
+<!-- Item 1 (Selected Desk 07) -->
+<div class="p-space-sm rounded-lg bg-surface-container cursor-pointer transition-colors flex items-start gap-space-sm" id="queueItem07" onclick="selectTracker('07')">
+<div class="w-8 h-8 rounded-lg bg-error-container text-error flex items-center justify-center shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[18px]">smartphone</span>
+</div>
+<div class="flex flex-col flex-1 min-w-0">
+<div class="flex items-center justify-between">
+<span class="font-label-code-sm text-label-code-sm font-bold text-error">TRACKER #07</span>
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant">10:42 AM</span>
+</div>
+<span class="font-body-sm text-body-sm font-semibold text-on-surface truncate">Handheld Device / Phone Detected</span>
+<div class="flex items-center gap-2 mt-1">
+<span class="font-label-code-sm text-label-code-sm text-error bg-error-container/60 px-1.5 py-0.2 rounded font-bold">Occurrences: ×2</span>
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant">94% Confidence</span>
+</div>
+</div>
+</div>
+<!-- Item 2 (Desk 12) -->
+<div class="p-space-sm rounded-lg bg-surface-container-low hover:bg-surface-container cursor-pointer transition-colors flex items-start gap-space-sm" id="queueItem12" onclick="selectTracker('12')">
+<div class="w-8 h-8 rounded-lg bg-amber-100 text-amber-800 flex items-center justify-center shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[18px]">menu_book</span>
+</div>
+<div class="flex flex-col flex-1 min-w-0">
+<div class="flex items-center justify-between">
+<span class="font-label-code-sm text-label-code-sm font-bold text-amber-800">TRACKER #12</span>
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant">10:39 AM</span>
+</div>
+<span class="font-body-sm text-body-sm font-semibold text-on-surface truncate">Unauthorised Document / Formulae</span>
+<div class="flex items-center gap-2 mt-1">
+<span class="font-label-code-sm text-label-code-sm text-amber-800 bg-amber-100 px-1.5 py-0.2 rounded font-semibold">Occurrences: ×1</span>
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant">89% Confidence</span>
+</div>
+</div>
+</div>
+<!-- Item 3 (Desk 21) -->
+<div class="p-space-sm rounded-lg bg-surface-container-low hover:bg-surface-container cursor-pointer transition-colors flex items-start gap-space-sm" id="queueItem21" onclick="selectTracker('21')">
+<div class="w-8 h-8 rounded-lg bg-amber-100 text-amber-800 flex items-center justify-center shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[18px]">record_voice_over</span>
+</div>
+<div class="flex flex-col flex-1 min-w-0">
+<div class="flex items-center justify-between">
+<span class="font-label-code-sm text-label-code-sm font-bold text-amber-800">TRACKER #21</span>
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant">10:34 AM</span>
+</div>
+<span class="font-body-sm text-body-sm font-semibold text-on-surface truncate">Whispering / Repetitive Head Turns</span>
+<div class="flex items-center gap-2 mt-1">
+<span class="font-label-code-sm text-label-code-sm text-amber-800 bg-amber-100 px-1.5 py-0.2 rounded font-semibold">Occurrences: ×1</span>
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant">91% Confidence</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Human Review & Evidence Detail Panel -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col gap-space-md">
+<!-- Institutional Guiding Principle Banner -->
+<div class="bg-primary/5 p-space-sm rounded-lg">
+<p class="font-body-sm text-body-sm italic text-primary font-medium text-center">
+            « The system detects. The invigilator reviews. The school remains in control. »
+          </p>
+</div>
+<!-- Evidence Freeze-Frame Viewport -->
+<div class="flex flex-col gap-1.5">
+<div class="flex items-center justify-between">
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant uppercase font-semibold">Visual Evidence Capture</span>
+<span class="font-label-code-sm text-label-code-sm text-primary font-medium">Timestamp: 10:42:14 AM</span>
+</div>
+<div class="relative w-full aspect-[4/3] bg-inverse-surface rounded-lg overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A detailed, high contrast security surveillance still frame showing a school examination desk from above. The student's hands are positioned near a mathematical logarithmic table booklet, partially concealing an illuminated compact smartphone screen underneath paper notes." id="evidenceImage" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBYygwIqojonvEfmH-VmevrReNsGkxDuGq5-lsGw9l8reWFZC62UxdZ-mLW1cQUf_ibN7qogY9jmQ32Kt0FIjzZCxikZsrKuvpouLairJRyPQz3cIeiPwSAzpiPZxLeEqPlf34GjuM44xKABIqY4IcqvQk2t7GSDlOCOUGnwwV0N53OFl0-lpP5Yuo5Uavi5ribMlCWZjtS9Mympa-WEZS44UFEOVN0woaLQmcP4nEAv1F0zXWqZEF7JQ"/>
+<!-- Magnified Reticle Overlay -->
+<div class="absolute inset-0 pointer-events-none flex items-center justify-center">
+<div class="w-32 h-32 rounded-full border-2 border-red-500 bg-red-500/10 shadow-[0_0_20px_rgba(239,68,68,0.4)] flex items-center justify-center">
+<span class="font-label-code-sm text-label-code-sm bg-inverse-surface/90 text-inverse-on-surface px-1.5 py-0.5 rounded text-[10px]">
+                  MAGNIFIED ZONE
+                </span>
+</div>
+</div>
+<div class="absolute bottom-2 left-2 bg-inverse-surface/90 text-inverse-on-surface px-2 py-0.5 rounded font-label-code-sm text-label-code-sm text-[11px]">
+              SHA-256: 7f8a9e...3c21
+            </div>
+</div>
+</div>
+<!-- Metadata Breakdown Box -->
+<div class="bg-surface-container-low p-space-sm rounded-lg flex flex-col gap-1.5">
+<div class="flex items-center justify-between">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Incident Classification:</span>
+<span class="font-body-sm text-body-sm font-semibold text-error" id="detailActivity">Phone Detected (Aggregated ×2)</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Tracker Location:</span>
+<span class="font-label-code-sm text-label-code-sm text-on-surface font-semibold" id="detailDesk">Desk Row 3, Column 2 (#07)</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="font-body-sm text-body-sm text-on-surface-variant">AI Model Confidence:</span>
+<span class="font-label-code-sm text-label-code-sm text-primary font-bold" id="detailConf">94.2%</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Temporal Span:</span>
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant">First: 10:14 AM • Last: 10:42 AM</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Institutional Severity:</span>
+<span class="font-label-code-sm text-label-code-sm bg-error-container text-on-error-container px-1.5 py-0.2 rounded font-bold" id="detailSeverity">Elevated (Repeated Pattern)</span>
+</div>
+</div>
+<!-- Quick Observation Note -->
+<div class="flex flex-col gap-1">
+<label class="font-label-code-sm text-label-code-sm text-on-surface-variant font-medium" for="invigilatorNote">
+            Invigilator Hall Observation Note:
+          </label>
+<input class="w-full bg-surface-container-lowest px-3 py-2 rounded-lg text-body-sm font-body-sm text-on-surface placeholder:text-outline-variant focus:outline-none focus:ring-2 focus:ring-primary shadow-inner" id="invigilatorNote" placeholder="Add brief on-hall verification remark..." type="text"/>
+</div>
+<!-- Human Review Action Decision Buttons -->
+<div class="flex flex-col gap-2 pt-1">
+<!-- Primary Blue Confirmation Action -->
+<button class="w-full bg-primary-container text-on-primary py-2.5 px-4 rounded-lg font-body-sm text-body-sm font-semibold hover:bg-blue-800 transition-colors shadow-sm flex items-center justify-center gap-2 active:scale-[0.99]" id="confirmFlagBtn" type="button">
+<span class="material-symbols-outlined text-[18px]">verified</span>
+<span>CONFIRM ACTIVITY (FLAG FOR DISCIPLINE MASTER)</span>
+</button>
+<!-- Secondary Dismiss Action -->
+<button class="w-full bg-surface-container-low hover:bg-surface-container text-on-surface-variant hover:text-on-surface py-2 px-4 rounded-lg font-body-sm text-body-sm font-medium transition-colors flex items-center justify-center gap-2" id="dismissBtn" type="button">
+<span class="material-symbols-outlined text-[18px]">cancel</span>
+<span>DISMISS AS FALSE POSITIVE</span>
+</button>
+<!-- Slip Printing Action -->
+<button class="w-full bg-surface-container-lowest hover:bg-surface-container-low text-primary py-2 px-4 rounded-lg font-body-sm text-body-sm font-semibold transition-colors flex items-center justify-center gap-2" id="printSlipBtn" type="button">
+<span class="material-symbols-outlined text-[18px]">print</span>
+<span>PRINT INCIDENT EVIDENCE SLIP</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- End Examination Confirmation Modal (Hidden by Default) -->
+<div class="fixed inset-0 z-50 bg-[#0b2a4a]/40 backdrop-blur-sm hidden items-center justify-center p-4" id="endExamModal">
+<div class="bg-surface-container-lowest rounded-xl max-w-lg w-full p-space-lg shadow-2xl flex flex-col gap-space-md">
+<div class="flex items-center gap-space-sm text-error">
+<span class="material-symbols-outlined text-[32px]">warning</span>
+<h2 class="font-headline-md text-headline-md text-on-surface">Conclude &amp; Lock Examination?</h2>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">
+        You are about to officially conclude <strong>MATHEMATICS (Paper 2)</strong> in Hall A. All 117 candidates will be locked from further CV telemetry, and the SHA-256 session package will be compiled for the GCE Board Regional Inspector.
+      </p>
+<div class="bg-surface-container-low p-space-sm rounded-lg flex flex-col gap-1 text-body-sm font-body-sm">
+<div class="flex justify-between">
+<span class="text-on-surface-variant">Seated Candidates:</span>
+<span class="font-semibold text-on-surface">117 / 120</span>
+</div>
+<div class="flex justify-between">
+<span class="text-on-surface-variant">Resolved Flags:</span>
+<span class="font-semibold text-on-surface">1 Confirmed, 2 Pending</span>
+</div>
+<div class="flex justify-between">
+<span class="text-on-surface-variant">Audit Package:</span>
+<span class="font-label-code-sm text-label-code-sm text-primary">gbhs-yde-hallA-math2.audit</span>
+</div>
+</div>
+<div class="flex items-center justify-end gap-space-sm pt-space-xs">
+<button class="px-4 py-2 rounded-lg bg-surface-container text-on-surface-variant font-body-sm text-body-sm font-medium hover:bg-surface-container-high transition-colors" id="cancelEndExamBtn" type="button">
+          Return to Monitoring
+        </button>
+<button class="px-4 py-2 rounded-lg bg-error text-on-error font-body-sm text-body-sm font-semibold hover:bg-red-700 transition-colors shadow-sm" id="confirmEndExamBtn" type="button">
+          Confirm End Examination
+        </button>
+</div>
+</div>
+</div>
+<!-- Notification Toast for Invigilator Actions -->
+<div class="fixed bottom-6 right-6 z-50 transform translate-y-24 opacity-0 transition-all duration-300 pointer-events-none bg-inverse-surface text-inverse-on-surface px-space-md py-3 rounded-xl shadow-xl flex items-center gap-space-sm" id="toastNotification">
+<span class="material-symbols-outlined text-[20px] text-emerald-400" id="toastIcon">check_circle</span>
+<span class="font-body-sm text-body-sm font-medium" id="toastMessage">Evidence confirmed and dispatched to Regional Inspector.</span>
+</div>
+</div>
+<script>
+  // Session Clock simulation
+  let secondsElapsed = 5058; // 01:24:18
+  const timerElem = document.getElementById('sessionTimer');
+  setInterval(() => {
+    secondsElapsed++;
+    const h = String(Math.floor(secondsElapsed / 3600)).padStart(2, '0');
+    const m = String(Math.floor((secondsElapsed % 3600) / 60)).padStart(2, '0');
+    const s = String(secondsElapsed % 60).padStart(2, '0');
+    if (timerElem) timerElem.textContent = `${h}:${m}:${s}`;
+  }, 1000);
+
+  // Live Feed Clock
+  const liveFeedClockElem = document.getElementById('liveFeedClock');
+  setInterval(() => {
+    const now = new Date();
+    if (liveFeedClockElem) {
+      liveFeedClockElem.textContent = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    }
+  }, 1000);
+
+  // Audio Toggle
+  let audioOn = true;
+  const audioToggleBtn = document.getElementById('audioToggleBtn');
+  const audioIcon = document.getElementById('audioIcon');
+  const audioLabel = document.getElementById('audioLabel');
+
+  audioToggleBtn.addEventListener('click', () => {
+    audioOn = !audioOn;
+    if (audioOn) {
+      audioIcon.textContent = 'volume_up';
+      audioLabel.textContent = 'CHIME ON';
+      showToast('Audio chime alerts enabled for high-confidence events.');
+    } else {
+      audioIcon.textContent = 'volume_off';
+      audioLabel.textContent = 'CHIME MUTED';
+      showToast('Audio alerts muted. Visual flags remain active.');
+    }
+  });
+
+  // Offline Simulator Toggle
+  let isOffline = false;
+  const toggleNetworkBtn = document.getElementById('toggleNetworkBtn');
+  const networkDot = document.getElementById('networkDot');
+  const networkStatusText = document.getElementById('networkStatusText');
+  const offlineNotice = document.getElementById('offlineNotice');
+
+  toggleNetworkBtn.addEventListener('click', () => {
+    isOffline = !isOffline;
+    if (isOffline) {
+      networkDot.className = 'w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse';
+      networkStatusText.textContent = 'LOCAL EDGE ONLY (OFFLINE SAFE)';
+      networkStatusText.className = 'font-label-code-sm text-label-code-sm font-semibold text-amber-700';
+      offlineNotice.classList.remove('hidden');
+      toggleNetworkBtn.textContent = 'Restore Uplink';
+      showToast('Network drop simulated: Hall A running autonomous edge pipeline.');
+    } else {
+      networkDot.className = 'w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-sm';
+      networkStatusText.textContent = 'LOCAL MONITORING ACTIVE (ONLINE SYNCED)';
+      networkStatusText.className = 'font-label-code-sm text-label-code-sm font-semibold text-primary';
+      offlineNotice.classList.add('hidden');
+      toggleNetworkBtn.textContent = 'Simulate Drop';
+      showToast('Uplink restored: Audit hashes synchronized with GCE Board cloud.');
+    }
+  });
+
+  // Dynamic Evidence Selection Logic
+  const trackerData = {
+    '07': {
+      activity: 'Phone Detected (Aggregated ×2)',
+      desk: 'Desk Row 3, Column 2 (#07)',
+      conf: '94.2%',
+      severity: 'Elevated (Repeated Pattern)',
+      prompt: 'A detailed, high contrast security surveillance still frame showing a school examination desk from above. The student\'s hands are positioned near a mathematical logarithmic table booklet, partially concealing an illuminated compact smartphone screen underneath paper notes.'
+    },
+    '12': {
+      activity: 'Unauthorised Notes Material ×1',
+      desk: 'Desk Row 4, Column 1 (#12)',
+      conf: '89.1%',
+      severity: 'Moderate Review (Single Incident)',
+      prompt: 'Surveillance photo of an examination hall wooden desk with handwritten mathematical formulas scribbled onto an unauthorized ruler and compass case during high school tests.'
+    },
+    '21': {
+      activity: 'Suspicious Lateral Communication ×1',
+      desk: 'Desk Row 5, Column 3 (#21)',
+      conf: '91.4%',
+      severity: 'Inquiry Triggered (Repeated Turn)',
+      prompt: 'Security surveillance viewpoint of a secondary school student leaning laterally toward an adjacent desk while looking away from their exam paper in a silent hall.'
+    }
+  };
+
+  function selectTracker(id) {
+    const data = trackerData[id];
+    if (!data) return;
+
+    document.getElementById('detailActivity').textContent = data.activity;
+    document.getElementById('detailDesk').textContent = data.desk;
+    document.getElementById('detailConf').textContent = data.conf;
+    document.getElementById('detailSeverity').textContent = data.severity;
+    
+    const evImg = document.getElementById('evidenceImage');
+    if (evImg) {
+      evImg.setAttribute('data-alt', data.prompt);
+    }
+
+    // Update active highlight classes in queue
+    ['07', '12', '21'].forEach(k => {
+      const q = document.getElementById(`queueItem${k}`);
+      if (q) {
+        if (k === id) {
+          q.classList.add('bg-surface-container');
+          q.classList.remove('bg-surface-container-low');
+        } else {
+          q.classList.remove('bg-surface-container');
+          q.classList.add('bg-surface-container-low');
+        }
+      }
+    });
+
+    showToast(`Loaded evidence telemetry for Desk #${id}`);
+  }
+
+  // End Examination Modal controls
+  const endExamTrigger = document.getElementById('endExamTrigger');
+  const endExamModal = document.getElementById('endExamModal');
+  const cancelEndExamBtn = document.getElementById('cancelEndExamBtn');
+  const confirmEndExamBtn = document.getElementById('confirmEndExamBtn');
+
+  endExamTrigger.addEventListener('click', () => {
+    endExamModal.classList.remove('hidden');
+    endExamModal.classList.add('flex');
+  });
+
+  cancelEndExamBtn.addEventListener('click', () => {
+    endExamModal.classList.add('hidden');
+    endExamModal.classList.remove('flex');
+  });
+
+  confirmEndExamBtn.addEventListener('click', () => {
+    endExamModal.classList.add('hidden');
+    endExamModal.classList.remove('flex');
+    showToast('Examination Session Concluded. Session archive generated.');
+  });
+
+  // Action Buttons
+  document.getElementById('confirmFlagBtn').addEventListener('click', () => {
+    const note = document.getElementById('invigilatorNote').value;
+    showToast(note ? `Confirmed with note: "${note}"` : 'Confirmed & Flagged for Discipline Master review.');
+    document.getElementById('invigilatorNote').value = '';
+  });
+
+  document.getElementById('dismissBtn').addEventListener('click', () => {
+    showToast('Item marked as False Positive. Edge CV tuned.');
+  });
+
+  document.getElementById('printSlipBtn').addEventListener('click', () => {
+    showToast('Generating signed thermal incident slip for Invigilator...');
+  });
+
+  // Toast Helper
+  function showToast(msg) {
+    const toast = document.getElementById('toastNotification');
+    const toastMsg = document.getElementById('toastMessage');
+    if (!toast || !toastMsg) return;
+
+    toastMsg.textContent = msg;
+    toast.classList.remove('translate-y-24', 'opacity-0');
+    toast.classList.add('translate-y-0', 'opacity-100');
+
+    setTimeout(() => {
+      toast.classList.add('translate-y-24', 'opacity-0');
+      toast.classList.remove('translate-y-0', 'opacity-100');
+    }, 3200);
+  }
+</script></main><footer class="w-full bg-surface-container-lowest border-t border-outline-variant py-space-md"><div class="w-full px-margin flex flex-col md:flex-row items-center justify-between gap-space-sm"><div class="flex items-center gap-space-sm"><span class="font-body-sm text-body-sm text-on-surface-variant">© Republic of Cameroon • Ministry of Secondary Education • EyeX Secure Supervision</span></div><div class="flex items-center gap-space-md font-label-code-sm text-label-code-sm text-on-surface-variant"><span>GCE Board Certified Protocol</span><span>SHA-256 Tamper-Proof Audit</span></div></div></footer></body></html>

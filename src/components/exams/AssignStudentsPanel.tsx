@@ -52,80 +52,83 @@ export function AssignStudentsPanel({ examId, examStudents, allStudents, assigne
   }
 
   return (
-    <div className="rounded-xl border border-gray-800 bg-gray-900/60 p-5 space-y-5">
+    <div className="rounded-2xl border border-[#e5eeff] bg-white p-6 space-y-5 shadow-sm">
       <div className="flex items-center justify-between">
-        <h2 className="text-sm font-semibold text-gray-200">
-          Assigned Students
-          <span className="ml-2 text-xs text-gray-500 font-normal">({examStudents.length})</span>
+        <h2 className="font-code-sm text-[11px] font-bold uppercase tracking-wider text-[#466083]">
+          Assigned Candidates Roster
+          <span className="ml-2 text-[12px] text-[#747686] font-normal">({examStudents.length} Assigned)</span>
         </h2>
       </div>
 
       {error && (
-        <div className="rounded-lg border border-red-800 bg-red-950/40 p-3 text-sm text-red-300">
+        <div className="rounded-lg border border-[#fecaca] bg-[#fef2f2] p-3 text-[13px] text-[#b91c1c]">
           {error}
         </div>
       )}
 
       {/* Assigned students table */}
       {examStudents.length === 0 ? (
-        <div className="text-center py-6 text-gray-500 text-sm">
-          No students assigned yet. Search and assign students below.
+        <div className="text-center py-6 text-[#747686] text-[13px]">
+          No candidates assigned yet. Search and assign candidates below.
         </div>
       ) : (
-        <div className="overflow-x-auto rounded-lg border border-gray-800">
-          <table className="w-full text-sm">
+        <div className="overflow-x-auto rounded-xl border border-[#e5eeff]">
+          <table className="w-full text-left text-[13px]">
             <thead>
-              <tr className="border-b border-gray-800 text-left text-xs text-gray-500">
-                <th className="px-4 py-2.5 font-medium">Student #</th>
-                <th className="px-4 py-2.5 font-medium">Name</th>
-                <th className="px-4 py-2.5 font-medium">Seat</th>
-                <th className="px-4 py-2.5 font-medium text-right">Actions</th>
+              <tr className="bg-[#eff4ff] font-code-sm text-[11px] text-[#747686] uppercase tracking-wider">
+                <th className="py-2.5 px-4 font-medium">Candidate #</th>
+                <th className="py-2.5 px-4 font-medium">Name</th>
+                <th className="py-2.5 px-4 font-medium">Seat</th>
+                <th className="py-2.5 px-4 font-medium text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-800/60">
+            <tbody className="divide-y divide-[#eff4ff]">
               {examStudents.map((es) => (
-                <tr key={es.id} className="hover:bg-gray-800/20 transition-colors">
-                  <td className="px-4 py-2.5 font-mono text-teal-400 text-xs">
+                <tr key={es.id} className="hover:bg-[#f8f9ff] transition-colors">
+                  <td className="py-2.5 px-4 font-mono text-[#0037b0] font-bold text-xs">
                     {es.student?.student_number ?? '—'}
                   </td>
-                  <td className="px-4 py-2.5 text-white">{es.student?.full_name ?? '—'}</td>
-                  <td className="px-4 py-2.5">
+                  <td className="py-2.5 px-4 text-[#0b1c30] font-semibold">{es.student?.full_name ?? '—'}</td>
+                  <td className="py-2.5 px-4">
                     {editingSeat === es.student_id ? (
                       <div className="flex items-center gap-2">
                         <input
                           value={seatValue}
                           onChange={e => setSeatValue(e.target.value)}
                           placeholder="A01"
-                          className="w-20 px-2 py-1 rounded border border-gray-700 bg-gray-800 text-white text-xs focus:outline-none focus:ring-1 focus:ring-teal-500"
+                          className="w-20 px-2 py-1 rounded border border-[#c4c5d7] bg-[#eff4ff] text-[#0b1c30] text-xs font-mono focus:outline-none focus:ring-1 focus:ring-[#1d4ed8]"
                         />
                         <button
                           onClick={() => handleSeatSave(es.student_id)}
                           disabled={isPending}
-                          className="text-xs text-teal-400 hover:text-teal-300 disabled:opacity-50"
+                          className="px-2 py-1 text-xs bg-[#1d4ed8] text-white rounded font-medium"
                         >
                           Save
                         </button>
                         <button
                           onClick={() => setEditingSeat(null)}
-                          className="text-xs text-gray-500 hover:text-gray-300"
+                          className="text-xs text-[#747686]"
                         >
                           Cancel
                         </button>
                       </div>
                     ) : (
                       <button
-                        onClick={() => { setEditingSeat(es.student_id); setSeatValue(es.seat_number ?? '') }}
-                        className="text-xs text-gray-400 hover:text-white transition-colors font-mono"
+                        onClick={() => {
+                          setEditingSeat(es.student_id)
+                          setSeatValue(es.seat_number ?? '')
+                        }}
+                        className="font-mono text-xs text-[#434655] hover:text-[#0037b0] underline"
                       >
-                        {es.seat_number ?? <span className="text-gray-600 italic">Set seat</span>}
+                        {es.seat_number ? `Seat: ${es.seat_number}` : 'Set Seat'}
                       </button>
                     )}
                   </td>
-                  <td className="px-4 py-2.5 text-right">
+                  <td className="py-2.5 px-4 text-right">
                     <button
                       onClick={() => handleRemove(es.student_id)}
                       disabled={isPending}
-                      className="text-xs text-red-400 hover:text-red-300 disabled:opacity-50 transition-colors"
+                      className="text-xs text-[#b91c1c] hover:underline font-semibold disabled:opacity-50"
                     >
                       Remove
                     </button>
@@ -137,45 +140,44 @@ export function AssignStudentsPanel({ examId, examStudents, allStudents, assigne
         </div>
       )}
 
-      {/* Assign new students */}
-      <div>
-        <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Add Students</p>
+      {/* Unassigned search and add */}
+      <div className="pt-4 border-t border-[#e5eeff] space-y-3">
+        <h3 className="font-code-sm text-[11px] font-bold uppercase tracking-wider text-[#466083]">
+          Assign Additional Candidates
+        </h3>
+
         <input
           type="text"
           value={search}
           onChange={e => setSearch(e.target.value)}
-          placeholder="Search by name or student number…"
-          className="w-full px-3.5 py-2 rounded-lg border border-gray-700 bg-gray-800 text-white placeholder-gray-500 text-sm mb-3 focus:outline-none focus:ring-2 focus:ring-[#0e5a4d]/50 focus:border-[#0e5a4d] transition-colors"
+          placeholder="Search unassigned candidates by name or number…"
+          className="w-full px-3.5 py-2 rounded-lg border border-[#c4c5d7] bg-[#eff4ff] text-[#0b1c30] placeholder-[#747686] text-[13px] focus:outline-none focus:ring-2 focus:ring-[#1d4ed8] focus:bg-white transition-all font-medium"
         />
+
         {unassigned.length === 0 ? (
-          <p className="text-sm text-gray-500 text-center py-4">
+          <p className="text-xs text-[#747686] py-2">
             {allStudents.length === 0
-              ? 'No students in your school yet. '
+              ? 'No candidates enrolled in school yet.'
               : search
-              ? 'No students match your search.'
-              : 'All students are already assigned.'}
-            {allStudents.length === 0 && (
-              <Link href="/students/create" className="text-teal-400 hover:underline">Add students →</Link>
-            )}
+              ? 'No matching unassigned candidates.'
+              : 'All candidates are already assigned to this examination.'}
           </p>
         ) : (
-          <div className="space-y-1.5 max-h-60 overflow-y-auto">
-            {unassigned.map(student => (
-              <div
-                key={student.id}
-                className="flex items-center justify-between px-3 py-2 rounded-lg bg-gray-800/40 hover:bg-gray-800 transition-colors"
-              >
+          <div className="max-h-48 overflow-y-auto divide-y divide-[#eff4ff] rounded-xl border border-[#e5eeff]">
+            {unassigned.slice(0, 10).map((student) => (
+              <div key={student.id} className="flex items-center justify-between p-2.5 hover:bg-[#f8f9ff] text-[13px]">
                 <div>
-                  <span className="font-mono text-teal-400 text-xs mr-2">{student.student_number}</span>
-                  <span className="text-sm text-white">{student.full_name}</span>
-                  {student.email && <span className="text-xs text-gray-500 ml-2">{student.email}</span>}
+                  <span className="font-mono text-xs text-[#0037b0] font-semibold mr-2">
+                    {student.student_number}
+                  </span>
+                  <span className="font-semibold text-[#0b1c30]">{student.full_name}</span>
                 </div>
                 <button
                   onClick={() => handleAssign(student.id)}
                   disabled={isPending}
-                  className="text-xs text-teal-400 hover:text-teal-300 disabled:opacity-50 transition-colors border border-teal-900 hover:border-teal-700 px-2 py-1 rounded"
+                  className="px-3 py-1 rounded bg-[#eff4ff] hover:bg-[#e5eeff] text-[#0037b0] text-xs font-semibold disabled:opacity-50 transition-colors"
                 >
-                  Assign
+                  + Assign
                 </button>
               </div>
             ))}

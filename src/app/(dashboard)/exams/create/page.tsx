@@ -14,7 +14,7 @@ function SubmitButton() {
     <button
       type="submit"
       disabled={pending}
-      className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[#0e5a4d] hover:bg-[#0b483d] disabled:opacity-60 disabled:cursor-not-allowed text-white text-sm font-semibold transition-colors shadow-sm"
+      className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[#1d4ed8] hover:bg-[#0037b0] disabled:opacity-60 disabled:cursor-not-allowed text-white text-[14px] font-semibold transition-colors shadow-sm"
     >
       {pending ? (
         <>
@@ -35,71 +35,71 @@ export default function CreateExamPage() {
   const [state, formAction] = useActionState(createExam, initial)
 
   return (
-    <div className="p-6 max-w-2xl mx-auto">
+    <div className="w-full px-4 sm:px-6 lg:px-8 py-6 max-w-2xl mx-auto space-y-6">
       {/* Header */}
-      <div className="mb-6">
-        <Link href="/exams" className="text-xs text-gray-500 hover:text-gray-300 transition-colors mb-3 inline-flex items-center gap-1">
+      <div className="flex flex-col gap-1">
+        <Link href="/exams" className="text-[13px] text-[#747686] hover:text-[#0b1c30] transition-colors mb-1 inline-flex items-center gap-1">
           ← Back to Examinations
         </Link>
-        <h1 className="text-xl font-bold text-white">New Examination</h1>
-        <p className="text-sm text-gray-400 mt-0.5">Fill in the examination details below.</p>
+        <h1 className="font-headline-lg text-[#0b1c30] tracking-tight">New Examination Setup</h1>
+        <p className="text-[13px] text-[#434655] mt-0.5">Fill in the examination parameters and schedule details below.</p>
       </div>
 
-      <div className="rounded-xl border border-gray-800 bg-gray-900/60 p-6">
-        <form action={formAction} className="space-y-5">
+      <div className="rounded-2xl border border-[#e5eeff] bg-white p-6 shadow-sm">
+        <form action={formAction} className="space-y-4">
           {/* Title */}
           <div>
-            <label htmlFor="title" className="block text-xs font-medium text-gray-300 mb-1.5">
-              Examination Title <span className="text-red-400">*</span>
+            <label htmlFor="title" className="block text-[13px] font-medium text-[#0b1c30] mb-1.5">
+              Examination Title <span className="text-[#b91c1c]">*</span>
             </label>
             <input
               id="title"
               name="title"
               type="text"
               required
-              placeholder="e.g. Mathematics Final Exam"
-              className="w-full px-3.5 py-2.5 rounded-lg border border-gray-700 bg-gray-800 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-[#0e5a4d]/50 focus:border-[#0e5a4d] transition-colors"
+              placeholder="e.g. Mathematics Paper 2 (Pure Maths & Mechanics)"
+              className="w-full px-3.5 py-2.5 rounded-lg border border-[#c4c5d7] bg-[#eff4ff] text-[#0b1c30] placeholder-[#747686] text-[14px] focus:outline-none focus:ring-2 focus:ring-[#1d4ed8] focus:bg-white transition-all font-medium"
             />
           </div>
 
           {/* Description */}
           <div>
-            <label htmlFor="description" className="block text-xs font-medium text-gray-300 mb-1.5">
-              Description <span className="text-gray-500">(optional)</span>
+            <label htmlFor="description" className="block text-[13px] font-medium text-[#0b1c30] mb-1.5">
+              Description <span className="text-[#747686] text-[11px] font-normal">(Optional)</span>
             </label>
             <textarea
               id="description"
               name="description"
               rows={3}
-              placeholder="Additional notes about this examination…"
-              className="w-full px-3.5 py-2.5 rounded-lg border border-gray-700 bg-gray-800 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-[#0e5a4d]/50 focus:border-[#0e5a4d] transition-colors resize-none"
+              placeholder="Instructions, syllabus section, or supervisory notes…"
+              className="w-full px-3.5 py-2.5 rounded-lg border border-[#c4c5d7] bg-[#eff4ff] text-[#0b1c30] placeholder-[#747686] text-[14px] focus:outline-none focus:ring-2 focus:ring-[#1d4ed8] focus:bg-white transition-all resize-none"
             />
           </div>
 
           {/* Date + Time */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label htmlFor="exam_date" className="block text-xs font-medium text-gray-300 mb-1.5">
-                Exam Date <span className="text-red-400">*</span>
+              <label htmlFor="exam_date" className="block text-[13px] font-medium text-[#0b1c30] mb-1.5">
+                Exam Date <span className="text-[#b91c1c]">*</span>
               </label>
               <input
                 id="exam_date"
                 name="exam_date"
                 type="date"
                 required
-                className="w-full px-3.5 py-2.5 rounded-lg border border-gray-700 bg-gray-800 text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#0e5a4d]/50 focus:border-[#0e5a4d] transition-colors"
+                className="w-full px-3.5 py-2.5 rounded-lg border border-[#c4c5d7] bg-[#eff4ff] text-[#0b1c30] text-[14px] focus:outline-none focus:ring-2 focus:ring-[#1d4ed8] focus:bg-white transition-all"
               />
             </div>
             <div>
-              <label htmlFor="start_time" className="block text-xs font-medium text-gray-300 mb-1.5">
-                Start Time <span className="text-red-400">*</span>
+              <label htmlFor="start_time" className="block text-[13px] font-medium text-[#0b1c30] mb-1.5">
+                Start Time <span className="text-[#b91c1c]">*</span>
               </label>
               <input
                 id="start_time"
                 name="start_time"
                 type="time"
                 required
-                className="w-full px-3.5 py-2.5 rounded-lg border border-gray-700 bg-gray-800 text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#0e5a4d]/50 focus:border-[#0e5a4d] transition-colors"
+                className="w-full px-3.5 py-2.5 rounded-lg border border-[#c4c5d7] bg-[#eff4ff] text-[#0b1c30] text-[14px] focus:outline-none focus:ring-2 focus:ring-[#1d4ed8] focus:bg-white transition-all"
               />
             </div>
           </div>
@@ -107,8 +107,8 @@ export default function CreateExamPage() {
           {/* Duration + Room */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label htmlFor="duration_minutes" className="block text-xs font-medium text-gray-300 mb-1.5">
-                Duration (minutes) <span className="text-red-400">*</span>
+              <label htmlFor="duration_minutes" className="block text-[13px] font-medium text-[#0b1c30] mb-1.5">
+                Duration (minutes) <span className="text-[#b91c1c]">*</span>
               </label>
               <input
                 id="duration_minutes"
@@ -118,12 +118,12 @@ export default function CreateExamPage() {
                 max={600}
                 required
                 defaultValue={120}
-                className="w-full px-3.5 py-2.5 rounded-lg border border-gray-700 bg-gray-800 text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#0e5a4d]/50 focus:border-[#0e5a4d] transition-colors"
+                className="w-full px-3.5 py-2.5 rounded-lg border border-[#c4c5d7] bg-[#eff4ff] text-[#0b1c30] text-[14px] focus:outline-none focus:ring-2 focus:ring-[#1d4ed8] focus:bg-white transition-all font-medium"
               />
             </div>
             <div>
-              <label htmlFor="room_number" className="block text-xs font-medium text-gray-300 mb-1.5">
-                Room Number <span className="text-red-400">*</span>
+              <label htmlFor="room_number" className="block text-[13px] font-medium text-[#0b1c30] mb-1.5">
+                Room / Hall Number <span className="text-[#b91c1c]">*</span>
               </label>
               <input
                 id="room_number"
@@ -131,22 +131,22 @@ export default function CreateExamPage() {
                 type="text"
                 required
                 placeholder="e.g. Hall A, Room 201"
-                className="w-full px-3.5 py-2.5 rounded-lg border border-gray-700 bg-gray-800 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-[#0e5a4d]/50 focus:border-[#0e5a4d] transition-colors"
+                className="w-full px-3.5 py-2.5 rounded-lg border border-[#c4c5d7] bg-[#eff4ff] text-[#0b1c30] placeholder-[#747686] text-[14px] focus:outline-none focus:ring-2 focus:ring-[#1d4ed8] focus:bg-white transition-all font-medium"
               />
             </div>
           </div>
 
           {/* Error */}
           {state && 'error' in state && state.error && (
-            <div className="rounded-lg border border-red-800 bg-red-950/40 p-3 text-sm text-red-300">
+            <div className="rounded-lg border border-[#fecaca] bg-[#fef2f2] p-3 text-[13px] text-[#b91c1c]">
               {state.error}
             </div>
           )}
 
           {/* Actions */}
-          <div className="flex items-center gap-3 pt-2">
+          <div className="flex items-center gap-3 pt-3 border-t border-[#e5eeff]">
             <SubmitButton />
-            <Link href="/exams" className="px-4 py-2.5 text-sm text-gray-400 hover:text-gray-200 transition-colors">
+            <Link href="/exams" className="px-4 py-2.5 text-[13px] font-medium text-[#434655] hover:text-[#0b1c30] transition-colors">
               Cancel
             </Link>
           </div>

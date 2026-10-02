@@ -3,7 +3,6 @@
 import { useState, useEffect, use } from 'react'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
-import { CameraIcon, CloseIcon } from '@/components/ui/Icons'
 import type { Classroom, Camera, HallSession } from '@/types'
 
 export default function ClassroomDetailPage({
@@ -143,7 +142,7 @@ export default function ClassroomDetailPage({
 
   if (isLoading) {
     return (
-      <div className="p-12 text-center text-gray-400 text-sm">
+      <div className="bg-white rounded-xl shadow-sm p-12 text-center text-[#747686] text-[14px]">
         Loading Hall Setup…
       </div>
     )
@@ -151,9 +150,9 @@ export default function ClassroomDetailPage({
 
   if (!classroom) {
     return (
-      <div className="p-8 text-center space-y-3">
-        <p className="text-gray-400">Hall not found.</p>
-        <Link href="/classrooms" className="text-teal-400 text-xs">
+      <div className="bg-white rounded-xl shadow-sm p-8 text-center space-y-3">
+        <p className="text-[#434655]">Hall not found.</p>
+        <Link href="/classrooms" className="text-[#1d4ed8] text-[13px] font-semibold hover:underline">
           ← Back to Examination Halls
         </Link>
       </div>
@@ -161,28 +160,27 @@ export default function ClassroomDetailPage({
   }
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8 space-y-6 max-w-5xl mx-auto selection:bg-teal-900 selection:text-teal-100">
+    <div className="w-full px-4 sm:px-6 lg:px-8 py-6 max-w-5xl mx-auto space-y-6">
       {/* ── Top Header ── */}
-      <div>
-        <Link
-          href="/classrooms"
-          className="text-xs text-gray-400 hover:text-white transition-colors inline-flex items-center gap-1 mb-2"
-        >
-          ← Back to Examination Halls
-        </Link>
-        <div className="flex flex-wrap items-center justify-between gap-4">
+      <div className="flex flex-col gap-1">
+        <nav className="flex items-center gap-1.5 text-[13px] text-[#747686]">
+          <Link href="/classrooms" className="hover:text-[#0037b0] transition-colors">Examination Halls</Link>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-3.5 h-3.5"><path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
+          <span className="font-medium text-[#0b1c30]">{classroom.name}</span>
+        </nav>
+        <div className="flex flex-wrap items-center justify-between gap-4 pt-1">
           <div className="flex items-center gap-3">
-            <h1 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
+            <h1 className="font-headline-lg text-[#0b1c30] tracking-tight">
               {classroom.name}
             </h1>
-            <span className="font-mono text-xs font-bold text-teal-300 bg-teal-950 px-2.5 py-1 rounded-md border border-teal-800">
+            <span className="font-mono text-[13px] font-bold text-[#0037b0] bg-[#eff4ff] px-3 py-1 rounded-lg border border-[#bbd6ff]">
               Code: {classroom.access_code}
             </span>
           </div>
 
           <Link
             href={`/hall/${classroom.id}`}
-            className="min-h-[40px] px-3.5 py-2 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-200 text-xs sm:text-sm font-semibold transition-colors flex items-center gap-1.5"
+            className="flex items-center gap-1.5 bg-[#eff4ff] hover:bg-[#e5eeff] text-[#0037b0] px-4 py-2 rounded-lg text-[14px] font-semibold transition-colors"
           >
             <span>Open Examiner Workspace</span> &rarr;
           </Link>
@@ -190,34 +188,34 @@ export default function ClassroomDetailPage({
       </div>
 
       {/* ── Hall Settings Card (Rename) ── */}
-      <div className="rounded-2xl border border-gray-800 bg-gray-900/60 p-5 sm:p-6 space-y-4 shadow-sm">
-        <h2 className="text-sm font-bold uppercase tracking-wider text-gray-200">
+      <div className="bg-white rounded-2xl border border-[#e5eeff] p-5 sm:p-6 space-y-4 shadow-sm">
+        <h2 className="font-code-sm text-[11px] font-bold uppercase tracking-wider text-[#466083]">
           Hall Configuration
         </h2>
 
         <form onSubmit={handleUpdateName} className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-end">
           <div className="flex-1">
-            <label className="block text-xs font-medium text-gray-400 mb-1">
+            <label className="block text-[13px] font-medium text-[#0b1c30] mb-1">
               Examination Hall Name
             </label>
             <input
               type="text"
               value={editName}
               onChange={(e) => setEditName(e.target.value)}
-              className="w-full px-3.5 py-2.5 rounded-lg border border-gray-700 bg-gray-950 text-white text-sm focus:outline-none focus:ring-1 focus:ring-teal-500"
+              className="w-full px-3.5 py-2.5 rounded-lg border border-[#c4c5d7] bg-[#eff4ff] text-[#0b1c30] text-[14px] focus:outline-none focus:ring-2 focus:ring-[#1d4ed8] focus:bg-white transition-all font-medium"
             />
           </div>
 
           <button
             type="submit"
             disabled={isUpdatingName || editName === classroom.name}
-            className="min-h-[44px] px-5 py-2.5 rounded-lg bg-[#0e5a4d] hover:bg-[#0b483d] text-white text-xs sm:text-sm font-semibold disabled:opacity-50 transition-colors shadow-sm"
+            className="min-h-[42px] px-5 py-2 rounded-lg bg-[#1d4ed8] hover:bg-[#0037b0] text-white text-[14px] font-semibold disabled:opacity-50 transition-colors shadow-sm"
           >
             {isUpdatingName ? 'Saving…' : 'Save Name'}
           </button>
         </form>
 
-        <div className="pt-3 border-t border-gray-800 text-xs text-gray-400 flex flex-wrap gap-4 font-mono">
+        <div className="pt-3 border-t border-[#e5eeff] text-[12px] text-[#747686] flex flex-wrap gap-4 font-mono">
           <span>Terminal ID: {classroom.id}</span>
           <span>•</span>
           <span>
@@ -230,27 +228,27 @@ export default function ClassroomDetailPage({
       </div>
 
       {/* ── Cameras Attached to this Hall ── */}
-      <div className="rounded-2xl border border-gray-800 bg-gray-900/60 p-5 sm:p-6 space-y-4 shadow-sm">
+      <div className="bg-white rounded-2xl border border-[#e5eeff] p-5 sm:p-6 space-y-4 shadow-sm">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-sm font-bold uppercase tracking-wider text-gray-200">
+            <h2 className="font-code-sm text-[11px] font-bold uppercase tracking-wider text-[#466083]">
               Attached Cameras &amp; Video Streams ({cameras.length})
             </h2>
-            <p className="text-xs text-gray-400 mt-0.5">
+            <p className="text-[13px] text-[#747686] mt-0.5">
               Live hardware cameras bound to this examination hall.
             </p>
           </div>
 
           <button
             onClick={() => setIsCameraModalOpen(true)}
-            className="min-h-[40px] px-3.5 py-2 rounded-lg bg-[#0e5a4d] hover:bg-[#0b483d] text-white text-xs sm:text-sm font-semibold transition-colors flex items-center gap-1.5"
+            className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-[#1d4ed8] hover:bg-[#0037b0] text-white text-[13px] font-semibold transition-colors shadow-sm"
           >
             <span>+</span> Add Camera
           </button>
         </div>
 
         {cameras.length === 0 ? (
-          <div className="p-8 text-center text-gray-500 text-xs">
+          <div className="p-8 text-center text-[#747686] text-[13px]">
             No cameras attached yet. Click &quot;Add Camera&quot; to configure overhead streams.
           </div>
         ) : (
@@ -260,15 +258,19 @@ export default function ClassroomDetailPage({
               return (
                 <div
                   key={cam.id}
-                  className="rounded-xl border border-gray-800 bg-gray-950 p-4 flex items-center justify-between"
+                  className="rounded-xl border border-[#e5eeff] bg-[#eff4ff] p-4 flex items-center justify-between"
                 >
                   <div className="flex items-center gap-3">
-                    <CameraIcon className="w-5 h-5 text-teal-400 shrink-0" />
+                    <div className="w-10 h-10 rounded-lg bg-white text-[#0037b0] flex items-center justify-center shadow-xs">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} className="w-5 h-5">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-7.5A2.25 2.25 0 0013.5 6.75h-9a2.25 2.25 0 00-2.25 2.25v7.5A2.25 2.25 0 004.5 18.75z" />
+                      </svg>
+                    </div>
                     <div>
-                      <p className="text-sm font-bold text-white leading-tight">
+                      <p className="text-[14px] font-bold text-[#0b1c30] leading-tight">
                         {cam.name || `Camera ${cam.camera_number}`}
                       </p>
-                      <p className="text-[11px] font-mono text-gray-400 mt-0.5">
+                      <p className="font-code-sm text-[11px] text-[#747686] mt-0.5">
                         Camera Number #{cam.camera_number}
                       </p>
                     </div>
@@ -277,10 +279,10 @@ export default function ClassroomDetailPage({
                   <button
                     type="button"
                     onClick={() => handleToggleCameraStatus(cam)}
-                    className={`min-h-[36px] px-2.5 py-1 rounded-full text-[10px] font-mono font-bold border transition-colors ${
+                    className={`px-3 py-1 rounded-full font-code-sm text-[10px] font-bold border transition-colors ${
                       isOnline
-                        ? 'bg-emerald-950 text-emerald-300 border-emerald-800 hover:border-emerald-600'
-                        : 'bg-red-950 text-red-400 border-red-800 hover:border-red-600'
+                        ? 'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100'
+                        : 'bg-[#fef2f2] text-[#b91c1c] border-[#fecaca] hover:bg-[#fee2e2]'
                     }`}
                     title="Click to toggle camera status"
                   >
@@ -294,20 +296,20 @@ export default function ClassroomDetailPage({
       </div>
 
       {/* ── Past Examinations History ── */}
-      <div className="rounded-2xl border border-gray-800 bg-gray-900/60 p-5 sm:p-6 space-y-4 shadow-sm">
-        <h2 className="text-sm font-bold uppercase tracking-wider text-gray-200">
+      <div className="bg-white rounded-2xl border border-[#e5eeff] p-5 sm:p-6 space-y-4 shadow-sm">
+        <h2 className="font-code-sm text-[11px] font-bold uppercase tracking-wider text-[#466083]">
           History of Examinations in this Hall ({pastSessions.length})
         </h2>
 
         {pastSessions.length === 0 ? (
-          <div className="p-8 text-center text-gray-500 text-xs">
+          <div className="p-8 text-center text-[#747686] text-[13px]">
             No examination sessions have been conducted in this hall yet.
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full text-xs text-left min-w-[600px]">
+            <table className="w-full text-left min-w-[600px]">
               <thead>
-                <tr className="border-b border-gray-800 text-gray-500 font-mono">
+                <tr className="bg-[#eff4ff] font-code-sm text-[11px] text-[#747686] uppercase tracking-wider">
                   <th className="px-4 py-3">Course Name</th>
                   <th className="px-4 py-3">Status</th>
                   <th className="px-4 py-3">Duration</th>
@@ -316,35 +318,35 @@ export default function ClassroomDetailPage({
                   <th className="px-4 py-3 text-right">Console</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-800/60">
+              <tbody className="divide-y divide-[#eff4ff]">
                 {pastSessions.map((session) => (
-                  <tr key={session.id} className="hover:bg-gray-800/30 transition-colors">
-                    <td className="px-4 py-3.5 font-bold text-white">
+                  <tr key={session.id} className="hover:bg-[#f8f9ff] transition-colors">
+                    <td className="px-4 py-3.5 font-bold text-[14px] text-[#0b1c30]">
                       {session.course_name}
                       {session.course_code && (
-                        <span className="block text-[11px] text-gray-400 font-mono font-normal">
+                        <span className="block font-code-sm text-[11px] text-[#747686] font-normal">
                           {session.course_code}
                         </span>
                       )}
                     </td>
                     <td className="px-4 py-3.5">
-                      <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase bg-gray-800 text-gray-300 border border-gray-700">
+                      <span className="px-2 py-0.5 rounded font-code-sm text-[10px] font-bold uppercase bg-[#eff4ff] text-[#0037b0] border border-[#bbd6ff]">
                         {session.status}
                       </span>
                     </td>
-                    <td className="px-4 py-3.5 text-gray-300 font-mono">
+                    <td className="px-4 py-3.5 font-code-sm text-[12px] text-[#434655]">
                       {session.duration_minutes}m
                     </td>
-                    <td className="px-4 py-3.5 text-gray-300 font-mono">
+                    <td className="px-4 py-3.5 font-code-sm text-[12px] text-[#434655]">
                       {session.expected_students}
                     </td>
-                    <td className="px-4 py-3.5 text-gray-400 font-mono">
+                    <td className="px-4 py-3.5 font-code-sm text-[11px] text-[#747686]">
                       {new Date(session.created_at).toLocaleDateString()}
                     </td>
                     <td className="px-4 py-3.5 text-right">
                       <Link
                         href={`/hall/session/${session.id}`}
-                        className="text-teal-400 hover:text-teal-300 font-medium"
+                        className="text-[#1d4ed8] hover:underline font-semibold text-[13px]"
                       >
                         Inspect &rarr;
                       </Link>
@@ -359,22 +361,24 @@ export default function ClassroomDetailPage({
 
       {/* ── Add Camera Modal ── */}
       {isCameraModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-xs animate-in fade-in">
-          <div className="w-full max-w-md rounded-2xl border border-gray-800 bg-gray-900 p-6 sm:p-7 shadow-2xl space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-gray-800">
-              <h3 className="text-base font-bold text-white">Attach Camera to Hall</h3>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm animate-in fade-in">
+          <div className="w-full max-w-md rounded-2xl bg-white p-6 sm:p-7 shadow-2xl space-y-4 border border-[#e5eeff]">
+            <div className="flex items-center justify-between pb-3 border-b border-[#e5eeff]">
+              <h3 className="text-[16px] font-bold text-[#0b1c30]">Attach Camera to Hall</h3>
               <button
                 type="button"
                 onClick={() => setIsCameraModalOpen(false)}
-                className="text-gray-400 hover:text-white p-1"
+                className="text-[#747686] hover:text-[#0b1c30] p-1 rounded-lg"
               >
-                <CloseIcon className="w-4 h-4" />
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-5 h-5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
               </button>
             </div>
 
             <form onSubmit={handleAddCamera} className="space-y-4">
               <div>
-                <label className="block text-xs font-medium text-gray-300 mb-1">
+                <label className="block text-[13px] font-medium text-[#0b1c30] mb-1">
                   Camera Label / Name *
                 </label>
                 <input
@@ -383,12 +387,12 @@ export default function ClassroomDetailPage({
                   value={cameraName}
                   onChange={(e) => setCameraName(e.target.value)}
                   placeholder="e.g. Camera 3 (Rear Diagonal)"
-                  className="w-full px-3.5 py-2.5 rounded-lg border border-gray-700 bg-gray-950 text-white text-sm focus:outline-none focus:ring-1 focus:ring-teal-500"
+                  className="w-full px-3.5 py-2.5 rounded-lg border border-[#c4c5d7] bg-[#eff4ff] text-[#0b1c30] text-[14px] focus:outline-none focus:ring-2 focus:ring-[#1d4ed8] focus:bg-white transition-all font-medium"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-gray-300 mb-1">
+                <label className="block text-[13px] font-medium text-[#0b1c30] mb-1">
                   Camera Number (Optional)
                 </label>
                 <input
@@ -398,7 +402,7 @@ export default function ClassroomDetailPage({
                   value={cameraNumber}
                   onChange={(e) => setCameraNumber(e.target.value)}
                   placeholder="e.g. 3"
-                  className="w-full px-3.5 py-2.5 rounded-lg border border-gray-700 bg-gray-950 text-white text-sm focus:outline-none focus:ring-1 focus:ring-teal-500"
+                  className="w-full px-3.5 py-2.5 rounded-lg border border-[#c4c5d7] bg-[#eff4ff] text-[#0b1c30] text-[14px] focus:outline-none focus:ring-2 focus:ring-[#1d4ed8] focus:bg-white transition-all font-medium"
                 />
               </div>
 
@@ -406,14 +410,14 @@ export default function ClassroomDetailPage({
                 <button
                   type="button"
                   onClick={() => setIsCameraModalOpen(false)}
-                  className="min-h-[44px] px-4 py-2 text-xs font-medium text-gray-400 hover:text-white"
+                  className="min-h-[40px] px-4 py-2 text-[13px] font-medium text-[#434655] hover:text-[#0b1c30]"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={isAddingCamera}
-                  className="min-h-[44px] px-5 py-2 rounded-lg bg-[#0e5a4d] hover:bg-[#0b483d] text-white text-xs sm:text-sm font-semibold disabled:opacity-50 transition-colors shadow-sm"
+                  className="min-h-[40px] px-5 py-2 rounded-lg bg-[#1d4ed8] hover:bg-[#0037b0] text-white text-[13px] sm:text-[14px] font-semibold disabled:opacity-50 transition-colors shadow-sm"
                 >
                   {isAddingCamera ? 'Attaching…' : 'Attach Camera →'}
                 </button>

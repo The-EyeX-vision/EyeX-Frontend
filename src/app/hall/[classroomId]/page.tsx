@@ -4,7 +4,7 @@ import { useState, useEffect, use } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
-import { EyeIcon, CameraIcon, CloseIcon } from '@/components/ui/Icons'
+import { EyeXLogo } from '@/components/ui/EyeXLogo'
 import type { Classroom, Camera, HallSession } from '@/types'
 
 export default function HallWorkspacePage({
@@ -44,7 +44,6 @@ export default function HallWorkspacePage({
       if (hall) {
         setClassroom(hall)
       } else {
-        // Fallback default mock representation if database table not yet populated
         setClassroom({
           id: classroomId,
           school_id: 'default',
@@ -64,7 +63,6 @@ export default function HallWorkspacePage({
       if (cams && cams.length > 0) {
         setCameras(cams)
       } else {
-        // Default simulated cameras for this hall
         setCameras([
           {
             id: 'c1',
@@ -145,7 +143,7 @@ export default function HallWorkspacePage({
           courseCode,
           durationMinutes: parseInt(durationMinutes, 10) || 120,
           expectedStudents: parseInt(expectedStudents, 10) || 0,
-          startImmediately: true, // Examiner creates and immediately starts
+          startImmediately: true,
         }),
       })
 
@@ -167,9 +165,9 @@ export default function HallWorkspacePage({
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-950 text-gray-300 flex items-center justify-center p-4">
-        <div className="flex items-center gap-3 text-sm">
-          <span className="w-5 h-5 border-2 border-teal-500/30 border-t-teal-500 rounded-full animate-spin" />
+      <div className="min-h-screen bg-[#f8f9ff] text-[#434655] flex items-center justify-center p-4">
+        <div className="flex items-center gap-3 text-[14px]">
+          <span className="w-5 h-5 border-2 border-[#1d4ed8]/30 border-t-[#1d4ed8] rounded-full animate-spin" />
           Loading Hall Station…
         </div>
       </div>
@@ -177,33 +175,32 @@ export default function HallWorkspacePage({
   }
 
   return (
-    <div className="min-h-screen bg-gray-950 text-gray-100 flex flex-col justify-between selection:bg-teal-900 selection:text-teal-100">
+    <div className="min-h-screen bg-[#f8f9ff] text-[#0b1c30] flex flex-col justify-between antialiased">
       {/* ── Top Bar ── */}
-      <header className="border-b border-gray-800 bg-gray-900/90 backdrop-blur-md px-4 sm:px-6 lg:px-8 py-3.5 flex flex-wrap items-center justify-between gap-4">
+      <header className="border-b border-[#c4c5d7] bg-white px-4 sm:px-6 lg:px-8 py-4 flex flex-wrap items-center justify-between gap-4" style={{ boxShadow: '0 1px 8px rgba(0,0,0,0.04)' }}>
         <div className="flex items-center gap-3">
-          <Link href="/hall-access" className="text-xs text-gray-400 hover:text-white transition-colors p-1 -ml-1">
+          <Link href="/hall-access" className="text-[13px] text-[#747686] hover:text-[#0b1c30] transition-colors p-1 -ml-1">
             ← Change Hall
           </Link>
-          <span className="text-gray-700">/</span>
+          <span className="text-[#c4c5d7]">/</span>
           <div className="flex items-center gap-2">
-            <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#0e5a4d] text-white text-xs font-bold shadow-sm">
-              <EyeIcon className="w-4 h-4 text-white" />
-            </span>
-            <h1 className="text-base font-bold text-white tracking-tight">
+            <EyeXLogo width={100} showTagline={false} />
+            <span className="text-[#c4c5d7]">/</span>
+            <h1 className="text-[16px] font-bold text-[#0b1c30] tracking-tight">
               {classroom?.name || 'Examination Hall'}
             </h1>
           </div>
         </div>
 
         <div className="flex items-center gap-2 sm:gap-3">
-          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg border border-teal-900/60 bg-teal-950/40 text-teal-400 text-xs font-mono">
-            <span className="w-1.5 h-1.5 rounded-full bg-teal-400 animate-pulse" />
+          <div className="flex items-center gap-1.5 px-3 py-1 rounded-lg border border-[#bbd6ff] bg-[#eff4ff] text-[#0037b0] text-[12px] font-mono font-semibold">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
             <span>Code: {classroom?.access_code || 'ACTIVE'}</span>
           </div>
 
           <button
             onClick={() => setIsModalOpen(true)}
-            className="min-h-[40px] px-3.5 py-2 rounded-lg bg-teal-600 hover:bg-teal-500 text-white text-xs sm:text-sm font-semibold transition-colors flex items-center gap-1.5 shadow-sm"
+            className="min-h-[40px] px-4 py-2 rounded-lg bg-[#1d4ed8] hover:bg-[#0037b0] text-white text-[13px] sm:text-[14px] font-semibold transition-colors flex items-center gap-1.5 shadow-sm"
           >
             <span>+</span> New Session
           </button>
@@ -214,64 +211,63 @@ export default function HallWorkspacePage({
       <main className="flex-1 w-full max-w-5xl mx-auto p-4 sm:p-6 lg:p-8 space-y-6">
         {/* Active Session Spotlight Banner */}
         {activeSession ? (
-          <div className="rounded-2xl border-2 border-emerald-600/80 bg-emerald-950/25 p-6 sm:p-8 shadow-2xl relative overflow-hidden">
-            <div className="absolute top-0 right-0 p-4">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold font-mono bg-emerald-900/80 border border-emerald-500 text-emerald-300">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-                EXAMINATION IN PROGRESS
-              </span>
-            </div>
-
-            <div className="max-w-xl">
-              <p className="text-xs uppercase font-mono tracking-wider text-emerald-400 font-bold mb-1">
-                Active Session
-              </p>
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-                {activeSession.course_name}
-              </h2>
-              {activeSession.course_code && (
-                <p className="text-sm font-mono text-emerald-300/80 mt-1">
-                  Course Code: {activeSession.course_code}
-                </p>
-              )}
-              <div className="flex flex-wrap items-center gap-4 text-xs text-gray-300 mt-4">
-                <span>Duration: <strong>{activeSession.duration_minutes} min</strong></span>
-                <span>•</span>
-                <span>Expected Candidates: <strong>{activeSession.expected_students}</strong></span>
-                <span>•</span>
-                <span>Started: <strong>{new Date(activeSession.started_at || Date.now()).toLocaleTimeString()}</strong></span>
+          <div className="rounded-2xl border-2 border-emerald-500 bg-white p-6 sm:p-8 shadow-sm relative overflow-hidden">
+            <div className="absolute top-0 left-0 right-0 h-1.5 bg-emerald-500" />
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold font-mono bg-emerald-50 border border-emerald-200 text-emerald-800">
+                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
+                    EXAMINATION IN PROGRESS
+                  </span>
+                </div>
+                <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0b1c30] tracking-tight">
+                  {activeSession.course_name}
+                </h2>
+                {activeSession.course_code && (
+                  <p className="text-[13px] font-mono text-[#0037b0] mt-1 font-semibold">
+                    Course Code: {activeSession.course_code}
+                  </p>
+                )}
+                <div className="flex flex-wrap items-center gap-3 text-[13px] text-[#434655] mt-3">
+                  <span>Duration: <strong>{activeSession.duration_minutes} min</strong></span>
+                  <span>•</span>
+                  <span>Expected Candidates: <strong>{activeSession.expected_students}</strong></span>
+                  <span>•</span>
+                  <span>Started: <strong>{new Date(activeSession.started_at || Date.now()).toLocaleTimeString()}</strong></span>
+                </div>
               </div>
-            </div>
 
-            <div className="mt-6 pt-6 border-t border-emerald-800/60 flex flex-wrap items-center gap-3">
-              <Link
-                href={`/hall/session/${activeSession.id}`}
-                className="min-h-[48px] px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm sm:text-base transition-all flex items-center justify-center gap-2 shadow-lg hover:shadow-emerald-950/50"
-              >
-                <span>Resume Live Proctoring</span>
-                <span className="text-lg">&rarr;</span>
-              </Link>
+              <div className="shrink-0">
+                <Link
+                  href={`/hall/session/${activeSession.id}`}
+                  className="min-h-[48px] px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-[14px] sm:text-[15px] transition-all flex items-center justify-center gap-2 shadow-md"
+                >
+                  <span>Resume Live Proctoring</span>
+                  <span className="text-lg">&rarr;</span>
+                </Link>
+              </div>
             </div>
           </div>
         ) : (
           /* Idle Station Notice with Scheduled Sessions */
-          <div className="rounded-2xl border border-gray-800 bg-gray-900/60 p-6 sm:p-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+          <div className="rounded-2xl border border-[#e5eeff] bg-white p-6 sm:p-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 shadow-sm">
             <div>
-              <div className="inline-flex items-center gap-2 text-xs font-mono text-gray-400 mb-2">
-                <span className="w-2 h-2 rounded-full bg-gray-500" />
+              <div className="inline-flex items-center gap-2 text-[11px] font-mono text-[#466083] mb-2 font-semibold">
+                <span className="w-2 h-2 rounded-full bg-emerald-500" />
                 STATION READY • NO ACTIVE SESSION
               </div>
-              <h2 className="text-xl sm:text-2xl font-bold text-white">
+              <h2 className="text-xl sm:text-2xl font-bold text-[#0b1c30]">
                 Hall is Ready for Examination
               </h2>
-              <p className="text-xs sm:text-sm text-gray-400 mt-1 max-w-lg">
+              <p className="text-[14px] text-[#434655] mt-1 max-w-lg leading-relaxed">
                 Start a scheduled test or initialize an immediate examination session to begin monitoring candidate desks.
               </p>
             </div>
 
             <button
               onClick={() => setIsModalOpen(true)}
-              className="min-h-[48px] px-5 py-3 rounded-xl bg-[#0e5a4d] hover:bg-[#0b483d] text-white font-semibold text-sm transition-all flex items-center gap-2 shadow-md w-full md:w-auto justify-center"
+              className="min-h-[48px] px-5 py-3 rounded-xl bg-[#1d4ed8] hover:bg-[#0037b0] text-white font-semibold text-[14px] transition-all flex items-center gap-2 shadow-sm w-full md:w-auto justify-center"
             >
               <span>+</span> Start New Examination Session
             </button>
@@ -281,23 +277,23 @@ export default function HallWorkspacePage({
         {/* ── Scheduled Examinations for this Hall ── */}
         {scheduledSessions.length > 0 && (
           <section className="space-y-3">
-            <h3 className="text-xs uppercase font-bold tracking-wider text-gray-400">
+            <h3 className="font-code-sm text-[11px] uppercase font-bold tracking-wider text-[#466083]">
               Scheduled for this Hall ({scheduledSessions.length})
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {scheduledSessions.map((session) => (
                 <div
                   key={session.id}
-                  className="rounded-xl border border-gray-800 bg-gray-900/60 p-5 flex flex-col justify-between space-y-4 hover:border-gray-700 transition-colors"
+                  className="rounded-xl border border-[#e5eeff] bg-white p-5 flex flex-col justify-between space-y-4 shadow-sm hover:border-[#bbd6ff] transition-colors"
                 >
                   <div>
-                    <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase bg-blue-950 text-blue-300 border border-blue-800">
+                    <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase bg-[#eff4ff] text-[#0037b0] border border-[#bbd6ff]">
                       SCHEDULED
                     </span>
-                    <h4 className="text-base font-bold text-white mt-2">
+                    <h4 className="text-[16px] font-bold text-[#0b1c30] mt-2">
                       {session.course_name}
                     </h4>
-                    <p className="text-xs text-gray-400 mt-0.5">
+                    <p className="text-[13px] text-[#434655] mt-0.5">
                       {session.course_code ? `${session.course_code} • ` : ''}
                       {session.duration_minutes} min • {session.expected_students} candidates
                     </p>
@@ -305,7 +301,7 @@ export default function HallWorkspacePage({
 
                   <button
                     onClick={() => handleStartSession(session.id)}
-                    className="min-h-[44px] w-full rounded-lg bg-[#0e5a4d] hover:bg-[#0b483d] text-white text-xs sm:text-sm font-semibold transition-colors flex items-center justify-center gap-2"
+                    className="min-h-[40px] w-full rounded-lg bg-[#1d4ed8] hover:bg-[#0037b0] text-white text-[13px] font-semibold transition-colors flex items-center justify-center gap-2 shadow-sm"
                   >
                     <span>Start Examination</span>
                     <span>&rarr;</span>
@@ -319,10 +315,10 @@ export default function HallWorkspacePage({
         {/* ── Camera Feeds Status for this Hall ── */}
         <section className="space-y-3">
           <div className="flex items-center justify-between">
-            <h3 className="text-xs uppercase font-bold tracking-wider text-gray-400">
+            <h3 className="font-code-sm text-[11px] uppercase font-bold tracking-wider text-[#466083]">
               Hall Cameras &amp; Video Streams ({cameras.length})
             </h3>
-            <span className="text-[11px] text-gray-500 font-mono">
+            <span className="font-code-sm text-[11px] text-[#747686]">
               Auto-sync with CV Model
             </span>
           </div>
@@ -333,32 +329,34 @@ export default function HallWorkspacePage({
               return (
                 <div
                   key={cam.id}
-                  className="rounded-xl border border-gray-800 bg-gray-900/60 p-4 flex items-center justify-between"
+                  className="rounded-xl border border-[#e5eeff] bg-white p-4 flex items-center justify-between shadow-sm"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-lg bg-gray-800 border border-gray-700 flex items-center justify-center">
-                      <CameraIcon className="w-5 h-5 text-gray-400" />
+                    <div className="w-10 h-10 rounded-lg bg-[#eff4ff] text-[#0037b0] flex items-center justify-center">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} className="w-5 h-5">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-7.5A2.25 2.25 0 0013.5 6.75h-9a2.25 2.25 0 00-2.25 2.25v7.5A2.25 2.25 0 004.5 18.75z" />
+                      </svg>
                     </div>
                     <div>
-                      <p className="text-sm font-bold text-white leading-tight">
+                      <p className="text-[14px] font-bold text-[#0b1c30] leading-tight">
                         {cam.name || `Camera ${cam.camera_number}`}
                       </p>
-                      <p className="text-[11px] text-gray-400 font-mono mt-0.5">
+                      <p className="font-code-sm text-[11px] text-[#747686] mt-0.5">
                         Feed #{cam.camera_number} • 1080p 30fps
                       </p>
                     </div>
                   </div>
 
                   <span
-                    className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-mono font-bold border ${
+                    className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full font-code-sm text-[10px] font-bold border ${
                       isOnline
-                        ? 'bg-emerald-950 text-emerald-300 border-emerald-800'
-                        : 'bg-red-950 text-red-400 border-red-800'
+                        ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                        : 'bg-[#fef2f2] text-[#b91c1c] border-[#fecaca]'
                     }`}
                   >
                     <span
                       className={`w-1.5 h-1.5 rounded-full ${
-                        isOnline ? 'bg-emerald-400 animate-pulse' : 'bg-red-400'
+                        isOnline ? 'bg-emerald-500 animate-pulse' : 'bg-[#ba1a1a]'
                       }`}
                     />
                     {cam.status}
@@ -372,30 +370,32 @@ export default function HallWorkspacePage({
 
       {/* ── New Session Quick-Modal ── */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-xs animate-in fade-in">
-          <div className="w-full max-w-md rounded-2xl border border-gray-800 bg-gray-900 p-6 sm:p-7 shadow-2xl space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-gray-800">
-              <h3 className="text-base font-bold text-white">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm animate-in fade-in">
+          <div className="w-full max-w-md rounded-2xl bg-white p-6 sm:p-7 shadow-2xl space-y-4 border border-[#e5eeff]">
+            <div className="flex items-center justify-between pb-3 border-b border-[#e5eeff]">
+              <h3 className="text-[16px] font-bold text-[#0b1c30]">
                 Initialize Examination Session
               </h3>
               <button
                 type="button"
                 onClick={() => setIsModalOpen(false)}
-                className="text-gray-400 hover:text-white p-1"
+                className="text-[#747686] hover:text-[#0b1c30] p-1 rounded-lg"
               >
-                <CloseIcon className="w-4 h-4" />
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-5 h-5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
               </button>
             </div>
 
             <form onSubmit={handleCreateSession} className="space-y-4">
               {formError && (
-                <div className="p-3 rounded-lg border border-red-800 bg-red-950/50 text-red-300 text-xs">
+                <div className="p-3 rounded-lg border border-[#fecaca] bg-[#fef2f2] text-[#b91c1c] text-[13px]">
                   {formError}
                 </div>
               )}
 
               <div>
-                <label className="block text-xs font-medium text-gray-300 mb-1">
+                <label className="block text-[13px] font-medium text-[#0b1c30] mb-1">
                   Course / Subject Name *
                 </label>
                 <input
@@ -404,12 +404,12 @@ export default function HallWorkspacePage({
                   value={courseName}
                   onChange={(e) => setCourseName(e.target.value)}
                   placeholder="e.g. Pure Mathematics Paper II"
-                  className="w-full px-3.5 py-2.5 rounded-lg border border-gray-700 bg-gray-950 text-white text-sm focus:outline-none focus:ring-1 focus:ring-teal-500"
+                  className="w-full px-3.5 py-2.5 rounded-lg border border-[#c4c5d7] bg-[#eff4ff] text-[#0b1c30] text-[14px] focus:outline-none focus:ring-2 focus:ring-[#1d4ed8] focus:bg-white transition-all"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-gray-300 mb-1">
+                <label className="block text-[13px] font-medium text-[#0b1c30] mb-1">
                   Course Code (Optional)
                 </label>
                 <input
@@ -417,13 +417,13 @@ export default function HallWorkspacePage({
                   value={courseCode}
                   onChange={(e) => setCourseCode(e.target.value.toUpperCase())}
                   placeholder="e.g. MATH-402"
-                  className="w-full px-3.5 py-2.5 rounded-lg border border-gray-700 bg-gray-950 text-white text-sm font-mono focus:outline-none focus:ring-1 focus:ring-teal-500"
+                  className="w-full px-3.5 py-2.5 rounded-lg border border-[#c4c5d7] bg-[#eff4ff] text-[#0b1c30] text-[14px] font-mono focus:outline-none focus:ring-2 focus:ring-[#1d4ed8] focus:bg-white transition-all"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-medium text-gray-300 mb-1">
+                  <label className="block text-[13px] font-medium text-[#0b1c30] mb-1">
                     Duration (Minutes)
                   </label>
                   <input
@@ -432,12 +432,12 @@ export default function HallWorkspacePage({
                     max="360"
                     value={durationMinutes}
                     onChange={(e) => setDurationMinutes(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-lg border border-gray-700 bg-gray-950 text-white text-sm focus:outline-none focus:ring-1 focus:ring-teal-500"
+                    className="w-full px-3.5 py-2.5 rounded-lg border border-[#c4c5d7] bg-[#eff4ff] text-[#0b1c30] text-[14px] focus:outline-none focus:ring-2 focus:ring-[#1d4ed8] focus:bg-white transition-all"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-medium text-gray-300 mb-1">
+                  <label className="block text-[13px] font-medium text-[#0b1c30] mb-1">
                     Expected Students
                   </label>
                   <input
@@ -446,7 +446,7 @@ export default function HallWorkspacePage({
                     max="500"
                     value={expectedStudents}
                     onChange={(e) => setExpectedStudents(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-lg border border-gray-700 bg-gray-950 text-white text-sm focus:outline-none focus:ring-1 focus:ring-teal-500"
+                    className="w-full px-3.5 py-2.5 rounded-lg border border-[#c4c5d7] bg-[#eff4ff] text-[#0b1c30] text-[14px] focus:outline-none focus:ring-2 focus:ring-[#1d4ed8] focus:bg-white transition-all"
                   />
                 </div>
               </div>
@@ -455,14 +455,14 @@ export default function HallWorkspacePage({
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="min-h-[44px] px-4 py-2 text-xs font-medium text-gray-400 hover:text-white"
+                  className="min-h-[40px] px-4 py-2 text-[13px] font-medium text-[#434655] hover:text-[#0b1c30]"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="min-h-[44px] px-5 py-2 rounded-lg bg-[#0e5a4d] hover:bg-[#0b483d] text-white text-xs sm:text-sm font-semibold disabled:opacity-50 transition-colors shadow-sm"
+                  className="min-h-[40px] px-5 py-2 rounded-lg bg-[#1d4ed8] hover:bg-[#0037b0] text-white text-[13px] sm:text-[14px] font-semibold disabled:opacity-50 transition-colors shadow-sm"
                 >
                   {isSubmitting ? 'Starting Session…' : 'Start Live Session →'}
                 </button>
@@ -473,8 +473,8 @@ export default function HallWorkspacePage({
       )}
 
       {/* Footer */}
-      <footer className="border-t border-gray-800/80 px-6 py-4 text-center text-xs text-gray-500">
-        The Eye X • Hall Station Terminal #{classroom?.id?.slice(0, 8)}
+      <footer className="border-t border-[#c4c5d7] bg-white px-6 py-4 text-center font-code-sm text-[11px] text-[#747686]">
+        EyeX • Hall Station Terminal #{classroom?.id?.slice(0, 8)}
       </footer>
     </div>
   )

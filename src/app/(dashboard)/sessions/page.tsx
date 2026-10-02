@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
-import { CalendarIcon, ClipboardIcon, CloseIcon } from '@/components/ui/Icons'
 import type { HallSession, Classroom } from '@/types'
 
 export default function SessionsManagementPage() {
@@ -88,7 +87,7 @@ export default function SessionsManagementPage() {
           courseCode,
           durationMinutes: parseInt(durationMinutes, 10) || 120,
           expectedStudents: parseInt(expectedStudents, 10) || 30,
-          startImmediately: false, // Scheduled
+          startImmediately: false,
         }),
       })
 
@@ -118,29 +117,41 @@ export default function SessionsManagementPage() {
   })
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8 space-y-6 max-w-7xl mx-auto selection:bg-teal-900 selection:text-teal-100">
+    <div className="w-full px-4 sm:px-6 lg:px-8 py-6 max-w-7xl mx-auto space-y-6">
       {/* ── Page Header & Schedule Action ── */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-2 border-b border-gray-800/80">
-        <div>
-          <h1 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
-            Examination Sessions
-          </h1>
-          <p className="text-xs sm:text-sm text-gray-400 mt-1">
-            Complete schedule, live active tests, and historical proctoring archives across all halls.
-          </p>
-        </div>
+      <div className="flex flex-col gap-1">
+        <nav className="flex items-center gap-1.5 text-[13px] text-[#747686]">
+          <span>Operations</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-3.5 h-3.5"><path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
+          <span className="font-medium text-[#0b1c30]">Exams &amp; Sessions</span>
+        </nav>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-1">
+          <div className="flex items-center gap-2.5">
+            <span className="w-2.5 h-6 bg-[#1d4ed8] rounded-sm" />
+            <div>
+              <h1 className="font-headline-lg text-[#0b1c30] tracking-tight">
+                Examination Sessions Directory
+              </h1>
+              <p className="text-[13px] text-[#434655] mt-0.5">
+                Complete schedule, live active tests, and historical proctoring archives across all halls.
+              </p>
+            </div>
+          </div>
 
-        <button
-          onClick={() => setIsModalOpen(true)}
-          className="min-h-[44px] px-4 py-2 rounded-xl bg-[#0e5a4d] hover:bg-[#0b483d] text-white text-xs sm:text-sm font-semibold transition-colors flex items-center gap-1.5 shadow-sm self-start sm:self-auto"
-        >
-          <CalendarIcon className="w-4 h-4 shrink-0" />
-          <span>Schedule Examination</span>
-        </button>
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="flex items-center gap-2 bg-[#1d4ed8] text-white font-semibold px-4 py-2 rounded-lg text-[14px] hover:bg-[#0037b0] transition-colors shadow-sm self-start sm:self-auto"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-4 h-4">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+            </svg>
+            Schedule Examination
+          </button>
+        </div>
       </div>
 
-      {/* ── Filter Tabs (Accessible Touch Targets) ── */}
-      <div className="flex items-center gap-2 border-b border-gray-800 pb-3 overflow-x-auto">
+      {/* ── Filter Tabs ── */}
+      <div className="flex items-center gap-2 border-b border-[#e5eeff] pb-3 overflow-x-auto">
         {(['All', 'Active', 'Scheduled', 'Completed'] as const).map((tab) => {
           const isActive = activeTab === tab
           const count =
@@ -156,14 +167,14 @@ export default function SessionsManagementPage() {
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`min-h-[40px] px-4 py-2 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5 whitespace-nowrap cursor-pointer ${
+              className={`px-3.5 py-1.5 rounded-lg text-[13px] font-semibold transition-all flex items-center gap-1.5 whitespace-nowrap cursor-pointer ${
                 isActive
-                  ? 'bg-teal-950 text-teal-300 border border-teal-800 shadow-sm'
-                  : 'text-gray-400 hover:text-white hover:bg-gray-800/50'
+                  ? 'bg-[#0037b0] text-white shadow-sm'
+                  : 'text-[#434655] hover:text-[#0b1c30] hover:bg-[#eff4ff]'
               }`}
             >
               <span>{tab}</span>
-              <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono ${isActive ? 'bg-teal-900 text-teal-200' : 'bg-gray-800 text-gray-400'}`}>
+              <span className={`px-1.5 py-0.2 rounded-full font-code-sm text-[10px] ${isActive ? 'bg-white/20 text-white' : 'bg-[#e5eeff] text-[#466083]'}`}>
                 {count}
               </span>
             </button>
@@ -173,96 +184,100 @@ export default function SessionsManagementPage() {
 
       {/* ── Sessions Table / Cards ── */}
       {isLoading ? (
-        <div className="p-12 text-center text-gray-400 text-sm">
+        <div className="bg-white rounded-xl shadow-sm p-12 text-center text-[#747686] text-[14px]">
           Loading Examination Sessions…
         </div>
       ) : filtered.length === 0 ? (
-        <div className="rounded-2xl border border-gray-800 bg-gray-900/40 p-12 text-center space-y-3">
-          <ClipboardIcon className="w-10 h-10 text-gray-600 mx-auto" />
-          <h2 className="text-base font-bold text-white">No {activeTab.toLowerCase()} sessions found</h2>
-          <p className="text-xs sm:text-sm text-gray-400 max-w-sm mx-auto">
+        <div className="bg-white rounded-xl shadow-sm p-12 text-center flex flex-col items-center gap-3">
+          <div className="w-14 h-14 rounded-xl bg-[#eff4ff] flex items-center justify-center text-[#0037b0]">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} className="w-7 h-7">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
+            </svg>
+          </div>
+          <h2 className="font-headline-md text-[#0b1c30]">No {activeTab.toLowerCase()} sessions found</h2>
+          <p className="text-[14px] text-[#747686] max-w-sm">
             Schedule an upcoming examination or start one immediately from the hall workspace.
           </p>
           <button
             onClick={() => setIsModalOpen(true)}
-            className="mt-2 min-h-[44px] px-4 py-2 rounded-lg bg-[#0e5a4d] text-white text-xs font-semibold"
+            className="mt-2 flex items-center gap-2 bg-[#1d4ed8] text-white font-semibold px-4 py-2 rounded-lg text-[14px] hover:bg-[#0037b0] transition-colors"
           >
             Schedule Examination Now
           </button>
         </div>
       ) : (
-        <div className="rounded-2xl border border-gray-800 bg-gray-900/60 overflow-hidden shadow-xl">
+        <div className="bg-white rounded-xl shadow-sm overflow-hidden">
           <div className="overflow-x-auto">
-            <table className="w-full text-xs text-left min-w-[700px]">
+            <table className="w-full text-left min-w-[700px]">
               <thead>
-                <tr className="border-b border-gray-800 bg-gray-950/70 text-gray-400 font-mono">
-                  <th className="px-5 py-4">Course Details</th>
-                  <th className="px-5 py-4">Assigned Hall</th>
-                  <th className="px-5 py-4">Status</th>
-                  <th className="px-5 py-4">Duration</th>
-                  <th className="px-5 py-4">Candidates</th>
-                  <th className="px-5 py-4">Date &amp; Time</th>
-                  <th className="px-5 py-4 text-right">Console</th>
+                <tr className="bg-[#eff4ff] font-code-sm text-[11px] text-[#747686] uppercase tracking-wider">
+                  <th className="py-3 px-5">Course Details</th>
+                  <th className="py-3 px-5">Assigned Hall</th>
+                  <th className="py-3 px-5">Status</th>
+                  <th className="py-3 px-5">Duration</th>
+                  <th className="py-3 px-5">Candidates</th>
+                  <th className="py-3 px-5">Date &amp; Time</th>
+                  <th className="py-3 px-5 text-right">Console</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-800/60">
+              <tbody className="divide-y divide-[#eff4ff]">
                 {filtered.map((s) => {
                   const isActive = s.status === 'ACTIVE'
-                  const statusColor =
+                  const statusBadge =
                     s.status === 'ACTIVE'
-                      ? 'bg-emerald-950 text-emerald-300 border-emerald-800'
+                      ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
                       : s.status === 'SCHEDULED'
-                      ? 'bg-blue-950 text-blue-300 border-blue-800'
-                      : 'bg-gray-800 text-gray-400 border-gray-700'
+                      ? 'bg-[#eff4ff] text-[#0037b0] border-[#bbd6ff]'
+                      : 'bg-[#f8f9ff] text-[#747686] border-[#c4c5d7]'
 
                   return (
-                    <tr key={s.id} className="hover:bg-gray-800/40 transition-colors">
-                      <td className="px-5 py-4">
+                    <tr key={s.id} className="hover:bg-[#f8f9ff] transition-colors">
+                      <td className="py-4 px-5">
                         <Link
                           href={`/hall/session/${s.id}`}
-                          className="font-bold text-sm text-white hover:text-teal-300 transition-colors"
+                          className="font-bold text-[14px] text-[#0b1c30] hover:text-[#1d4ed8] transition-colors"
                         >
                           {s.course_name}
                         </Link>
                         {s.course_code && (
-                          <p className="text-[11px] text-gray-400 font-mono mt-0.5">
+                          <p className="font-code-sm text-[11px] text-[#747686] mt-0.5">
                             {s.course_code}
                           </p>
                         )}
                       </td>
 
-                      <td className="px-5 py-4 text-gray-300">
+                      <td className="py-4 px-5 text-[14px] text-[#434655]">
                         {s.classroom?.name || 'Classroom Hall'}
                       </td>
 
-                      <td className="px-5 py-4">
-                        <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold border ${statusColor}`}>
-                          {isActive && <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />}
+                      <td className="py-4 px-5">
+                        <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full font-code-sm text-[10px] font-bold border ${statusBadge}`}>
+                          {isActive && <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />}
                           {s.status}
                         </span>
                       </td>
 
-                      <td className="px-5 py-4 font-mono text-gray-300">
+                      <td className="py-4 px-5 font-code-sm text-[12px] text-[#434655]">
                         {s.duration_minutes} min
                       </td>
 
-                      <td className="px-5 py-4 font-mono text-gray-300">
+                      <td className="py-4 px-5 font-code-sm text-[12px] text-[#434655]">
                         {s.expected_students} Expected
                       </td>
 
-                      <td className="px-5 py-4 text-gray-400 font-mono">
+                      <td className="py-4 px-5 font-code-sm text-[11px] text-[#747686]">
                         {s.started_at
                           ? new Date(s.started_at).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' })
                           : new Date(s.created_at).toLocaleDateString()}
                       </td>
 
-                      <td className="px-5 py-4 text-right">
+                      <td className="py-4 px-5 text-right">
                         <Link
                           href={`/hall/session/${s.id}`}
-                          className={`min-h-[36px] px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors inline-flex items-center gap-1 ${
+                          className={`px-3 py-1.5 rounded-lg text-[13px] font-semibold transition-colors inline-flex items-center gap-1 ${
                             isActive
-                              ? 'bg-emerald-600 hover:bg-emerald-500 text-white'
-                              : 'bg-gray-800 hover:bg-gray-700 text-gray-300'
+                              ? 'bg-emerald-600 hover:bg-emerald-700 text-white'
+                              : 'bg-[#eff4ff] hover:bg-[#e5eeff] text-[#0037b0]'
                           }`}
                         >
                           {isActive ? 'Enter Live →' : 'View →'}
@@ -279,35 +294,37 @@ export default function SessionsManagementPage() {
 
       {/* ── Schedule Exam Modal ── */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-xs animate-in fade-in">
-          <div className="w-full max-w-md rounded-2xl border border-gray-800 bg-gray-900 p-6 sm:p-7 shadow-2xl space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-gray-800">
-              <h3 className="text-base font-bold text-white">Schedule Examination Session</h3>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm animate-in fade-in">
+          <div className="w-full max-w-md rounded-2xl bg-white p-6 sm:p-7 shadow-2xl space-y-4 border border-[#e5eeff]">
+            <div className="flex items-center justify-between pb-3 border-b border-[#e5eeff]">
+              <h3 className="text-[16px] font-bold text-[#0b1c30]">Schedule Examination Session</h3>
               <button
                 type="button"
                 onClick={() => setIsModalOpen(false)}
-                className="text-gray-400 hover:text-white p-1"
+                className="text-[#747686] hover:text-[#0b1c30] p-1 rounded-lg"
               >
-                <CloseIcon className="w-4 h-4" />
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-5 h-5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
               </button>
             </div>
 
             <form onSubmit={handleSchedule} className="space-y-4">
               {error && (
-                <div className="p-3 rounded-lg border border-red-800 bg-red-950/50 text-red-300 text-xs">
+                <div className="p-3 rounded-lg border border-[#fecaca] bg-[#fef2f2] text-[#b91c1c] text-[13px]">
                   {error}
                 </div>
               )}
 
               <div>
-                <label className="block text-xs font-medium text-gray-300 mb-1">
-                  Examination Hall / Room *
+                <label className="block text-[13px] font-medium text-[#0b1c30] mb-1">
+                  Examination Hall *
                 </label>
                 <select
-                  required
                   value={selectedHallId}
                   onChange={(e) => setSelectedHallId(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-lg border border-gray-700 bg-gray-950 text-white text-sm focus:outline-none focus:ring-1 focus:ring-teal-500"
+                  required
+                  className="w-full px-3.5 py-2.5 rounded-lg border border-[#c4c5d7] bg-[#eff4ff] text-[#0b1c30] text-[14px] focus:outline-none focus:ring-2 focus:ring-[#1d4ed8] focus:bg-white transition-all font-medium"
                 >
                   {halls.map((h) => (
                     <option key={h.id} value={h.id}>
@@ -318,7 +335,7 @@ export default function SessionsManagementPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-gray-300 mb-1">
+                <label className="block text-[13px] font-medium text-[#0b1c30] mb-1">
                   Course / Subject Title *
                 </label>
                 <input
@@ -326,27 +343,27 @@ export default function SessionsManagementPage() {
                   required
                   value={courseName}
                   onChange={(e) => setCourseName(e.target.value)}
-                  placeholder="e.g. Cambridge Biology A-Level"
-                  className="w-full px-3.5 py-2.5 rounded-lg border border-gray-700 bg-gray-950 text-white text-sm focus:outline-none focus:ring-1 focus:ring-teal-500"
+                  placeholder="e.g. Further Mathematics Paper 1"
+                  className="w-full px-3.5 py-2.5 rounded-lg border border-[#c4c5d7] bg-[#eff4ff] text-[#0b1c30] text-[14px] focus:outline-none focus:ring-2 focus:ring-[#1d4ed8] focus:bg-white transition-all"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-gray-300 mb-1">
+                <label className="block text-[13px] font-medium text-[#0b1c30] mb-1">
                   Course Code (Optional)
                 </label>
                 <input
                   type="text"
                   value={courseCode}
                   onChange={(e) => setCourseCode(e.target.value.toUpperCase())}
-                  placeholder="e.g. BIO-9700"
-                  className="w-full px-3.5 py-2.5 rounded-lg border border-gray-700 bg-gray-950 text-white text-sm font-mono focus:outline-none focus:ring-1 focus:ring-teal-500"
+                  placeholder="e.g. FM-052"
+                  className="w-full px-3.5 py-2.5 rounded-lg border border-[#c4c5d7] bg-[#eff4ff] text-[#0b1c30] text-[14px] font-mono focus:outline-none focus:ring-2 focus:ring-[#1d4ed8] focus:bg-white transition-all"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-medium text-gray-300 mb-1">
+                  <label className="block text-[13px] font-medium text-[#0b1c30] mb-1">
                     Duration (Minutes)
                   </label>
                   <input
@@ -355,12 +372,12 @@ export default function SessionsManagementPage() {
                     max="360"
                     value={durationMinutes}
                     onChange={(e) => setDurationMinutes(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-lg border border-gray-700 bg-gray-950 text-white text-sm focus:outline-none focus:ring-1 focus:ring-teal-500"
+                    className="w-full px-3.5 py-2.5 rounded-lg border border-[#c4c5d7] bg-[#eff4ff] text-[#0b1c30] text-[14px] focus:outline-none focus:ring-2 focus:ring-[#1d4ed8] focus:bg-white transition-all"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-medium text-gray-300 mb-1">
+                  <label className="block text-[13px] font-medium text-[#0b1c30] mb-1">
                     Expected Students
                   </label>
                   <input
@@ -369,7 +386,7 @@ export default function SessionsManagementPage() {
                     max="500"
                     value={expectedStudents}
                     onChange={(e) => setExpectedStudents(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-lg border border-gray-700 bg-gray-950 text-white text-sm focus:outline-none focus:ring-1 focus:ring-teal-500"
+                    className="w-full px-3.5 py-2.5 rounded-lg border border-[#c4c5d7] bg-[#eff4ff] text-[#0b1c30] text-[14px] focus:outline-none focus:ring-2 focus:ring-[#1d4ed8] focus:bg-white transition-all"
                   />
                 </div>
               </div>
@@ -378,16 +395,16 @@ export default function SessionsManagementPage() {
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="min-h-[44px] px-4 py-2 text-xs font-medium text-gray-400 hover:text-white"
+                  className="min-h-[40px] px-4 py-2 text-[13px] font-medium text-[#434655] hover:text-[#0b1c30]"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={isScheduling}
-                  className="min-h-[44px] px-5 py-2 rounded-lg bg-[#0e5a4d] hover:bg-[#0b483d] text-white text-xs sm:text-sm font-semibold disabled:opacity-50 transition-colors shadow-sm"
+                  className="min-h-[40px] px-5 py-2 rounded-lg bg-[#1d4ed8] hover:bg-[#0037b0] text-white text-[13px] sm:text-[14px] font-semibold disabled:opacity-50 transition-colors shadow-sm"
                 >
-                  {isScheduling ? 'Scheduling…' : 'Schedule Session →'}
+                  {isScheduling ? 'Scheduling…' : 'Schedule Session'}
                 </button>
               </div>
             </form>

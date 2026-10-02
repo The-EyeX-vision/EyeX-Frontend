@@ -1,49 +1,8 @@
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
-import {
-  EyeIcon,
-  KeyIcon,
-  CameraIcon,
-  ClipboardIcon,
-  ShieldIcon,
-  RocketIcon,
-} from '@/components/ui/Icons'
+import { EyeXLogo } from '@/components/ui/EyeXLogo'
 
 export const dynamic = 'force-dynamic'
-
-// ── Icons ──────────────────────────────────────────────────────────────────
-function CheckIcon({ className = 'w-4 h-4 text-emerald-600' }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 20 20" fill="currentColor" className={className}>
-      <path fillRule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clipRule="evenodd" />
-    </svg>
-  )
-}
-
-function CrossIcon() {
-  return (
-    <svg viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4 text-rose-500">
-      <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
-    </svg>
-  )
-}
-
-function LockIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" className="w-4 h-4" stroke="currentColor" strokeWidth={1.75}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
-    </svg>
-  )
-}
-
-
-function ShieldCheckIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" className="w-4 h-4 text-blue-600" stroke="currentColor" strokeWidth={2}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
-    </svg>
-  )
-}
 
 export default async function LandingPage() {
   let user = null
@@ -52,65 +11,53 @@ export default async function LandingPage() {
     const { data } = await supabase.auth.getUser()
     user = data.user
   } catch (err) {
-    console.error('[LandingPage] Auth query notice:', err)
+    console.error('[LandingPage] Auth query error:', err)
   }
 
   return (
-    <div className="min-h-screen bg-[#fafbfc] text-slate-800 font-sans antialiased selection:bg-teal-100 selection:text-teal-900">
-      {/* ── Top Header ── */}
-      <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200/80 px-6 py-3.5">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          {/* Logo & Tag */}
-          <div className="flex items-center gap-3">
-            <Link href="/" className="flex items-center gap-2">
-              <span className="flex h-7 w-7 items-center justify-center rounded-md bg-[#0e5a4d] text-white text-xs font-bold shadow-sm">
-                <EyeIcon className="w-4 h-4 text-white" />
-              </span>
-              <span className="font-bold text-slate-900 tracking-tight text-sm">The Eye X</span>
+    <div className="min-h-screen bg-[#f8f9ff] text-[#0b1c30] antialiased">
+      {/* ── Fixed Top Header ── */}
+      <header className="fixed top-0 left-0 w-full z-50 bg-white border-b border-[#c4c5d7]" style={{ boxShadow: '0 1px 8px rgba(0,0,0,0.04)' }}>
+        <div className="h-20 w-full px-4 sm:px-8 max-w-7xl mx-auto flex items-center justify-between">
+          <div className="flex items-center gap-6">
+            <Link href="/" className="flex items-center gap-3">
+              <EyeXLogo width={130} showTagline={false} />
             </Link>
-            <span className="hidden sm:inline-block text-[11px] text-slate-500 bg-slate-100 border border-slate-200/80 px-2.5 py-0.5 rounded-full font-medium">
-              Institutional Exam Platform
-            </span>
+            <span className="hidden lg:block h-6 w-px bg-[#c4c5d7]" />
+            <div className="hidden xl:flex items-center gap-2 px-3 py-1 rounded-lg bg-[#eff4ff] border border-[#c4c5d7]">
+              <span className="w-2 h-2 rounded-full bg-[#1d4ed8] animate-pulse" />
+              <span className="font-code-sm text-[11px] text-[#466083] uppercase font-semibold">
+                MINESEC / GCE Board Protocol 2025
+              </span>
+            </div>
           </div>
 
-          {/* Nav Links */}
-          <nav className="hidden lg:flex items-center gap-7 text-xs font-medium text-slate-600">
-            <a href="#philosophy" className="hover:text-slate-900 transition-colors">Philosophy</a>
-            <a href="#workflow" className="hover:text-slate-900 transition-colors">How It Works</a>
-            <a href="#workflow" className="hover:text-slate-900 transition-colors">The 3-Screen Rule</a>
-            <a href="#governance" className="hover:text-slate-900 transition-colors">Institutional Security</a>
-            <a href="#pilot" className="hover:text-slate-900 transition-colors">Pilot Program</a>
+          <nav className="hidden md:flex items-center gap-6 text-[14px] font-medium text-[#434655]">
+            <Link href="/" className="text-[#0037b0] font-semibold">Home</Link>
+            <Link href="/hall-access" className="hover:text-[#0b1c30] transition-colors">Invigilator Hall Code</Link>
+            <Link href="/api/docs" className="hover:text-[#0b1c30] transition-colors">API Documentation</Link>
+            <Link href="/login" className="hover:text-[#0b1c30] transition-colors">School Login</Link>
           </nav>
 
-          {/* Action CTAs */}
-          <div className="flex items-center gap-2 sm:gap-3">
-            <Link
-              href="/hall-access"
-              className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-800 bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 px-3 py-1.5 rounded-md transition-colors"
-            >
-              <KeyIcon className="w-3.5 h-3.5" />
-              <span>Hall Access Code</span>
-            </Link>
-
+          <div className="flex items-center gap-3">
             {user ? (
               <Link
                 href="/dashboard"
-                className="inline-flex items-center gap-1.5 rounded-md bg-[#0e5a4d] hover:bg-[#0b483d] text-white text-xs font-semibold px-3.5 py-1.5 transition-colors shadow-sm"
+                className="inline-flex items-center justify-center bg-[#1d4ed8] text-white text-[14px] font-semibold px-4 py-2 rounded-lg hover:bg-[#0037b0] transition-colors shadow-sm"
               >
-                School Portal →
+                Go to Dashboard →
               </Link>
             ) : (
               <>
                 <Link
                   href="/login"
-                  className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-700 hover:text-slate-900 px-3 py-1.5 rounded-md hover:bg-slate-100 transition-colors"
+                  className="hidden sm:inline-flex items-center justify-center text-[14px] font-medium text-[#434655] hover:text-[#0b1c30] px-3 py-2 transition-colors"
                 >
-                  <LockIcon />
                   Sign In
                 </Link>
                 <Link
                   href="/signup"
-                  className="hidden sm:inline-flex items-center rounded-md bg-[#0e5a4d] hover:bg-[#0b483d] text-white text-xs font-semibold px-3.5 py-1.5 transition-colors shadow-sm"
+                  className="inline-flex items-center justify-center bg-[#1d4ed8] text-white text-[14px] font-semibold px-4 py-2 rounded-lg hover:bg-[#0037b0] transition-colors shadow-sm"
                 >
                   Register School
                 </Link>
@@ -120,571 +67,406 @@ export default async function LandingPage() {
         </div>
       </header>
 
-      {/* ── Hero Section ── */}
-      <section className="pt-16 pb-12 px-6 max-w-5xl mx-auto text-center">
-        {/* Compliance Badge */}
-        <div className="inline-flex items-center gap-1.5 text-xs font-medium text-blue-700 bg-blue-50/80 border border-blue-200/80 rounded-full px-3.5 py-1 mb-6">
-          <ShieldCheckIcon />
-          Examination &amp; Classroom Monitoring Standard
-        </div>
+      {/* ── Main Canvas ── */}
+      <main className="pt-20">
+        {/* HERO SECTION */}
+        <div className="relative w-full overflow-hidden">
+          {/* Subtle top glow */}
+          <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-[850px] h-[340px] bg-gradient-to-b from-[#dce1ff]/50 via-[#eff4ff]/30 to-transparent blur-3xl pointer-events-none -z-10" />
 
-        {/* Hero Editorial Heading */}
-        <h1 className="text-3xl sm:text-5xl lg:text-[54px] font-bold tracking-tight text-slate-950 leading-[1.18] max-w-4xl mx-auto">
-          Intelligent Examination Monitoring.<br className="hidden sm:inline" />
-          <span className="text-slate-900">It points. A human reviews. A human decides.</span>
-        </h1>
-
-        {/* Subtitle */}
-        <p className="mt-5 text-sm sm:text-base text-slate-600 max-w-2xl mx-auto leading-relaxed">
-          EyeX provides real-time behavioral alerts to invigilators during live exam sessions—reducing false allegations, eliminating subjective bias, and safeguarding student integrity.
-        </p>
-
-        {/* Dual-User Entry Pathways (Examiner vs School Admin) */}
-        <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-xl mx-auto text-left">
-          {/* Examiner Entry Card */}
-          <Link
-            href="/hall-access"
-            className="group rounded-xl border-2 border-emerald-600/70 bg-emerald-50/40 p-4 transition-all hover:bg-emerald-50 hover:shadow-md flex flex-col justify-between"
-          >
-            <div>
-              <div className="flex items-center justify-between text-xs font-mono font-bold text-emerald-800">
-                <span>INVIGILATOR / EXAMINER</span>
-                <span className="text-base group-hover:translate-x-1 transition-transform">&rarr;</span>
-              </div>
-              <h3 className="font-bold text-slate-900 text-sm mt-1">
-                Enter with Hall Access Code
-              </h3>
-              <p className="text-[11px] text-slate-600 mt-1">
-                Zero password needed. Type your 8-character code to unlock live proctoring.
-              </p>
-            </div>
-            <span className="mt-3 text-xs font-semibold text-emerald-700">
-              Unlock Hall Terminal &rarr;
-            </span>
-          </Link>
-
-          {/* School Admin Card */}
-          <Link
-            href="/login"
-            className="group rounded-xl border border-slate-300 bg-white p-4 transition-all hover:border-slate-400 hover:shadow-md flex flex-col justify-between"
-          >
-            <div>
-              <div className="flex items-center justify-between text-xs font-mono font-bold text-slate-700">
-                <span>INSTITUTION PORTAL</span>
-                <span className="text-base group-hover:translate-x-1 transition-transform">&rarr;</span>
-              </div>
-              <h3 className="font-bold text-slate-900 text-sm mt-1">
-                School Administrator Login
-              </h3>
-              <p className="text-[11px] text-slate-600 mt-1">
-                Configure examination halls, rotate access codes, view evidence archive.
-              </p>
-            </div>
-            <span className="mt-3 text-xs font-semibold text-[#0e5a4d]">
-              Sign In to Dashboard &rarr;
-            </span>
-          </Link>
-        </div>
-
-        {/* Secondary Links (API Docs) */}
-        <div className="mt-5 flex items-center justify-center gap-4 text-xs text-slate-500">
-          <Link href="/api/docs" className="hover:text-slate-800 font-mono underline underline-offset-2">
-            Interactive API Docs (Swagger) &rarr;
-          </Link>
-        </div>
-
-        {/* 4 Feature Checklist Items */}
-        <div className="mt-10 pt-6 border-t border-slate-200/80 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-xs text-slate-600 font-medium">
-          <div className="flex items-center gap-1.5">
-            <CheckIcon className="w-4 h-4 text-emerald-700" />
-            GCE Board Protocol Compliant
-          </div>
-          <div className="flex items-center gap-1.5">
-            <CheckIcon className="w-4 h-4 text-emerald-700" />
-            Zero-Biometric / Face Recording
-          </div>
-          <div className="flex items-center gap-1.5">
-            <CheckIcon className="w-4 h-4 text-emerald-700" />
-            Real-Time 1-Hall / 1-Exam Isolation
-          </div>
-          <div className="flex items-center gap-1.5">
-            <CheckIcon className="w-4 h-4 text-emerald-700" />
-            Local Edge Offline Fallback
-          </div>
-        </div>
-      </section>
-
-      {/* ── The 3-Screen Terminal Preview Showcase ── */}
-      <section className="px-6 py-6 max-w-6xl mx-auto">
-        <div className="rounded-xl border border-slate-300 bg-white shadow-sm overflow-hidden">
-          {/* Top Terminal Bar */}
-          <div className="flex items-center justify-between px-4 py-2.5 border-b border-slate-200 bg-slate-50/70 text-xs">
-            <div className="flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-slate-300" />
-              <span className="w-2.5 h-2.5 rounded-full bg-slate-300" />
-              <span className="w-2.5 h-2.5 rounded-full bg-slate-300" />
-              <span className="ml-2 font-mono text-[11px] text-slate-500">
-                Terminal — Hall_2_A_North_01 // Session #0937
+          <section className="w-full px-4 sm:px-8 py-16 sm:py-20 max-w-7xl mx-auto flex flex-col items-center text-center">
+            {/* Tag */}
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#dce9ff] shadow-sm mb-6">
+              <span className="w-2 h-2 rounded-full bg-[#1d4ed8] animate-pulse" />
+              <span className="font-code-sm text-[11px] text-[#004870] uppercase tracking-wider font-semibold">
+                Cameroon Secondary Education • GCE Board Protocol Ready
               </span>
             </div>
-            <div className="flex items-center gap-1.5 text-[11px] font-medium text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-              AI Edge Synced
+
+            {/* Title */}
+            <h1 className="font-headline-xl text-3xl sm:text-5xl lg:text-6xl text-[#0b1c30] max-w-4xl tracking-tight leading-tight font-bold">
+              Smarter Examination Monitoring for Cameroonian Schools
+            </h1>
+
+            {/* Subtitle */}
+            <p className="mt-5 text-[16px] sm:text-[18px] text-[#434655] max-w-3xl leading-relaxed">
+              EyeX helps schools monitor examination halls in real time, identify unusual activities, and preserve evidence for authorised human review. The system detects, the invigilator reviews, the school remains in control.
+            </p>
+
+            {/* Trust Highlights */}
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-6 text-[#466083] text-[13px] font-medium">
+              <div className="flex items-center gap-2">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-4 h-4 text-[#0037b0]">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
+                </svg>
+                <span className="font-code-sm">GCE Board Protocol 2025</span>
+              </div>
+              <div className="hidden sm:block w-1.5 h-1.5 rounded-full bg-[#c4c5d7]" />
+              <div className="flex items-center gap-2">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-4 h-4 text-[#0037b0]">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+                </svg>
+                <span className="font-code-sm">Offline-Edge Resilient</span>
+              </div>
+              <div className="hidden sm:block w-1.5 h-1.5 rounded-full bg-[#c4c5d7]" />
+              <div className="flex items-center gap-2">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-4 h-4 text-[#0037b0]">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+                </svg>
+                <span className="font-code-sm">Tamper-Proof Audit Vault</span>
+              </div>
             </div>
+
+            {/* Dual Primary Action Gate */}
+            <div className="w-full mt-12 grid grid-cols-1 lg:grid-cols-2 gap-6 text-left">
+              {/* Card A: Invigilator Quick Access */}
+              <div className="relative bg-white rounded-2xl p-6 sm:p-8 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between border border-[#e5eeff]">
+                <div className="absolute top-0 left-0 right-0 h-1.5 bg-[#1d4ed8] rounded-t-2xl" />
+                <div>
+                  <div className="flex items-center justify-between gap-2 mb-3">
+                    <div className="flex items-center gap-2">
+                      <span className="p-2 rounded-lg bg-[#eff4ff] text-[#0037b0] flex items-center justify-center">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} className="w-5 h-5">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 5.25a3 3 0 013 3m3 0a6 6 0 01-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1121.75 8.25z" />
+                        </svg>
+                      </span>
+                      <span className="font-code-sm text-[11px] uppercase tracking-wider text-[#466083] font-semibold">
+                        Field Invigilator Portal
+                      </span>
+                    </div>
+                    <span className="font-code-sm text-[11px] px-2 py-0.5 rounded bg-[#dce9ff] text-[#004870] font-semibold">
+                      Direct Session
+                    </span>
+                  </div>
+
+                  <h2 className="font-headline-lg text-[#0b1c30] tracking-tight">
+                    Enter Examination Hall
+                  </h2>
+                  <p className="mt-1.5 text-[14px] text-[#434655] leading-relaxed">
+                    Conduct scheduled supervision. Enter the 8-character terminal code generated by your Chief Invigilator.
+                  </p>
+
+                  <div className="mt-5 bg-[#eff4ff] rounded-xl p-4">
+                    <label className="block font-code-sm text-[11px] text-[#466083] uppercase font-semibold mb-2">
+                      Active Hall Token Code
+                    </label>
+                    <div className="flex items-center gap-3">
+                      <Link
+                        href="/hall-access"
+                        className="flex-1 bg-white text-[#0b1c30] font-code-lg text-[16px] font-semibold tracking-widest px-4 py-2.5 rounded-lg border border-[#c4c5d7] hover:border-[#1d4ed8] transition-colors flex items-center justify-between"
+                      >
+                        <span className="text-[#0037b0]">7K4P-92XM</span>
+                        <span className="text-[12px] font-sans font-normal text-[#747686]">Click to enter</span>
+                      </Link>
+                      <Link
+                        href="/hall-access"
+                        className="inline-flex items-center gap-1.5 bg-[#1d4ed8] text-white text-[14px] font-semibold px-4 py-2.5 rounded-lg hover:bg-[#0037b0] transition-colors shadow-sm"
+                      >
+                        <span>Enter Hall</span>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-4 h-4">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                        </svg>
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-5 pt-3 border-t border-[#eff4ff] flex items-center gap-2 text-[#434655] text-[13px]">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-4 h-4 text-emerald-600 shrink-0">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <span>No password required for on-duty invigilators. Instant token access.</span>
+                </div>
+              </div>
+
+              {/* Card B: School Administration Command Portal */}
+              <div className="relative bg-white rounded-2xl p-6 sm:p-8 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between border border-[#e5eeff]">
+                <div className="absolute top-0 left-0 right-0 h-1.5 bg-[#006194] rounded-t-2xl" />
+                <div>
+                  <div className="flex items-center justify-between gap-2 mb-3">
+                    <div className="flex items-center gap-2">
+                      <span className="p-2 rounded-lg bg-[#eff4ff] text-[#006194] flex items-center justify-center">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} className="w-5 h-5">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.75a1.5 1.5 0 011.5-1.5h1.5a1.5 1.5 0 011.5 1.5V21m6-9.75h.75m-.75 3h.75m-.75 3h.75" />
+                        </svg>
+                      </span>
+                      <span className="font-code-sm text-[11px] uppercase tracking-wider text-[#466083] font-semibold">
+                        Institutional Governance
+                      </span>
+                    </div>
+                    <span className="font-code-sm text-[11px] px-2 py-0.5 rounded bg-[#dce9ff] text-[#004870] font-semibold">
+                      Chief Examiners
+                    </span>
+                  </div>
+
+                  <h2 className="font-headline-lg text-[#0b1c30] tracking-tight">
+                    School Command Portal
+                  </h2>
+                  <p className="mt-1.5 text-[14px] text-[#434655] leading-relaxed">
+                    Centralized telemetry hub for Principals, Vice Principals, Examination Officers, and GCE Center Superintendents.
+                  </p>
+
+                  <div className="mt-5 grid grid-cols-2 gap-3">
+                    <div className="p-3.5 rounded-xl bg-[#eff4ff] flex flex-col justify-between">
+                      <span className="font-code-sm text-[10px] text-[#747686] uppercase font-semibold">Verified Centers</span>
+                      <span className="font-headline-md text-2xl text-[#0b1c30] font-bold mt-1">100%</span>
+                      <span className="text-[12px] text-[#466083]">Accredited Protocol</span>
+                    </div>
+                    <div className="p-3.5 rounded-xl bg-[#eff4ff] flex flex-col justify-between">
+                      <span className="font-code-sm text-[10px] text-[#747686] uppercase font-semibold">Tamper Audits</span>
+                      <span className="font-headline-md text-2xl text-[#0037b0] font-bold mt-1">SHA-256</span>
+                      <span className="text-[12px] text-[#466083]">Cryptographic Vault</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-6 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-3 border-t border-[#eff4ff]">
+                  <Link
+                    href="/login"
+                    className="inline-flex items-center justify-center gap-2 bg-[#0b1c30] text-white text-[14px] font-semibold px-4 py-2.5 rounded-lg hover:bg-[#213145] transition-colors shadow-sm"
+                  >
+                    <span>Sign In to Dashboard</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-4 h-4">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                    </svg>
+                  </Link>
+                  <Link
+                    href="/signup"
+                    className="inline-flex items-center justify-center gap-1.5 bg-[#eff4ff] text-[#0037b0] text-[14px] font-semibold px-4 py-2.5 rounded-lg hover:bg-[#e5eeff] transition-colors"
+                  >
+                    <span>Register Institution</span>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        {/* SECTION 2: CORE PLATFORM PILLARS */}
+        <section className="w-full px-4 sm:px-8 py-16 max-w-7xl mx-auto">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
+            <div>
+              <span className="font-code-sm text-[11px] uppercase tracking-wider text-[#0037b0] font-semibold">
+                Architectural Tenets
+              </span>
+              <h2 className="mt-1 font-headline-xl text-2xl sm:text-4xl text-[#0b1c30] font-bold tracking-tight">
+                Purpose-Built for High-Stakes African Examination Environments
+              </h2>
+            </div>
+            <p className="text-[14px] text-[#434655] max-w-md leading-relaxed">
+              Designed from the ground up to respect human judgment, survive unstable power infrastructure, and protect student privacy.
+            </p>
           </div>
 
-          {/* 3-Screen Panels */}
-          <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-slate-200 p-4 gap-4 md:gap-0">
-            {/* Screen 01 */}
-            <div className="md:px-4 flex flex-col justify-between">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* Pillar 1 */}
+            <div className="bg-white rounded-2xl p-6 shadow-sm flex flex-col justify-between border border-[#e5eeff]">
               <div>
-                <div className="flex items-center justify-between text-[11px] font-medium text-slate-600 mb-2">
-                  <span className="font-semibold text-slate-900">01 / Observation Feed</span>
-                  <span className="font-mono text-slate-400">CAM-02-LIVE</span>
+                <div className="w-12 h-12 rounded-xl bg-[#eff4ff] text-[#0037b0] flex items-center justify-center mb-4">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} className="w-6 h-6">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 10.5V6.75a4.5 4.5 0 119 0v3.75M3.75 21.75h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H3.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+                  </svg>
                 </div>
-                <div className="rounded-lg border border-slate-200 bg-slate-50 p-6 flex flex-col items-center justify-center text-center min-h-[140px]">
-                  <div className="w-8 h-8 rounded-full border border-slate-300 bg-white flex items-center justify-center text-slate-500 mb-2 shadow-2xs">
-                    <CameraIcon className="w-4 h-4 text-slate-600" />
-                  </div>
-                  <span className="text-xs font-semibold text-slate-800">Desk D-04</span>
-                  <span className="mt-1 text-[11px] font-medium text-amber-800 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded">
-                    Turned away from paper
-                  </span>
-                </div>
+                <span className="font-code-sm text-[11px] text-[#466083] font-semibold uppercase tracking-wider">
+                  Pillar 01
+                </span>
+                <h3 className="mt-1 font-headline-md text-xl text-[#0b1c30] font-semibold tracking-tight">
+                  Zero-Friction Hall Access
+                </h3>
+                <p className="mt-2 text-[14px] text-[#434655] leading-relaxed">
+                  Invigilators enter via temporary 8-character hall tokens without complex passwords or IT overhead. Temporary delegations prevent account sharing while keeping audit trails linked to specific schedules.
+                </p>
               </div>
-              <p className="mt-3 text-[11px] text-slate-500 leading-snug">
-                Camera physically isolated to exam perimeter. No external stream or biometric matching.
+              <div className="mt-6 pt-3 bg-[#eff4ff] rounded-lg p-3 flex items-center justify-between">
+                <span className="font-code-sm text-[11px] text-[#466083]">Authentication overhead</span>
+                <span className="font-code-sm text-[11px] text-[#0037b0] font-bold">&lt; 15 seconds</span>
+              </div>
+            </div>
+
+            {/* Pillar 2 */}
+            <div className="bg-white rounded-2xl p-6 shadow-sm flex flex-col justify-between border border-[#e5eeff]">
+              <div>
+                <div className="w-12 h-12 rounded-xl bg-[#eff4ff] text-[#0037b0] flex items-center justify-center mb-4">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} className="w-6 h-6">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
+                </div>
+                <span className="font-code-sm text-[11px] text-[#466083] font-semibold uppercase tracking-wider">
+                  Pillar 02
+                </span>
+                <h3 className="mt-1 font-headline-md text-xl text-[#0b1c30] font-semibold tracking-tight">
+                  Real-Time Edge Computer Vision
+                </h3>
+                <p className="mt-2 text-[14px] text-[#434655] leading-relaxed">
+                  Localized camera detection of prohibited materials and communication with zero permanent biometrics stored. Candidate privacy is enforced by redaction algorithms right on the hall edge device.
+                </p>
+              </div>
+              <div className="mt-6 pt-3 bg-[#eff4ff] rounded-lg p-3 flex items-center justify-between">
+                <span className="font-code-sm text-[11px] text-[#466083]">Data storage policy</span>
+                <span className="font-code-sm text-[11px] text-[#0037b0] font-bold">Ephemeral / No Biometrics</span>
+              </div>
+            </div>
+
+            {/* Pillar 3 */}
+            <div className="bg-white rounded-2xl p-6 shadow-sm flex flex-col justify-between border border-[#e5eeff]">
+              <div>
+                <div className="w-12 h-12 rounded-xl bg-[#eff4ff] text-[#0037b0] flex items-center justify-center mb-4">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} className="w-6 h-6">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+                  </svg>
+                </div>
+                <span className="font-code-sm text-[11px] text-[#466083] font-semibold uppercase tracking-wider">
+                  Pillar 03
+                </span>
+                <h3 className="mt-1 font-headline-md text-xl text-[#0b1c30] font-semibold tracking-tight">
+                  Offline-Resilient Supervision
+                </h3>
+                <p className="mt-2 text-[14px] text-[#434655] leading-relaxed">
+                  Continues local edge logging during internet fluctuations, automatically synchronising when restored. Hall operations run uninterrupted even during localized power or cellular blackouts.
+                </p>
+              </div>
+              <div className="mt-6 pt-3 bg-[#eff4ff] rounded-lg p-3 flex items-center justify-between">
+                <span className="font-code-sm text-[11px] text-[#466083]">Local buffer capacity</span>
+                <span className="font-code-sm text-[11px] text-[#0037b0] font-bold">Up to 72 Hours Offline</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* SECTION 3: HUMAN-IN-THE-LOOP INTEGRITY PROTOCOL */}
+        <section className="w-full px-4 sm:px-8 py-16 max-w-7xl mx-auto">
+          <div className="bg-white rounded-2xl p-6 sm:p-10 shadow-sm border border-[#e5eeff]">
+            <div className="text-center max-w-3xl mx-auto mb-12">
+              <span className="font-code-sm text-[11px] uppercase tracking-wider text-[#0037b0] font-semibold">
+                Certified Supervision Protocol
+              </span>
+              <h2 className="mt-1 font-headline-xl text-2xl sm:text-4xl text-[#0b1c30] font-bold tracking-tight">
+                Human-in-the-Loop Integrity Architecture
+              </h2>
+              <p className="mt-2 text-[15px] text-[#434655] leading-relaxed">
+                EyeX empowers human decision-makers rather than automating disciplinary sanctions. AI assists vigilance; educators retain sovereignty.
               </p>
             </div>
 
-            {/* Screen 02 */}
-            <div className="md:px-4 flex flex-col justify-between pt-4 md:pt-0">
-              <div>
-                <div className="flex items-center justify-between text-[11px] font-medium text-slate-600 mb-2">
-                  <span className="font-semibold text-slate-900">02 / Invigilator Review</span>
-                  <span className="text-rose-600 font-semibold text-[10px] bg-rose-50 border border-rose-200 px-1.5 py-0.5 rounded">3-Second Clip</span>
-                </div>
-                <div className="rounded-lg border border-slate-200 bg-slate-50 p-4 flex flex-col justify-between min-h-[140px]">
-                  <div className="flex items-center justify-between text-xs font-mono text-slate-600">
-                    <span>SEC_LOOPED_FOOTAGE</span>
-                    <span className="text-[10px] text-slate-400">10:14:02</span>
-                  </div>
-                  <div className="my-auto text-center py-2">
-                    <span className="text-xs text-slate-700 font-medium">Head turned left &gt; 8s towards adjacent desk</span>
-                  </div>
-                  <div className="grid grid-cols-2 gap-2 mt-2">
-                    <button className="py-1 px-2 rounded border border-slate-300 bg-white hover:bg-slate-100 text-slate-700 text-xs font-medium">
-                      Dismiss
-                    </button>
-                    <button className="py-1 px-2 rounded bg-[#0e5a4d] hover:bg-[#0b483d] text-white text-xs font-medium">
-                      Confirm Flag
-                    </button>
-                  </div>
-                </div>
-              </div>
-              <p className="mt-3 text-[11px] text-slate-500 leading-snug">
-                Algorithm proposes. Human decides. Invigilator decides in 3 seconds without disrupting hall.
-              </p>
-            </div>
-
-            {/* Screen 03 */}
-            <div className="md:px-4 flex flex-col justify-between pt-4 md:pt-0">
-              <div>
-                <div className="flex items-center justify-between text-[11px] font-medium text-slate-600 mb-2">
-                  <span className="font-semibold text-slate-900">03 / Sealed Exam Ledger</span>
-                  <span className="font-mono text-slate-400">ESC-204 Unit</span>
-                </div>
-                <div className="rounded-lg border border-slate-200 bg-slate-900 text-emerald-400 font-mono text-[10.5px] p-3 leading-relaxed min-h-[140px] flex flex-col justify-between">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              {[
+                { stage: 'STAGE 01', title: 'Detection', desc: 'Edge vision triggers telemetry flag when unauthorized physical artifacts or atypical gaze angles appear.', footer: 'Passive Inference' },
+                { stage: 'STAGE 02', title: 'Real-Time Evidence', desc: 'System encapsulates an un-editable 3-second frame clip with time-stamp and camera hardware signature.', footer: 'SHA-256 Checksum' },
+                { stage: 'STAGE 03', title: 'Human Review', desc: 'Floor Invigilator receives subtle notification on hall tablet to discreetly assess candidate behavior on-site.', footer: 'Hall Invigilator Step' },
+                { stage: 'STAGE 04', title: 'Discipline Confirmation', desc: 'Discipline Master and Center Chief countersign or dismiss incidents before submission to the GCE Board.', footer: 'Final Human Authority' },
+              ].map((step, idx) => (
+                <div key={step.stage} className="bg-[#eff4ff] rounded-xl p-5 flex flex-col justify-between">
                   <div>
-                    <p className="text-slate-400">10:14:02 | DESK D-04 (OFF-DESK_GAZE)</p>
-                    <p className="text-slate-400">10:14:05 | REVIEW (CONFIRMED_HUMAN)</p>
-                    <p className="text-emerald-400 font-bold mt-1">10:14:06 | INCIDENT_SEALED</p>
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="font-code-sm text-[11px] text-[#466083] font-bold">{step.stage}</span>
+                      <span className="font-code-sm text-[12px] text-[#0037b0] font-bold">0{idx + 1}</span>
+                    </div>
+                    <h4 className="font-headline-md text-lg text-[#0b1c30] font-semibold mb-2">{step.title}</h4>
+                    <p className="text-[13px] text-[#434655] leading-relaxed">{step.desc}</p>
                   </div>
-                  <div className="pt-2 border-t border-slate-800 text-[10px] text-slate-300 flex justify-between">
-                    <span>Signed: Invigilator #4</span>
-                    <span className="text-slate-500">SHA-256</span>
+                  <div className="mt-5 pt-2 flex items-center gap-1.5 font-code-sm text-[11px] text-[#004870] font-semibold">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#1d4ed8]" />
+                    <span>{step.footer}</span>
                   </div>
                 </div>
-              </div>
-              <p className="mt-3 text-[11px] text-slate-500 leading-snug">
-                Cryptographically timestamped audit log submitted directly to the board. 100% tamper-evident.
-              </p>
+              ))}
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* ── Section: THE CORE DILEMMA ── */}
-      <section id="philosophy" className="py-16 px-6 max-w-5xl mx-auto border-t border-slate-200/80">
-        <div className="mb-10 text-left">
-          <span className="text-[11px] font-bold text-slate-500 uppercase tracking-widest">
-            The Core Dilemma
-          </span>
-          <h2 className="text-2xl sm:text-3xl font-bold text-slate-950 mt-1">
-            Why automated proctoring fails students — and why human-first decision support succeeds.
-          </h2>
-          <p className="mt-2 text-sm text-slate-600 max-w-3xl leading-relaxed">
-            Algorithmic surveillance criminalizes natural physiological behaviors. The Eye X restores the role of the invigilator as the sole ethical arbiter in the examination hall.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Card 1: Legacy AI */}
-          <div className="rounded-xl border border-rose-200/80 bg-white p-6 shadow-2xs">
-            <div className="flex items-center gap-2 text-rose-600 font-bold text-sm mb-1">
-              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-rose-100 text-rose-600 text-xs">
-                ✕
+        {/* SECTION 4: CALL TO ACTION */}
+        <section className="w-full px-4 sm:px-8 py-12 max-w-7xl mx-auto mb-12">
+          <div className="bg-[#eff4ff] rounded-2xl p-8 sm:p-12 flex flex-col md:flex-row items-center justify-between gap-6 border border-[#bbd6ff]">
+            <div className="max-w-2xl">
+              <span className="font-code-sm text-[11px] uppercase tracking-wider text-[#0037b0] font-semibold">
+                Session Initialization 2025
               </span>
-              The Legacy AI Approach
-            </div>
-            <p className="text-xs text-slate-500 mb-5 leading-normal">
-              Invasive black-box algorithms that create anxiety, produce false positives, and dehumanize exam supervision.
-            </p>
-
-            <ul className="space-y-4 text-xs">
-              <li className="flex items-start gap-2.5">
-                <CrossIcon />
-                <div>
-                  <strong className="text-slate-800 block mb-0.5">Opaque Probability Scores</strong>
-                  <span className="text-slate-600">Assigns automated suspicion metrics (e.g. &ldquo;82% Cheat Risk&rdquo;) without institutional accountability.</span>
-                </div>
-              </li>
-              <li className="flex items-start gap-2.5">
-                <CrossIcon />
-                <div>
-                  <strong className="text-slate-800 block mb-0.5">Automated Penalties</strong>
-                  <span className="text-slate-600">Can lock terminals or terminate sessions prematurely without an educator verifying the context.</span>
-                </div>
-              </li>
-              <li className="flex items-start gap-2.5">
-                <CrossIcon />
-                <div>
-                  <strong className="text-slate-800 block mb-0.5">Biometric Harvesting</strong>
-                  <span className="text-slate-600">Stores face scans and gaze coordinates in commercial cloud databases indefinitely.</span>
-                </div>
-              </li>
-              <li className="flex items-start gap-2.5">
-                <CrossIcon />
-                <div>
-                  <strong className="text-slate-800 block mb-0.5">Hostile Hall Dynamics</strong>
-                  <span className="text-slate-600">Fosters mutual suspicion between candidates and supervisory staff.</span>
-                </div>
-              </li>
-            </ul>
-          </div>
-
-          {/* Card 2: The Eye X Standard */}
-          <div className="rounded-xl border border-teal-200/80 bg-white p-6 shadow-2xs">
-            <div className="flex items-center gap-2 text-[#0e5a4d] font-bold text-sm mb-1">
-              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-teal-100 text-[#0e5a4d] text-xs">
-                ✓
-              </span>
-              The Eye X Institutional Standard
-            </div>
-            <p className="text-xs text-slate-500 mb-5 leading-normal">
-              Strictly assists educators; designed to preserve calm, respect privacy, and empower pedagogical leadership.
-            </p>
-
-            <ul className="space-y-4 text-xs">
-              <li className="flex items-start gap-2.5">
-                <CheckIcon />
-                <div>
-                  <strong className="text-slate-800 block mb-0.5">Plain Human Language</strong>
-                  <span className="text-slate-600">Descriptive observations only (&ldquo;Looking down left&rdquo;, &ldquo;Hand below desk&rdquo;) without judgment words.</span>
-                </div>
-              </li>
-              <li className="flex items-start gap-2.5">
-                <CheckIcon />
-                <div>
-                  <strong className="text-slate-800 block mb-0.5">100% Invigilator Autonomy</strong>
-                  <span className="text-slate-600">Zero autonomous disqualifications. The human invigilator is the sole authority who can record an incident.</span>
-                </div>
-              </li>
-              <li className="flex items-start gap-2.5">
-                <CheckIcon />
-                <div>
-                  <strong className="text-slate-800 block mb-0.5">Zero-Vaulted Biometrics</strong>
-                  <span className="text-slate-600">No facial identification models, gaze prediction vector storage, or candidate identity matching.</span>
-                </div>
-              </li>
-              <li className="flex items-start gap-2.5">
-                <CheckIcon />
-                <div>
-                  <strong className="text-slate-800 block mb-0.5">Quiet Hall Preservation</strong>
-                  <span className="text-slate-600">No alarms, buzzers, or blinking lights in the exam hall; unobtrusive notification to proctor tablet.</span>
-                </div>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Section: THE OPERATIONAL METHODOLOGY (3-Screen Architecture) ── */}
-      <section id="workflow" className="py-16 px-6 max-w-5xl mx-auto border-t border-slate-200/80">
-        <div className="mb-10 text-left">
-          <span className="text-[11px] font-bold text-slate-500 uppercase tracking-widest">
-            The Operational Methodology
-          </span>
-          <h2 className="text-2xl sm:text-3xl font-bold text-slate-950 mt-1">
-            The 3-Screen Workflow Architecture
-          </h2>
-          <p className="mt-2 text-sm text-slate-600 max-w-3xl leading-relaxed">
-            Designed specifically for the physical layout of school halls. Streamlined so that no invigilator spends more than three seconds looking at a screen instead of the students.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-          {/* Step 1 */}
-          <div className="rounded-xl border border-slate-200 bg-white p-5 flex flex-col justify-between">
-            <div>
-              <div className="w-6 h-6 rounded-md bg-blue-50 text-blue-700 font-bold text-xs flex items-center justify-center mb-3">
-                1
-              </div>
-              <h3 className="font-bold text-slate-900 text-sm mb-1.5">Live Alerts Feed</h3>
-              <p className="text-xs text-slate-600 leading-relaxed">
-                Zero-Distraction Hall Monitoring. Surfaces behavioral anomalies in real time using neutral, descriptive terminology. Never screams, never distracts.
+              <h3 className="mt-1 font-headline-lg text-2xl sm:text-3xl text-[#0b1c30] font-bold">
+                Ready to equip your examination center with EyeX?
+              </h3>
+              <p className="mt-2 text-[15px] text-[#434655] leading-relaxed">
+                Register your secondary school today for administrative credentials and certified invigilator terminal provisioning.
               </p>
             </div>
-            <div className="mt-5 pt-3 border-t border-slate-100 text-[11px] font-mono text-slate-500">
-              <span className="text-slate-800 font-semibold">Feed:</span> Desk D-04 flagged
+            <div className="flex items-center gap-3 shrink-0">
+              <Link
+                href="/signup"
+                className="inline-flex items-center justify-center bg-[#1d4ed8] text-white text-[14px] font-semibold px-5 py-3 rounded-lg hover:bg-[#0037b0] transition-colors shadow-sm"
+              >
+                Register School Now
+              </Link>
+              <Link
+                href="/api/docs"
+                className="inline-flex items-center justify-center bg-white text-[#0b1c30] text-[14px] font-semibold px-5 py-3 rounded-lg hover:bg-[#e5eeff] transition-colors border border-[#c4c5d7]"
+              >
+                Documentation
+              </Link>
             </div>
           </div>
+        </section>
+      </main>
 
-          {/* Step 2 */}
-          <div className="rounded-xl border border-slate-200 bg-white p-5 flex flex-col justify-between">
-            <div>
-              <div className="w-6 h-6 rounded-md bg-blue-50 text-blue-700 font-bold text-xs flex items-center justify-center mb-3">
-                2
+      {/* ── Institutional Footer ── */}
+      <footer className="w-full bg-white border-t border-[#c4c5d7]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-8 py-12">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 pb-8 border-b border-[#eff4ff]">
+            <div className="md:col-span-2 space-y-3">
+              <div className="flex items-center gap-3">
+                <EyeXLogo width={120} showTagline={false} />
+                <span className="px-2 py-0.5 rounded bg-[#dce9ff] font-code-sm text-[11px] text-[#004870] font-semibold">
+                  v4.8 Institutional
+                </span>
               </div>
-              <h3 className="font-bold text-slate-900 text-sm mb-1.5">3-Second Evidence Review</h3>
-              <p className="text-xs text-slate-600 leading-relaxed">
-                Instant Clip Verification. A 3-second localized loop presents the context. The invigilator chooses between &ldquo;Confirm Incident&rdquo; or &ldquo;Dismiss as normal&rdquo;.
+              <p className="text-[14px] text-[#434655] max-w-lg leading-relaxed">
+                Certified national digital examination telemetry platform powering high-integrity invigilation and script tracking across Anglophone Cameroon Secondary Examination Centers.
               </p>
-            </div>
-            <div className="mt-5 pt-3 border-t border-slate-100 text-[11px] font-mono text-slate-500">
-              <span className="text-teal-700 font-semibold">CLIP_SEC_770142:</span> Ready
-            </div>
-          </div>
-
-          {/* Step 3 */}
-          <div className="rounded-xl border border-slate-200 bg-white p-5 flex flex-col justify-between">
-            <div>
-              <div className="w-6 h-6 rounded-md bg-blue-50 text-blue-700 font-bold text-xs flex items-center justify-center mb-3">
-                3
-              </div>
-              <h3 className="font-bold text-slate-900 text-sm mb-1.5">Sealed Session Summary</h3>
-              <p className="text-xs text-slate-600 leading-relaxed">
-                Tamper-Proof Board Audit. Immutable event chronological log, and digitally signed invigilator certificate ready for formal examination boards.
-              </p>
-            </div>
-            <div className="mt-5 pt-3 border-t border-slate-100 text-[11px] font-mono text-slate-500">
-              <span className="text-slate-800 font-semibold">Audit:</span> Signed &amp; Sealed
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Section: INSTITUTIONAL GOVERNANCE ── */}
-      <section id="governance" className="py-16 px-6 max-w-5xl mx-auto border-t border-slate-200/80">
-        <div className="mb-10 text-left">
-          <span className="text-[11px] font-bold text-slate-500 uppercase tracking-widest">
-            Institutional Governance
-          </span>
-          <h2 className="text-2xl sm:text-3xl font-bold text-slate-950 mt-1">
-            Strict Architectural &amp; Ethical Guardrails
-          </h2>
-          <p className="mt-2 text-sm text-slate-600 max-w-3xl leading-relaxed">
-            Engineered to satisfy the stringent legal, ethical, and privacy standards of national education authorities.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-          <div className="rounded-xl border border-slate-200 bg-white p-5">
-            <div className="w-8 h-8 rounded-lg bg-blue-50 text-blue-700 flex items-center justify-center mb-3">
-              <ClipboardIcon className="w-4 h-4 text-blue-700" />
-            </div>
-            <h3 className="font-bold text-slate-900 text-sm mb-1.5">Non-Negotiable Language Standard</h3>
-            <p className="text-xs text-slate-600 leading-relaxed">
-              Zero computational jargon like &ldquo;yaw angles&rdquo;, &ldquo;confidence metrics&rdquo;, or speculative words like &ldquo;cheating&rdquo;. Observations are recorded exclusively in clear, objective examination terminology.
-            </p>
-          </div>
-
-          <div className="rounded-xl border border-slate-200 bg-white p-5">
-            <div className="w-8 h-8 rounded-lg bg-teal-50 text-teal-700 flex items-center justify-center mb-3">
-              <ShieldIcon className="w-4 h-4 text-teal-700" />
-            </div>
-            <h3 className="font-bold text-slate-900 text-sm mb-1.5">Privacy by Design Perimeter</h3>
-            <p className="text-xs text-slate-600 leading-relaxed">
-              All vision processing occurs on local edge hardware within school boundaries. Zero biometric templates are compiled, and all session feeds are permanently purged after verification.
-            </p>
-          </div>
-
-          <div className="rounded-xl border border-slate-200 bg-white p-5">
-            <div className="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-700 flex items-center justify-center mb-3">
-              <RocketIcon className="w-4 h-4 text-indigo-700" />
-            </div>
-            <h3 className="font-bold text-slate-900 text-sm mb-1.5">Fail-Safe Edge Fallback</h3>
-            <p className="text-xs text-slate-600 leading-relaxed">
-              Continuous local hall surveillance operates without interruption if internet connectivity degrades. Local buffers synchronize cryptographically once the institutional link recovers.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Testimonial & Benchmark ── */}
-      <section className="py-12 px-6 max-w-4xl mx-auto">
-        <div className="rounded-xl border border-slate-200 bg-white p-8 shadow-2xs">
-          <span className="text-3xl text-slate-400 font-serif leading-none block mb-2">&ldquo;</span>
-          <blockquote className="text-base sm:text-lg font-medium text-slate-900 leading-relaxed italic">
-            In high-stakes exams, a false accusation ruins a student&apos;s year or future. The Eye X gives us calm clarity without taking the decision out of the teacher&apos;s hands.
-          </blockquote>
-          <div className="mt-4 flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full bg-slate-200 text-slate-700 font-bold text-xs flex items-center justify-center">
-              MR
-            </div>
-            <div>
-              <p className="text-xs font-bold text-slate-900 leading-tight">Dr. Michael Richardson</p>
-              <p className="text-[11px] text-slate-500">Senior Invigilator &amp; Examination Officer, South East Academies Trust</p>
-            </div>
-          </div>
-        </div>
-
-        {/* Benchmark Pill Row */}
-        <div className="mt-6 flex flex-wrap items-center justify-between gap-4 px-6 py-4 rounded-xl border border-slate-200 bg-white text-xs">
-          <div>
-            <span className="text-[10px] text-slate-400 uppercase font-bold tracking-wider block">Pilot Benchmark</span>
-            <span className="font-semibold text-slate-800">1 Hall • 1 School • 1 Exam</span>
-          </div>
-          <div className="h-6 w-px bg-slate-200 hidden sm:block" />
-          <div>
-            <span className="text-xl font-bold text-slate-900">100%</span>
-            <span className="ml-2 text-slate-600 font-medium">Invigilator Clarity</span>
-          </div>
-          <div className="h-6 w-px bg-slate-200 hidden sm:block" />
-          <div>
-            <span className="text-xl font-bold text-slate-900">0</span>
-            <span className="ml-2 text-slate-600 font-medium">False Accusations Escalated</span>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Section: Official Pilot Request Form ── */}
-      <section id="pilot" className="py-16 px-6 max-w-3xl mx-auto text-center border-t border-slate-200/80">
-        <span className="text-xs font-semibold text-blue-700 bg-blue-50 border border-blue-200 px-3 py-1 rounded-full">
-          Official Secondary School &amp; Exam Centre Pilots
-        </span>
-        <h2 className="text-2xl sm:text-3xl font-bold text-slate-950 mt-4">
-          Bring Ethical Integrity Monitoring to Your Next Examination Window
-        </h2>
-        <p className="mt-2 text-xs sm:text-sm text-slate-600 max-w-xl mx-auto leading-relaxed">
-          We partner directly with academic institutions, regional boards, and accredited exam centres. Request an institutional briefing and sandbox terminal access.
-        </p>
-
-        {/* Pilot Form Card */}
-        <div className="mt-8 rounded-xl border border-slate-200 bg-white p-6 shadow-sm text-left">
-          <form action="/signup" method="GET" className="space-y-4">
-            <div>
-              <label htmlFor="pilot-email" className="block text-xs font-medium text-slate-700 mb-1">
-                Institutional Email
-              </label>
-              <input
-                id="pilot-email"
-                type="email"
-                placeholder="examinations@school.com or .edu.cm"
-                className="w-full text-xs px-3.5 py-2.5 rounded-md border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#0e5a4d]/30 focus:border-[#0e5a4d]"
-              />
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div>
-                <label htmlFor="inst-type" className="block text-xs font-medium text-slate-700 mb-1">
-                  Institution Type
-                </label>
-                <select id="inst-type" className="w-full text-xs px-3 py-2 rounded-md border border-slate-300 bg-white text-slate-700">
-                  <option>Secondary / GCE Centre</option>
-                  <option>Higher Education / University</option>
-                  <option>Accredited Vocational College</option>
-                </select>
-              </div>
-
-              <div>
-                <label htmlFor="exam-window" className="block text-xs font-medium text-slate-700 mb-1">
-                  Target Exam Window
-                </label>
-                <select id="exam-window" className="w-full text-xs px-3 py-2 rounded-md border border-slate-300 bg-white text-slate-700">
-                  <option>November Mocks Session</option>
-                  <option>June Official Board Exams</option>
-                  <option>Ongoing Modular Assessments</option>
-                </select>
+              <div className="flex flex-wrap items-center gap-4 pt-1 font-code-sm text-[11px] text-[#466083]">
+                <span className="flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#1d4ed8]" />
+                  GCE Board Certified Specification
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#1d4ed8]" />
+                  MINESEC Accredited Framework
+                </span>
               </div>
             </div>
 
-            <button
-              type="submit"
-              className="w-full mt-2 rounded-md bg-[#0e5a4d] hover:bg-[#0b483d] text-white text-xs sm:text-sm font-semibold py-2.5 px-4 transition-colors shadow-sm"
-            >
-              Submit Institutional Pilot Request →
-            </button>
-          </form>
-
-          <p className="mt-3 text-[11px] text-slate-400 text-center">
-            Strict confidentiality. No marketing spam. Direct outreach by our Education Integrity Network.
-          </p>
-        </div>
-      </section>
-
-      {/* ── Footer ── */}
-      <footer className="border-t border-slate-200 bg-white px-6 py-12 text-xs text-slate-600">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 mb-10">
-          <div>
-            <div className="flex items-center gap-2 mb-2">
-              <span className="flex h-6 w-6 items-center justify-center rounded bg-[#0e5a4d] text-white text-xs font-bold">
-                <EyeIcon className="w-3.5 h-3.5 text-white" />
-              </span>
-              <span className="font-bold text-slate-900 text-sm">The Eye X</span>
+            <div className="space-y-2">
+              <div className="font-code-sm text-[11px] text-[#0b1c30] font-bold uppercase tracking-wider">
+                Supervision Portals
+              </div>
+              <ul className="space-y-1.5 text-[14px] text-[#434655]">
+                <li><Link href="/hall-access" className="hover:text-[#0037b0] transition-colors">Invigilator Hall Code Access</Link></li>
+                <li><Link href="/login" className="hover:text-[#0037b0] transition-colors">Center Chief Admin Login</Link></li>
+                <li><Link href="/signup" className="hover:text-[#0037b0] transition-colors">New Examination Center Registry</Link></li>
+                <li><Link href="/api/docs" className="hover:text-[#0037b0] transition-colors">Hardware Driver API Docs</Link></li>
+              </ul>
             </div>
-            <p className="text-[11px] text-slate-500 leading-relaxed mb-3">
-              The decision-support platform for high-stakes examinations. Upholding integrity through human-centric autonomous computer vision.
-            </p>
-            <p className="text-[11px] text-slate-400">
-              Compliant with Ministry of Secondary Education &amp; GCE Board protocols.
-            </p>
+
+            <div className="space-y-2">
+              <div className="font-code-sm text-[11px] text-[#0b1c30] font-bold uppercase tracking-wider">
+                Institutional Protocol
+              </div>
+              <ul className="space-y-1.5 text-[13px] text-[#747686]">
+                <li>General Certificate of Education (GCE) Board</li>
+                <li>Ministry of Secondary Education (MINESEC)</li>
+                <li>South West &amp; North West Regional Inspectorates</li>
+                <li>Irregularity Incident Escrow &amp; Audit Logs</li>
+              </ul>
+            </div>
           </div>
 
-          <div>
-            <h4 className="font-bold text-slate-900 text-xs mb-3">Governance &amp; Whitepapers</h4>
-            <ul className="space-y-2 text-[11px] text-slate-500">
-              <li><a href="#philosophy" className="hover:text-slate-800">Pilot Protocol Whitepaper (PDF)</a></li>
-              <li><a href="#workflow" className="hover:text-slate-800">Invigilator Control Standard</a></li>
-              <li><a href="#governance" className="hover:text-slate-800">Non-Biometric Architecture Spec</a></li>
-              <li><a href="#governance" className="hover:text-slate-800">Row-Level Security Standards</a></li>
-            </ul>
+          <div className="pt-6 flex flex-col md:flex-row items-center justify-between gap-4 font-code-sm text-[11px] text-[#747686]">
+            <div>
+              © 2025 Republic of Cameroon • Ministry of Secondary Education (MINESEC) &amp; GCE Board.
+            </div>
+            <div className="flex items-center gap-4">
+              <span>EN 29001 Identity Assurance</span>
+              <span>AES-256 Telemetry</span>
+            </div>
           </div>
-
-          <div>
-            <h4 className="font-bold text-slate-900 text-xs mb-3">Legal &amp; Safeguarding</h4>
-            <ul className="space-y-2 text-[11px] text-slate-500">
-              <li><a href="#" className="hover:text-slate-800">UK/EEA GDPR Compliance Section</a></li>
-              <li><a href="#" className="hover:text-slate-800">72-hr Data Retention Policies</a></li>
-              <li><a href="#" className="hover:text-slate-800">Anti-Adversarial Guarantee</a></li>
-              <li><a href="#" className="hover:text-slate-800">Board Audit Certifications</a></li>
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="font-bold text-slate-900 text-xs mb-3">Institutional Access</h4>
-            <ul className="space-y-2 text-[11px] text-slate-500">
-              <li><Link href="/login" className="hover:text-[#0e5a4d] font-medium">School Terminal Sign In</Link></li>
-              <li><Link href="/signup" className="hover:text-[#0e5a4d] font-medium">Register Pilot Center</Link></li>
-              <li><a href="#" className="hover:text-slate-800">Hardware Edge Setup</a></li>
-              <li><a href="mailto:support@eyex.cm" className="hover:text-slate-800">Support Desk (24/7 Live Exam)</a></li>
-            </ul>
-          </div>
-        </div>
-
-        <div className="max-w-7xl mx-auto pt-6 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-slate-400">
-          <div>© {new Date().getFullYear()} The Eye X Systems Ltd. All Rights Reserved.</div>
-          <div>ISO 27001 &amp; SOC-2 Type II Exam Certified</div>
         </div>
       </footer>
     </div>

@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_standard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;family=Plus+Jakarta+Sans:wght@600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"surface-container":"#e5eeff","surface":"#f8f9ff","on-primary-fixed":"#001551","surface-container-lowest":"#ffffff","surface-dim":"#cbdbf5","secondary-fixed-dim":"#aec8f0","surface-container-high":"#dce9ff","inverse-on-surface":"#eaf1ff","inverse-surface":"#213145","on-secondary-fixed":"#001c38","error":"#ba1a1a","on-tertiary-fixed":"#001d31","primary-container":"#1d4ed8","secondary-fixed":"#d3e4ff","outline":"#747686","on-secondary":"#ffffff","on-primary":"#ffffff","surface-container-highest":"#d3e4fe","surface-tint":"#2151da","primary-fixed-dim":"#b7c4ff","surface-container-low":"#eff4ff","on-background":"#0b1c30","on-tertiary":"#ffffff","on-primary-fixed-variant":"#0039b5","tertiary-fixed":"#cce5ff","error-container":"#ffdad6","tertiary":"#004870","surface-variant":"#d3e4fe","surface-bright":"#f8f9ff","secondary":"#466083","on-tertiary-fixed-variant":"#004b73","primary":"#0037b0","primary-fixed":"#dce1ff","inverse-primary":"#b7c4ff","on-surface-variant":"#434655","on-tertiary-container":"#b2d9ff","on-surface":"#0b1c30","background":"#f8f9ff","outline-variant":"#c4c5d7","on-secondary-fixed-variant":"#2d486a","on-secondary-container":"#435d80","secondary-container":"#bbd6ff","on-error":"#ffffff","on-error-container":"#93000a","on-primary-container":"#cad3ff","tertiary-container":"#006194","tertiary-fixed-dim":"#93ccff"},"borderRadius":{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},"spacing":{"space-md":"1rem","margin-mobile":"1rem","gutter":"1.25rem","space-xs":"0.25rem","space-sm":"0.5rem","space-lg":"1.5rem","space-xl":"2.5rem","gutter-mobile":"0.75rem","margin":"2rem"},"fontFamily":{"label-code-md":["JetBrains Mono"],"body-md":["Inter"],"body-lg":["Inter"],"label-code-lg":["JetBrains Mono"],"headline-xl-mobile":["Plus Jakarta Sans"],"headline-md":["Plus Jakarta Sans"],"label-code-sm":["JetBrains Mono"],"headline-xl":["Plus Jakarta Sans"],"headline-lg":["Plus Jakarta Sans"],"headline-lg-mobile":["Plus Jakarta Sans"],"body-sm":["Inter"]},"fontSize":{"label-code-md":["13px",{"lineHeight":"18px","letterSpacing":"0.02em","fontWeight":"500"}],"body-md":["14px",{"lineHeight":"20px","fontWeight":"400"}],"body-lg":["16px",{"lineHeight":"24px","fontWeight":"400"}],"label-code-lg":["18px",{"lineHeight":"24px","letterSpacing":"0.05em","fontWeight":"600"}],"headline-xl-mobile":["28px",{"lineHeight":"36px","letterSpacing":"-0.01em","fontWeight":"700"}],"headline-md":["20px",{"lineHeight":"28px","fontWeight":"600"}],"label-code-sm":["11px",{"lineHeight":"14px","letterSpacing":"0.02em","fontWeight":"500"}],"headline-xl":["36px",{"lineHeight":"44px","letterSpacing":"-0.02em","fontWeight":"700"}],"headline-lg":["28px",{"lineHeight":"36px","letterSpacing":"-0.015em","fontWeight":"600"}],"headline-lg-mobile":["22px",{"lineHeight":"30px","letterSpacing":"-0.01em","fontWeight":"600"}],"body-sm":["12px",{"lineHeight":"16px","fontWeight":"400"}]}}}}</script></head><body class="bg-background font-body-md text-on-surface antialiased"><header class="fixed top-0 w-full z-50 bg-surface-container-lowest border-b border-outline-variant shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="w-full px-margin"><div class="h-20 flex items-center justify-between gap-gutter"><div class="flex items-center gap-space-md"><div class="flex items-center gap-space-sm"><img alt="EyeX Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1Wv5E9vMugY93Vn-72z0pKpTXbC1UYgjFLiQgU2nNMvQz9zgs-OfynrVDXbXm54cSm77EddXb5rH8LqQdBcvnu-KEtoHP6Nc9Zu9STzA5FIvddcOpCbLudO8_lvUtbbAYY_0SscxDgZiQnGq2JtsLTqe2pkTPbIqwfN6Ah3TJvtOAhcxAwL9vX7EQOEjtWlvJ6XHnfHL9hw7hNACk28fOBLjVd_6Aw-n7te-1-kGPn2-FIjiwjwqXGWFD0O"/><span class="font-headline-md text-headline-md tracking-tight text-primary">EyeX</span></div><div class="h-7 w-px bg-outline-variant hidden xl:block"></div><div class="hidden xl:flex flex-col"><div class="flex items-center gap-space-xs"><span class="font-body-sm text-body-sm font-semibold text-on-surface">GBHS Yaoundé</span><span class="font-label-code-sm text-label-code-sm bg-surface-container-high text-primary px-1.5 py-0.5 rounded font-medium">Centre #1042</span></div><div class="flex items-center gap-space-xs"><span class="font-body-sm text-body-sm text-on-surface-variant">First Term • Sequence 1 • GCE Mock Session</span></div></div></div><nav class="hidden lg:flex items-center gap-1 bg-surface-container-low p-1 rounded-lg border border-outline-variant" data-active-classes="bg-primary text-on-primary font-semibold shadow-sm"><a class="px-3 py-1.5 rounded-lg text-body-sm font-body-sm text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors" data-path="dashboard" href="#">Dashboard</a><a class="px-3 py-1.5 rounded-lg text-body-sm font-body-sm text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors" data-path="monitoring" href="#">Live Monitoring</a><a aria-current="page" class="px-3 py-1.5 rounded-lg transition-colors bg-primary text-on-primary font-semibold shadow-sm" data-path="exams" href="#">Exams &amp; Sessions</a><a class="px-3 py-1.5 rounded-lg text-body-sm font-body-sm text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors" data-path="classrooms" href="#">Examination Halls</a><a class="px-3 py-1.5 rounded-lg text-body-sm font-body-sm text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors" data-path="students" href="#">Students &amp; Candidates</a><a class="px-3 py-1.5 rounded-lg text-body-sm font-body-sm text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors" data-path="violations" href="#">Evidence Record</a><a class="px-3 py-1.5 rounded-lg text-body-sm font-body-sm text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors" data-path="hall-access" href="#">Invigilator Code</a></nav><div class="flex items-center gap-space-md"><div class="hidden md:flex items-center gap-space-xs bg-surface-container-lowest border border-outline-variant px-2.5 py-1 rounded"><span class="relative flex h-2 w-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span></span><span class="font-label-code-sm text-label-code-sm text-on-surface-variant uppercase tracking-wider">Online • Synchronised</span></div><button class="hidden sm:flex items-center gap-1.5 bg-error text-on-error px-3 py-1.5 rounded text-body-sm font-body-sm font-medium hover:bg-red-700 transition-colors" type="button"><span class="material-symbols-outlined text-[16px]">crisis_alert</span><span>Emergency</span></button><div class="h-7 w-px bg-outline-variant hidden sm:block"></div><div class="flex items-center gap-space-sm pl-1"><div class="hidden sm:flex flex-col text-right"><span class="font-body-sm text-body-sm font-semibold text-on-surface leading-snug">Mr. E. Mbella</span><span class="font-label-code-sm text-label-code-sm text-on-surface-variant">Chief Exam Officer</span></div><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></div></div></header><main class="w-full pt-20 bg-background min-h-screen"><div class="flex flex-col w-full">
+<div class="w-full px-margin py-space-lg flex flex-col gap-space-xl">
+<!-- Context / Breadcrumb & Header Unit -->
+<div class="flex flex-col lg:flex-row lg:items-end justify-between gap-space-md">
+<div class="flex flex-col gap-space-xs max-w-3xl">
+<div class="flex items-center gap-space-xs">
+<span class="font-body-sm text-body-sm text-on-surface-variant font-medium">Examinations</span>
+<span class="material-symbols-outlined text-outline text-[14px]">chevron_right</span>
+<span class="font-body-sm text-body-sm text-primary font-semibold">Master Examination Schedule &amp; Sessions</span>
+<span class="ml-2 font-label-code-sm text-label-code-sm px-2 py-0.5 rounded bg-surface-container-high text-primary font-medium tracking-wider uppercase">GCE-SYNC v4.12</span>
+</div>
+<h1 class="font-headline-xl text-headline-xl text-on-surface tracking-tight mt-1">Examination Master Roster</h1>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+          Scheduled, live, and concluded academic assessments for First Term Sequence &amp; Cameroon GCE Mock Series across Centre #1042 (GBHS Yaoundé).
+        </p>
+</div>
+<!-- Action Buttons -->
+<div class="flex items-center gap-space-sm self-start lg:self-auto flex-wrap">
+<button class="flex items-center gap-2 bg-surface-container-low text-primary hover:bg-surface-container px-4 py-2.5 rounded shadow-sm transition-all duration-200 font-body-md text-body-md font-medium" type="button">
+<span class="material-symbols-outlined text-[18px]">file_download</span>
+<span>Export Schedule (PDF/Excel)</span>
+</button>
+<button class="flex items-center gap-2 bg-primary-container text-on-primary hover:bg-primary px-4 py-2.5 rounded shadow-sm hover:shadow transition-all duration-200 font-body-md text-body-md font-medium" type="button">
+<span class="material-symbols-outlined text-[18px]">add</span>
+<span>Schedule New Examination</span>
+</button>
+</div>
+</div>
+<!-- High-Level Overview Metrics Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-gutter">
+<!-- Card 1 -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex flex-col justify-between relative overflow-hidden group hover:shadow-md transition-shadow duration-300">
+<div class="flex items-start justify-between">
+<div class="flex flex-col">
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant uppercase tracking-wider">Scheduled Exams</span>
+<span class="font-headline-xl text-headline-xl text-on-surface mt-1 font-bold">14</span>
+</div>
+<div class="w-10 h-10 rounded-lg bg-surface-container-low flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[22px]">calendar_month</span>
+</div>
+</div>
+<div class="flex items-center gap-2 mt-4 pt-3 bg-surface-container-low/50 -mx-space-md -mb-space-md px-space-md py-2.5">
+<span class="font-body-sm text-body-sm text-on-surface-variant flex items-center gap-1.5 font-medium">
+<span class="material-symbols-outlined text-primary text-[15px]">school</span>
+            Across 3 Forms (F4, F5, Sixth)
+          </span>
+</div>
+</div>
+<!-- Card 2: Active / Live with indicator -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex flex-col justify-between relative overflow-hidden group hover:shadow-md transition-shadow duration-300">
+<div class="flex items-start justify-between">
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant uppercase tracking-wider">Active In Progress</span>
+<span class="flex h-2 w-2 relative">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+</span>
+</div>
+<span class="font-headline-xl text-headline-xl text-primary mt-1 font-bold">3 <span class="font-headline-md text-headline-md text-on-surface-variant font-normal">Sessions</span></span>
+</div>
+<div class="w-10 h-10 rounded-lg bg-emerald-50 flex items-center justify-center text-emerald-600">
+<span class="material-symbols-outlined text-[22px]">sensors</span>
+</div>
+</div>
+<div class="flex items-center justify-between mt-4 pt-3 bg-surface-container-low/50 -mx-space-md -mb-space-md px-space-md py-2.5">
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant truncate">
+            Hall A (117) • Lab 1 (84) • Audi (123)
+          </span>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex flex-col justify-between relative overflow-hidden group hover:shadow-md transition-shadow duration-300">
+<div class="flex items-start justify-between">
+<div class="flex flex-col">
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant uppercase tracking-wider">Candidates Enrolled</span>
+<span class="font-headline-xl text-headline-xl text-on-surface mt-1 font-bold">540</span>
+</div>
+<div class="w-10 h-10 rounded-lg bg-surface-container-low flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-[22px]">groups</span>
+</div>
+</div>
+<div class="flex items-center gap-1.5 mt-4 pt-3 bg-surface-container-low/50 -mx-space-md -mb-space-md px-space-md py-2.5">
+<span class="font-body-sm text-body-sm text-on-surface-variant font-medium">Biometric Index Verified</span>
+<span class="font-label-code-sm text-label-code-sm text-primary font-semibold ml-auto">100% Match</span>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex flex-col justify-between relative overflow-hidden group hover:shadow-md transition-shadow duration-300">
+<div class="flex items-start justify-between">
+<div class="flex flex-col">
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant uppercase tracking-wider">Hall Clearance Rate</span>
+<span class="font-headline-xl text-headline-xl text-emerald-700 mt-1 font-bold">99.2%</span>
+</div>
+<div class="w-10 h-10 rounded-lg bg-emerald-50 flex items-center justify-center text-emerald-600">
+<span class="material-symbols-outlined text-[22px]">fact_check</span>
+</div>
+</div>
+<div class="flex items-center justify-between mt-4 pt-3 bg-surface-container-low/50 -mx-space-md -mb-space-md px-space-md py-2.5">
+<span class="font-body-sm text-body-sm text-on-surface-variant font-medium">324 Present / 327 Expected</span>
+<span class="font-label-code-sm text-label-code-sm text-error font-medium">3 Absent</span>
+</div>
+</div>
+</div>
+<!-- Filter, Search, and Operational Controls -->
+<div class="flex flex-col gap-space-md bg-surface-container-lowest p-space-md rounded-xl shadow-sm">
+<div class="flex flex-col xl:flex-row items-stretch xl:items-center justify-between gap-space-md">
+<!-- Search bar -->
+<div class="relative flex-1 min-w-[280px]">
+<span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-outline text-[20px]">search</span>
+<input class="w-full bg-surface-container-low pl-11 pr-4 py-2.5 rounded font-body-md text-body-md text-on-surface placeholder:text-outline focus:outline-none focus:bg-surface-container-lowest focus:ring-2 focus:ring-primary/20 transition-all" id="searchInput" placeholder="Search by subject, subject code (e.g. MTH-0521), hall, or invigilator..." type="text"/>
+</div>
+<!-- Filter Selectors -->
+<div class="flex items-center gap-space-sm flex-wrap sm:flex-nowrap">
+<div class="relative w-full sm:w-auto">
+<select class="w-full sm:w-auto appearance-none bg-surface-container-low pl-3.5 pr-8 py-2.5 rounded font-body-md text-body-md text-on-surface focus:outline-none font-medium cursor-pointer">
+<option value="all">All Classes: Form 4, Form 5, Sixth</option>
+<option value="f4">Form 4 Arts &amp; Science</option>
+<option value="f5">Form 5 General &amp; Commercial</option>
+<option value="l6">Lower Sixth Science &amp; Arts</option>
+<option value="u6">Upper Sixth Science &amp; Arts</option>
+</select>
+<span class="material-symbols-outlined absolute right-2.5 top-1/2 -translate-y-1/2 text-outline pointer-events-none text-[18px]">expand_more</span>
+</div>
+<div class="relative w-full sm:w-auto">
+<select class="w-full sm:w-auto appearance-none bg-surface-container-low pl-3.5 pr-8 py-2.5 rounded font-body-md text-body-md text-on-surface focus:outline-none font-medium cursor-pointer">
+<option value="t1-s1">First Term — Sequence 1</option>
+<option value="t1-s2">First Term — Sequence 2</option>
+<option value="gce-mock">GCE National Mock 2025</option>
+</select>
+<span class="material-symbols-outlined absolute right-2.5 top-1/2 -translate-y-1/2 text-outline pointer-events-none text-[18px]">calendar_today</span>
+</div>
+<button class="p-2.5 bg-surface-container-low hover:bg-surface-container text-on-surface-variant rounded transition-colors" title="Toggle Compact View" type="button">
+<span class="material-symbols-outlined text-[20px]">view_agenda</span>
+</button>
+</div>
+</div>
+<!-- Status Quick-Filter Tabs -->
+<div class="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
+<button class="tab-btn px-3.5 py-1.5 rounded font-body-sm text-body-sm font-semibold whitespace-nowrap bg-primary text-on-primary shadow-sm" data-filter="all" type="button">
+          All Examinations <span class="ml-1 opacity-80">14</span>
+</button>
+<button class="tab-btn px-3.5 py-1.5 rounded font-body-sm text-body-sm font-medium whitespace-nowrap bg-surface-container-low text-on-surface-variant hover:bg-surface-container transition-colors" data-filter="today" type="button">
+          Today's Sessions <span class="ml-1 px-1.5 py-0.2 rounded bg-surface-container font-label-code-sm text-label-code-sm">5</span>
+</button>
+<button class="tab-btn px-3.5 py-1.5 rounded font-body-sm text-body-sm font-medium whitespace-nowrap bg-surface-container-low text-on-surface-variant hover:bg-surface-container transition-colors" data-filter="in_progress" type="button">
+<span class="inline-block w-2 h-2 rounded-full bg-emerald-500 mr-1.5"></span>
+          In Progress <span class="ml-1 px-1.5 py-0.2 rounded bg-surface-container font-label-code-sm text-label-code-sm text-emerald-700 font-semibold">3</span>
+</button>
+<button class="tab-btn px-3.5 py-1.5 rounded font-body-sm text-body-sm font-medium whitespace-nowrap bg-surface-container-low text-on-surface-variant hover:bg-surface-container transition-colors" data-filter="scheduled" type="button">
+          Upcoming &amp; Scheduled <span class="ml-1 px-1.5 py-0.2 rounded bg-surface-container font-label-code-sm text-label-code-sm">6</span>
+</button>
+<button class="tab-btn px-3.5 py-1.5 rounded font-body-sm text-body-sm font-medium whitespace-nowrap bg-surface-container-low text-on-surface-variant hover:bg-surface-container transition-colors" data-filter="concluded" type="button">
+          Concluded Records <span class="ml-1 px-1.5 py-0.2 rounded bg-surface-container font-label-code-sm text-label-code-sm">5</span>
+</button>
+</div>
+</div>
+<!-- Structured Sessions Master Grid/List Table -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden flex flex-col">
+<!-- Table Header Bar -->
+<div class="grid grid-cols-12 gap-gutter px-6 py-3.5 bg-surface-container-low font-label-code-sm text-label-code-sm text-on-surface-variant uppercase tracking-wider font-semibold items-center">
+<div class="col-span-12 lg:col-span-4">Subject &amp; Cohort Specification</div>
+<div class="hidden lg:block lg:col-span-2">Hall Placement</div>
+<div class="hidden lg:block lg:col-span-2">Schedule &amp; Period</div>
+<div class="hidden lg:block lg:col-span-2">Candidate Quota</div>
+<div class="hidden lg:block lg:col-span-2 text-right">Supervision / Action</div>
+</div>
+<!-- Examination Rows Container -->
+<div class="flex flex-col divide-y-0" id="examRosterContainer">
+<!-- Row 1: Mathematics Paper 2 (In Progress) -->
+<div class="exam-row grid grid-cols-12 gap-gutter px-6 py-4 items-center bg-surface-container-lowest hover:bg-surface-container-low/60 transition-colors group relative" data-status="in_progress today">
+<div class="col-span-12 lg:col-span-4 flex items-start gap-3.5">
+<div class="w-1.5 self-stretch rounded-full bg-emerald-500 -ml-2 shrink-0"></div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-2 flex-wrap">
+<span class="font-body-lg text-body-lg font-bold text-on-surface group-hover:text-primary transition-colors">Mathematics (Paper 2)</span>
+<span class="font-label-code-sm text-label-code-sm px-2 py-0.5 rounded bg-surface-container text-primary font-semibold">MTH-0521</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Form 5A &amp; 5B • General Certificate Regular</span>
+<!-- Mobile view quick badges -->
+<div class="flex lg:hidden items-center gap-2 mt-2 flex-wrap">
+<span class="font-label-code-sm text-label-code-sm bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded font-medium">IN PROGRESS</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Exam Hall A</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">• 117 / 120 Pres.</span>
+</div>
+</div>
+</div>
+<div class="hidden lg:flex col-span-2 flex-col">
+<div class="flex items-center gap-1.5 text-on-surface font-medium font-body-md text-body-md">
+<span class="material-symbols-outlined text-[17px] text-primary">meeting_room</span>
+<span>Examination Hall A</span>
+</div>
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant mt-0.5">Main Wing, 1st Floor</span>
+</div>
+<div class="hidden lg:flex col-span-2 flex-col">
+<div class="flex items-center gap-1.5 text-on-surface font-semibold font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[17px] text-emerald-600">schedule</span>
+<span>Today, 10:00 – 12:30</span>
+</div>
+<span class="font-label-code-sm text-label-code-sm text-emerald-700 font-medium mt-0.5">Ends in 48m 20s</span>
+</div>
+<div class="hidden lg:flex col-span-2 flex-col">
+<div class="flex items-center justify-between max-w-[170px]">
+<span class="font-body-sm text-body-sm font-semibold text-on-surface">117 / 120</span>
+<span class="font-label-code-sm text-label-code-sm text-emerald-700 font-semibold">97.5%</span>
+</div>
+<div class="w-full max-w-[170px] h-1.5 rounded-full bg-surface-container-high mt-1 overflow-hidden">
+<div class="bg-emerald-600 h-full rounded-full" style="width: 97.5%"></div>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-1 text-xs">Invigilator: Mr. T. Nkemayang</span>
+</div>
+<div class="col-span-12 lg:col-span-2 flex items-center justify-end gap-2 mt-2 lg:mt-0">
+<span class="hidden xl:inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-emerald-100 text-emerald-800 font-label-code-sm text-label-code-sm font-semibold">
+<span class="w-2 h-2 rounded-full bg-emerald-600 animate-pulse"></span>
+              LIVE
+            </span>
+<button class="flex items-center gap-1.5 bg-primary hover:bg-primary-container text-on-primary px-3 py-1.5 rounded text-body-sm font-body-sm font-medium transition-colors shadow-sm" type="button">
+<span class="material-symbols-outlined text-[16px]">visibility</span>
+<span>Inspect</span>
+</button>
+<button class="p-1 text-outline hover:text-on-surface hover:bg-surface-container rounded transition-colors" type="button">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</div>
+</div>
+<!-- Row 2: Biology Practical Prep (In Progress) -->
+<div class="exam-row grid grid-cols-12 gap-gutter px-6 py-4 items-center bg-surface-container-lowest hover:bg-surface-container-low/60 transition-colors group relative" data-status="in_progress today">
+<div class="col-span-12 lg:col-span-4 flex items-start gap-3.5">
+<div class="w-1.5 self-stretch rounded-full bg-emerald-500 -ml-2 shrink-0"></div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-2 flex-wrap">
+<span class="font-body-lg text-body-lg font-bold text-on-surface group-hover:text-primary transition-colors">Biology (Practical Prep)</span>
+<span class="font-label-code-sm text-label-code-sm px-2 py-0.5 rounded bg-surface-container text-primary font-semibold">BIO-0715</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Upper Sixth Science • Advanced Level Practical</span>
+<div class="flex lg:hidden items-center gap-2 mt-2 flex-wrap">
+<span class="font-label-code-sm text-label-code-sm bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded font-medium">IN PROGRESS</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Science Lab 1</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">• 84 / 85 Pres.</span>
+</div>
+</div>
+</div>
+<div class="hidden lg:flex col-span-2 flex-col">
+<div class="flex items-center gap-1.5 text-on-surface font-medium font-body-md text-body-md">
+<span class="material-symbols-outlined text-[17px] text-primary">science</span>
+<span>Science Lab 1</span>
+</div>
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant mt-0.5">East Complex, Ground Flr</span>
+</div>
+<div class="hidden lg:flex col-span-2 flex-col">
+<div class="flex items-center gap-1.5 text-on-surface font-semibold font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[17px] text-emerald-600">schedule</span>
+<span>Today, 10:15 – 12:15</span>
+</div>
+<span class="font-label-code-sm text-label-code-sm text-emerald-700 font-medium mt-0.5">Ends in 33m 15s</span>
+</div>
+<div class="hidden lg:flex col-span-2 flex-col">
+<div class="flex items-center justify-between max-w-[170px]">
+<span class="font-body-sm text-body-sm font-semibold text-on-surface">84 / 85</span>
+<span class="font-label-code-sm text-label-code-sm text-emerald-700 font-semibold">98.8%</span>
+</div>
+<div class="w-full max-w-[170px] h-1.5 rounded-full bg-surface-container-high mt-1 overflow-hidden">
+<div class="bg-emerald-600 h-full rounded-full" style="width: 98.8%"></div>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-1 text-xs">Invigilator: Mrs. F. Ashu</span>
+</div>
+<div class="col-span-12 lg:col-span-2 flex items-center justify-end gap-2 mt-2 lg:mt-0">
+<span class="hidden xl:inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-emerald-100 text-emerald-800 font-label-code-sm text-label-code-sm font-semibold">
+<span class="w-2 h-2 rounded-full bg-emerald-600 animate-pulse"></span>
+              LIVE
+            </span>
+<button class="flex items-center gap-1.5 bg-primary hover:bg-primary-container text-on-primary px-3 py-1.5 rounded text-body-sm font-body-sm font-medium transition-colors shadow-sm" type="button">
+<span class="material-symbols-outlined text-[16px]">visibility</span>
+<span>Inspect</span>
+</button>
+<button class="p-1 text-outline hover:text-on-surface hover:bg-surface-container rounded transition-colors" type="button">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</div>
+</div>
+<!-- Row 3: Literature in English (In Progress) -->
+<div class="exam-row grid grid-cols-12 gap-gutter px-6 py-4 items-center bg-surface-container-lowest hover:bg-surface-container-low/60 transition-colors group relative" data-status="in_progress today">
+<div class="col-span-12 lg:col-span-4 flex items-start gap-3.5">
+<div class="w-1.5 self-stretch rounded-full bg-emerald-500 -ml-2 shrink-0"></div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-2 flex-wrap">
+<span class="font-body-lg text-body-lg font-bold text-on-surface group-hover:text-primary transition-colors">Literature in English</span>
+<span class="font-label-code-sm text-label-code-sm px-2 py-0.5 rounded bg-surface-container text-primary font-semibold">ENG-0510</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Form 4 Arts • Prose &amp; Poetry Modules</span>
+<div class="flex lg:hidden items-center gap-2 mt-2 flex-wrap">
+<span class="font-label-code-sm text-label-code-sm bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded font-medium">IN PROGRESS</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Auditorium</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">• 123 / 125 Pres.</span>
+</div>
+</div>
+</div>
+<div class="hidden lg:flex col-span-2 flex-col">
+<div class="flex items-center gap-1.5 text-on-surface font-medium font-body-md text-body-md">
+<span class="material-symbols-outlined text-[17px] text-primary">theater_comedy</span>
+<span>Main Auditorium</span>
+</div>
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant mt-0.5">Central Academic Hall</span>
+</div>
+<div class="hidden lg:flex col-span-2 flex-col">
+<div class="flex items-center gap-1.5 text-on-surface font-semibold font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[17px] text-emerald-600">schedule</span>
+<span>Today, 10:30 – 1:00</span>
+</div>
+<span class="font-label-code-sm text-label-code-sm text-emerald-700 font-medium mt-0.5">Ends in 1h 18m</span>
+</div>
+<div class="hidden lg:flex col-span-2 flex-col">
+<div class="flex items-center justify-between max-w-[170px]">
+<span class="font-body-sm text-body-sm font-semibold text-on-surface">123 / 125</span>
+<span class="font-label-code-sm text-label-code-sm text-emerald-700 font-semibold">98.4%</span>
+</div>
+<div class="w-full max-w-[170px] h-1.5 rounded-full bg-surface-container-high mt-1 overflow-hidden">
+<div class="bg-emerald-600 h-full rounded-full" style="width: 98.4%"></div>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-1 text-xs">Invigilator: Mr. C. Fon</span>
+</div>
+<div class="col-span-12 lg:col-span-2 flex items-center justify-end gap-2 mt-2 lg:mt-0">
+<span class="hidden xl:inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-emerald-100 text-emerald-800 font-label-code-sm text-label-code-sm font-semibold">
+<span class="w-2 h-2 rounded-full bg-emerald-600 animate-pulse"></span>
+              LIVE
+            </span>
+<button class="flex items-center gap-1.5 bg-primary hover:bg-primary-container text-on-primary px-3 py-1.5 rounded text-body-sm font-body-sm font-medium transition-colors shadow-sm" type="button">
+<span class="material-symbols-outlined text-[16px]">visibility</span>
+<span>Inspect</span>
+</button>
+<button class="p-1 text-outline hover:text-on-surface hover:bg-surface-container rounded transition-colors" type="button">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</div>
+</div>
+<!-- Row 4: Chemistry Theory (Scheduled Today) -->
+<div class="exam-row grid grid-cols-12 gap-gutter px-6 py-4 items-center bg-surface-container-lowest hover:bg-surface-container-low/60 transition-colors group relative" data-status="scheduled today">
+<div class="col-span-12 lg:col-span-4 flex items-start gap-3.5">
+<div class="w-1.5 self-stretch rounded-full bg-primary -ml-2 shrink-0"></div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-2 flex-wrap">
+<span class="font-body-lg text-body-lg font-bold text-on-surface group-hover:text-primary transition-colors">Chemistry (Paper 1 Theory)</span>
+<span class="font-label-code-sm text-label-code-sm px-2 py-0.5 rounded bg-surface-container text-primary font-semibold">CHE-0515</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Form 5 Science • Inorganic &amp; Physical</span>
+<div class="flex lg:hidden items-center gap-2 mt-2 flex-wrap">
+<span class="font-label-code-sm text-label-code-sm bg-primary-fixed text-primary px-2 py-0.5 rounded font-medium">SCHEDULED (2h 15m)</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Exam Hall B</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">• 110 Enrolled</span>
+</div>
+</div>
+</div>
+<div class="hidden lg:flex col-span-2 flex-col">
+<div class="flex items-center gap-1.5 text-on-surface font-medium font-body-md text-body-md">
+<span class="material-symbols-outlined text-[17px] text-secondary">meeting_room</span>
+<span>Examination Hall B</span>
+</div>
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant mt-0.5">North Building, 2nd Floor</span>
+</div>
+<div class="hidden lg:flex col-span-2 flex-col">
+<div class="flex items-center gap-1.5 text-on-surface font-semibold font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[17px] text-primary">schedule</span>
+<span>Today, 01:30 – 03:30</span>
+</div>
+<span class="font-label-code-sm text-label-code-sm text-primary font-medium mt-0.5">Starts in 2h 15m</span>
+</div>
+<div class="hidden lg:flex col-span-2 flex-col">
+<div class="flex items-center justify-between max-w-[170px]">
+<span class="font-body-sm text-body-sm font-semibold text-on-surface">110 Enrolled</span>
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant font-medium">Ready</span>
+</div>
+<div class="w-full max-w-[170px] h-1.5 rounded-full bg-surface-container-high mt-1 overflow-hidden">
+<div class="bg-primary/40 h-full rounded-full" style="width: 100%"></div>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-1 text-xs">Invigilator: Dr. M. Tabe</span>
+</div>
+<div class="col-span-12 lg:col-span-2 flex items-center justify-end gap-2 mt-2 lg:mt-0">
+<span class="hidden xl:inline-flex items-center gap-1 px-2.5 py-1 rounded bg-secondary-fixed text-on-secondary-fixed-variant font-label-code-sm text-label-code-sm font-medium">
+              READY
+            </span>
+<button class="flex items-center gap-1.5 bg-surface-container text-primary hover:bg-primary hover:text-on-primary px-3 py-1.5 rounded text-body-sm font-body-sm font-medium transition-colors shadow-sm" type="button">
+<span class="material-symbols-outlined text-[16px]">qr_code_scanner</span>
+<span>Setup Hall</span>
+</button>
+<button class="p-1 text-outline hover:text-on-surface hover:bg-surface-container rounded transition-colors" type="button">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</div>
+</div>
+<!-- Row 5: Physics (Scheduled Tomorrow) -->
+<div class="exam-row grid grid-cols-12 gap-gutter px-6 py-4 items-center bg-surface-container-lowest hover:bg-surface-container-low/60 transition-colors group relative" data-status="scheduled">
+<div class="col-span-12 lg:col-span-4 flex items-start gap-3.5">
+<div class="w-1.5 self-stretch rounded-full bg-secondary -ml-2 shrink-0"></div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-2 flex-wrap">
+<span class="font-body-lg text-body-lg font-bold text-on-surface group-hover:text-primary transition-colors">Physics (Paper 2 Problem Solving)</span>
+<span class="font-label-code-sm text-label-code-sm px-2 py-0.5 rounded bg-surface-container text-primary font-semibold">PHY-0710</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Lower Sixth Science • Mechanics &amp; Waves</span>
+<div class="flex lg:hidden items-center gap-2 mt-2 flex-wrap">
+<span class="font-label-code-sm text-label-code-sm bg-surface-container-high text-secondary px-2 py-0.5 rounded font-medium">TOMORROW</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Exam Hall A</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">• 95 Enrolled</span>
+</div>
+</div>
+</div>
+<div class="hidden lg:flex col-span-2 flex-col">
+<div class="flex items-center gap-1.5 text-on-surface font-medium font-body-md text-body-md">
+<span class="material-symbols-outlined text-[17px] text-secondary">meeting_room</span>
+<span>Examination Hall A</span>
+</div>
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant mt-0.5">Main Wing, 1st Floor</span>
+</div>
+<div class="hidden lg:flex col-span-2 flex-col">
+<div class="flex items-center gap-1.5 text-on-surface font-semibold font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[17px] text-secondary">event</span>
+<span>Tomorrow, 08:30 – 11:30</span>
+</div>
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant font-medium mt-0.5">Seating Rosters Locked</span>
+</div>
+<div class="hidden lg:flex col-span-2 flex-col">
+<div class="flex items-center justify-between max-w-[170px]">
+<span class="font-body-sm text-body-sm font-semibold text-on-surface">95 Enrolled</span>
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant font-medium">95 Desks</span>
+</div>
+<div class="w-full max-w-[170px] h-1.5 rounded-full bg-surface-container-high mt-1 overflow-hidden">
+<div class="bg-secondary/40 h-full rounded-full" style="width: 100%"></div>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-1 text-xs">Invigilator: Mr. E. Agbor</span>
+</div>
+<div class="col-span-12 lg:col-span-2 flex items-center justify-end gap-2 mt-2 lg:mt-0">
+<span class="hidden xl:inline-flex items-center gap-1 px-2.5 py-1 rounded bg-surface-container-high text-on-surface-variant font-label-code-sm text-label-code-sm font-medium">
+              SCHEDULED
+            </span>
+<button class="flex items-center gap-1.5 bg-surface-container-low text-on-surface-variant hover:bg-surface-container hover:text-on-surface px-3 py-1.5 rounded text-body-sm font-body-sm font-medium transition-colors" type="button">
+<span class="material-symbols-outlined text-[16px]">info</span>
+<span>View Details</span>
+</button>
+<button class="p-1 text-outline hover:text-on-surface hover:bg-surface-container rounded transition-colors" type="button">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</div>
+</div>
+<!-- Row 6: Economics MCQs (Concluded) -->
+<div class="exam-row grid grid-cols-12 gap-gutter px-6 py-4 items-center bg-surface-container-lowest hover:bg-surface-container-low/60 transition-colors group relative opacity-90" data-status="concluded">
+<div class="col-span-12 lg:col-span-4 flex items-start gap-3.5">
+<div class="w-1.5 self-stretch rounded-full bg-outline-variant -ml-2 shrink-0"></div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-2 flex-wrap">
+<span class="font-body-lg text-body-lg font-bold text-on-surface group-hover:text-primary transition-colors">Economics (Paper 1 MCQs)</span>
+<span class="font-label-code-sm text-label-code-sm px-2 py-0.5 rounded bg-surface-container-high text-on-surface-variant font-semibold">ECO-0520</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Form 5 Commercial • Micro &amp; Macro Analysis</span>
+<div class="flex lg:hidden items-center gap-2 mt-2 flex-wrap">
+<span class="font-label-code-sm text-label-code-sm bg-surface-container-high text-outline px-2 py-0.5 rounded font-medium">CONCLUDED</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Hall C</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">• 82 Sat (1 Flag Dismissed)</span>
+</div>
+</div>
+</div>
+<div class="hidden lg:flex col-span-2 flex-col">
+<div class="flex items-center gap-1.5 text-on-surface font-medium font-body-md text-body-md">
+<span class="material-symbols-outlined text-[17px] text-outline">meeting_room</span>
+<span>Hall C (Amphi A)</span>
+</div>
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant mt-0.5">South Annex Pavilion</span>
+</div>
+<div class="hidden lg:flex col-span-2 flex-col">
+<div class="flex items-center gap-1.5 text-on-surface font-semibold font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[17px] text-outline">check_circle</span>
+<span>Yesterday, 09:00 AM</span>
+</div>
+<span class="font-label-code-sm text-label-code-sm text-emerald-700 font-medium mt-0.5">Scripts Vaulted &amp; Sealed</span>
+</div>
+<div class="hidden lg:flex col-span-2 flex-col">
+<div class="flex items-center justify-between max-w-[170px]">
+<span class="font-body-sm text-body-sm font-semibold text-on-surface">82 Sat</span>
+<span class="font-label-code-sm text-label-code-sm text-on-error-container bg-error-container px-1 rounded font-medium">1 Flagged</span>
+</div>
+<div class="w-full max-w-[170px] h-1.5 rounded-full bg-surface-container-high mt-1 overflow-hidden">
+<div class="bg-outline h-full rounded-full" style="width: 100%"></div>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-1 text-xs">Flag Review: Dismissed</span>
+</div>
+<div class="col-span-12 lg:col-span-2 flex items-center justify-end gap-2 mt-2 lg:mt-0">
+<span class="hidden xl:inline-flex items-center gap-1 px-2.5 py-1 rounded bg-surface-container-high text-outline font-label-code-sm text-label-code-sm font-medium">
+              CONCLUDED
+            </span>
+<button class="flex items-center gap-1.5 bg-surface-container-low text-primary hover:bg-surface-container px-3 py-1.5 rounded text-body-sm font-body-sm font-medium transition-colors" type="button">
+<span class="material-symbols-outlined text-[16px]">folder_open</span>
+<span>Dossier</span>
+</button>
+<button class="p-1 text-outline hover:text-on-surface hover:bg-surface-container rounded transition-colors" type="button">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Pagination and Integrity Check Footer -->
+<div class="flex flex-col sm:flex-row items-center justify-between gap-space-md px-6 py-4 bg-surface-container-low border-t border-transparent">
+<div class="flex items-center gap-2">
+<span class="font-body-sm text-body-sm text-on-surface-variant">
+            Showing <strong class="text-on-surface font-semibold">1</strong> to <strong class="text-on-surface font-semibold">6</strong> of <strong class="text-on-surface font-semibold">14</strong> registered examinations
+          </span>
+<span class="hidden md:inline text-outline">•</span>
+<span class="hidden md:inline font-label-code-sm text-label-code-sm text-emerald-700 bg-emerald-100/60 px-2 py-0.5 rounded font-medium">
+            GCE Board Server: In Sync (Ping 28ms)
+          </span>
+</div>
+<div class="flex items-center gap-1">
+<button class="p-1.5 rounded text-outline bg-surface-container-lowest/50 opacity-50 cursor-not-allowed" disabled="" type="button">
+<span class="material-symbols-outlined text-[18px]">chevron_left</span>
+</button>
+<button class="w-8 h-8 rounded bg-primary text-on-primary font-label-code-sm text-label-code-sm font-semibold flex items-center justify-center shadow-sm" type="button">
+            1
+          </button>
+<button class="w-8 h-8 rounded bg-surface-container-lowest text-on-surface hover:bg-surface-container font-label-code-sm text-label-code-sm font-medium flex items-center justify-center transition-colors" type="button">
+            2
+          </button>
+<button class="w-8 h-8 rounded bg-surface-container-lowest text-on-surface hover:bg-surface-container font-label-code-sm text-label-code-sm font-medium flex items-center justify-center transition-colors" type="button">
+            3
+          </button>
+<button class="p-1.5 rounded text-on-surface bg-surface-container-lowest hover:bg-surface-container transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Quick Operational Hall Telemetry Banner -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex items-center gap-space-md">
+<div class="w-12 h-12 rounded-lg bg-surface-container flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined text-[24px]">verified_user</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-body-md text-body-md font-semibold text-on-surface truncate">Biometric Station Sync</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">4 handheld scanners active in halls</span>
+<span class="font-label-code-sm text-label-code-sm text-emerald-700 font-medium mt-1">Zero identity flags reported</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex items-center gap-space-md">
+<div class="w-12 h-12 rounded-lg bg-surface-container flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined text-[24px]">crisis_alert</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-body-md text-body-md font-semibold text-on-surface truncate">Telemetry Incident Stream</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Live CCTV &amp; Desk audio monitoring</span>
+<span class="font-label-code-sm text-label-code-sm text-primary font-medium mt-1">Halls A, B &amp; Lab 1 Nominal</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex items-center gap-space-md">
+<div class="w-12 h-12 rounded-lg bg-surface-container flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined text-[24px]">history_edu</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-body-md text-body-md font-semibold text-on-surface truncate">Custody Vault Status</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Packet seals tamper-proof check</span>
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant font-medium mt-1">Afternoon Papers En Route (Safe)</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Interactive Filtering Logic -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const filterButtons = document.querySelectorAll('.tab-btn');
+      const rows = document.querySelectorAll('.exam-row');
+      const searchInput = document.getElementById('searchInput');
+
+      function applyFilters() {
+        const activeTab = document.querySelector('.tab-btn.bg-primary');
+        const filterVal = activeTab ? activeTab.dataset.filter : 'all';
+        const query = searchInput.value.toLowerCase().trim();
+
+        rows.forEach(row => {
+          const rowStatuses = (row.dataset.status || '').split(' ');
+          const matchesStatus = (filterVal === 'all') || rowStatuses.includes(filterVal);
+          const rowText = row.innerText.toLowerCase();
+          const matchesQuery = !query || rowText.includes(query);
+
+          if (matchesStatus && matchesQuery) {
+            row.style.display = '';
+          } else {
+            row.style.display = 'none';
+          }
+        });
+      }
+
+      filterButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          filterButtons.forEach(b => {
+            b.classList.remove('bg-primary', 'text-on-primary', 'shadow-sm', 'font-semibold');
+            b.classList.add('bg-surface-container-low', 'text-on-surface-variant', 'font-medium');
+          });
+          btn.classList.add('bg-primary', 'text-on-primary', 'shadow-sm', 'font-semibold');
+          btn.classList.remove('bg-surface-container-low', 'text-on-surface-variant', 'font-medium');
+          applyFilters();
+        });
+      });
+
+      if (searchInput) {
+        searchInput.addEventListener('input', applyFilters);
+      }
+    });
+  </script>
+</div></main><footer class="w-full bg-surface-container-lowest border-t border-outline-variant py-space-md"><div class="w-full px-margin flex flex-col md:flex-row items-center justify-between gap-space-sm"><div class="flex items-center gap-space-sm"><span class="font-body-sm text-body-sm text-on-surface-variant">© Republic of Cameroon • Ministry of Secondary Education • EyeX Secure Supervision</span></div><div class="flex items-center gap-space-md font-label-code-sm text-label-code-sm text-on-surface-variant"><span>GCE Board Certified Protocol</span><span>SHA-256 Tamper-Proof Audit</span></div></div></footer></body></html>
