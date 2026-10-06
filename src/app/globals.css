@@ -2,7 +2,8 @@
 
 /* ─── EyeX Platform Design Token System ─────────────────────────────────────
    Institutional Modernism — Clean White & Blue Edition
-   Primary font: Plus Jakarta Sans | Code: JetBrains Mono | Body: Inter
+   Primary font: Inter | Secondary: Noto Sans | Code: JetBrains Mono
+   Fonts are self-hosted via next/font/google (no runtime Google requests).
    ─────────────────────────────────────────────────────────────────────────── */
 @theme {
   /* ── Surface & Background Colors ──────────────────────────────────────── */
@@ -80,8 +81,10 @@
   --color-border-focused:  #1d4ed8;
 
   /* ── Typography ───────────────────────────────────────────────────────── */
-  --font-sans:     "Plus Jakarta Sans", Inter, system-ui, sans-serif;
-  --font-body:     Inter, system-ui, sans-serif;
+  /* --font-inter and --font-noto are injected by next/font/google in layout.tsx */
+  --font-sans:     var(--font-inter), "Noto Sans", system-ui, sans-serif;
+  --font-body:     var(--font-inter), "Noto Sans", system-ui, sans-serif;
+  --font-noto:     var(--font-noto), system-ui, sans-serif;
   --font-mono:     "JetBrains Mono", "Fira Code", ui-monospace, monospace;
 
   /* ── Border Radius ────────────────────────────────────────────────────── */
@@ -105,7 +108,7 @@ html, body {
   padding: 0;
   background-color: #f8f9ff;
   color: #0b1c30;
-  font-family: Inter, system-ui, sans-serif;
+  font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overscroll-behavior: none;
@@ -124,15 +127,16 @@ html, body {
 .live-ping { animation: eyex-ping 1s cubic-bezier(0, 0, 0.2, 1) infinite; }
 
 /* ─── Font Utility Classes (mapped to design tokens) ────────────────────── */
-.font-headline-xl  { font-family: "Plus Jakarta Sans", sans-serif; font-size: 36px; font-weight: 700; line-height: 44px; letter-spacing: -0.02em; }
-.font-headline-lg  { font-family: "Plus Jakarta Sans", sans-serif; font-size: 28px; font-weight: 600; line-height: 36px; letter-spacing: -0.015em; }
-.font-headline-md  { font-family: "Plus Jakarta Sans", sans-serif; font-size: 20px; font-weight: 600; line-height: 28px; }
-.font-body-lg      { font-family: Inter, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; }
-.font-body-md      { font-family: Inter, sans-serif; font-size: 14px; font-weight: 400; line-height: 20px; }
-.font-body-sm      { font-family: Inter, sans-serif; font-size: 12px; font-weight: 400; line-height: 16px; }
-.font-code-lg      { font-family: "JetBrains Mono", monospace; font-size: 18px; font-weight: 600; line-height: 24px; letter-spacing: 0.05em; }
-.font-code-md      { font-family: "JetBrains Mono", monospace; font-size: 13px; font-weight: 500; line-height: 18px; letter-spacing: 0.02em; }
-.font-code-sm      { font-family: "JetBrains Mono", monospace; font-size: 11px; font-weight: 500; line-height: 14px; letter-spacing: 0.02em; }
+.font-headline-xl  { font-family: var(--font-sans); font-size: 36px; font-weight: 700; line-height: 44px; letter-spacing: -0.02em; }
+.font-headline-lg  { font-family: var(--font-sans); font-size: 28px; font-weight: 600; line-height: 36px; letter-spacing: -0.015em; }
+.font-headline-md  { font-family: var(--font-sans); font-size: 20px; font-weight: 600; line-height: 28px; }
+.font-body-lg      { font-family: var(--font-body); font-size: 16px; font-weight: 400; line-height: 24px; }
+.font-body-md      { font-family: var(--font-body); font-size: 14px; font-weight: 400; line-height: 20px; }
+.font-body-sm      { font-family: var(--font-body); font-size: 12px; font-weight: 400; line-height: 16px; }
+/* font-code-* intentionally uses JetBrains Mono for IDs, timestamps, tracker codes, and technical data */
+.font-code-lg      { font-family: var(--font-mono); font-size: 18px; font-weight: 600; line-height: 24px; letter-spacing: 0.05em; }
+.font-code-md      { font-family: var(--font-mono); font-size: 13px; font-weight: 500; line-height: 18px; letter-spacing: 0.02em; }
+.font-code-sm      { font-family: var(--font-mono); font-size: 11px; font-weight: 500; line-height: 14px; letter-spacing: 0.02em; }
 
 /* ─── Responsive headline at mobile ────────────────────────────────────── */
 @media (max-width: 640px) {

@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import Link from "next/link";
+import { Radio, Building2, Shield, Users } from "lucide-react";
 import type { Classroom, HallSession, Violation } from "@/types";
 
 export const dynamic = "force-dynamic";
@@ -568,16 +569,17 @@ export default async function DashboardPage() {
       {/* ── Quick Links Footer ───────────────────────────────────────── */}
       <section className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         {[
-          { href: "/monitoring", label: "Live Monitoring", icon: "📡" },
-          { href: "/classrooms", label: "Examination Halls", icon: "🏛" },
-          { href: "/violations", label: "Evidence Record", icon: "🛡" },
-          { href: "/students", label: "Candidate Roster", icon: "👥" },
+          { href: "/monitoring", label: "Live Monitoring", icon: <Radio className="w-5 h-5" /> },
+          { href: "/classrooms", label: "Examination Halls", icon: <Building2 className="w-5 h-5" /> },
+          { href: "/violations", label: "Evidence Record", icon: <Shield className="w-5 h-5" /> },
+          { href: "/students", label: "Candidate Roster", icon: <Users className="w-5 h-5" /> },
         ].map((link) => (
           <Link
             key={link.href}
             href={link.href}
-            className="bg-white border border-[#e5eeff] rounded-xl p-4 text-center hover:bg-[#eff4ff] hover:border-[#bbd6ff] transition-all shadow-sm group"
+            className="bg-white border border-[#e5eeff] rounded-xl p-4 flex flex-col items-center gap-2 text-center hover:bg-[#eff4ff] hover:border-[#bbd6ff] transition-all shadow-sm group"
           >
+            <span className="text-[#0037b0]">{link.icon}</span>
             <p className="text-[13px] font-semibold text-[#0037b0] group-hover:underline">
               {link.label}
             </p>

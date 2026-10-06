@@ -41,11 +41,11 @@ export function EyeXLogo({
   if (variant === 'wordmark') {
     return (
       <div className={`inline-flex flex-col justify-center leading-none ${className}`}>
-        <span className="font-['Plus_Jakarta_Sans',system-ui,sans-serif] text-xl font-extrabold text-[#0B2A4A] tracking-tight">
+        <span className="font-sans text-xl font-extrabold text-[#0B2A4A] tracking-tight">
           Eye<span className="text-[#1D4ED8]">X</span>
         </span>
         {showTagline && (
-          <span className="font-['Plus_Jakarta_Sans',system-ui,sans-serif] text-[9px] font-semibold text-[#64748B] tracking-[1.2px] uppercase mt-0.5">
+          <span className="font-sans text-[9px] font-semibold text-[#64748B] tracking-[1.2px] uppercase mt-0.5">
             EXAM MONITOR
           </span>
         )}
@@ -66,14 +66,14 @@ export function EyeXLogo({
       />
       <div className="flex flex-col justify-center leading-none">
         <span
-          className="font-['Plus_Jakarta_Sans',system-ui,sans-serif] font-extrabold text-[#0B2A4A] tracking-tight leading-none"
+          className="font-sans font-extrabold text-[#0B2A4A] tracking-tight leading-none"
           style={{ fontSize: `${Math.max(15, Math.round(width * 0.15))}px` }}
         >
           Eye<span className="text-[#1D4ED8]">X</span>
         </span>
         {showTagline && (
           <span
-            className="font-['Plus_Jakarta_Sans',system-ui,sans-serif] font-semibold text-[#64748B] tracking-[1.2px] uppercase mt-1 leading-none"
+            className="font-sans font-semibold text-[#64748B] tracking-[1.2px] uppercase mt-1 leading-none"
             style={{ fontSize: `${Math.max(8, Math.round(width * 0.06))}px` }}
           >
             EXAM MONITOR
