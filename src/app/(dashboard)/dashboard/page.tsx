@@ -313,33 +313,50 @@ export default async function DashboardPage() {
           <Link
             key={m.label}
             href={m.href}
-            className="bg-white p-4 rounded-xl shadow-sm flex flex-col justify-between gap-4 hover:shadow-md transition-shadow group"
+            className="bg-white p-4 rounded-xl shadow-sm flex flex-col justify-between gap-3 hover:shadow-md transition-shadow group"
           >
-            <div className="flex items-center justify-between">
+            {/* Top row: icon + label */}
+            <div className="flex items-center gap-2">
+              <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${m.iconBg}`}>
+                {m.icon}
+              </div>
               <span className="font-code-sm text-[11px] uppercase tracking-wider text-[#466083] font-semibold">
                 {m.label}
               </span>
-              <div
-                className={`w-9 h-9 rounded-lg flex items-center justify-center ${m.iconBg}`}
-              >
-                {m.icon}
-              </div>
             </div>
-            <div>
-              <div className="flex items-baseline gap-2">
+            {/* Bottom row: figures on left, circular ring on right */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-baseline gap-1.5">
                 <span className="font-headline-xl text-[#0b1c30]">
                   {m.value}
                 </span>
-                <span className="font-code-sm text-[13px] text-[#466083] font-semibold">
+                <span className="font-code-sm text-[12px] text-[#466083] font-semibold">
                   {m.sublabel}
                 </span>
               </div>
-            </div>
-            <div className="w-full bg-[#eff4ff] h-1.5 rounded-full overflow-hidden">
-              <div
-                className={`${m.progressColor} h-full rounded-full`}
-                style={{ width: `${m.progress || (m.value > 0 ? 60 : 5)}%` }}
-              />
+              {/* Circular Progress Ring */}
+              <svg width="48" height="48" viewBox="0 0 48 48" className="-rotate-90 shrink-0">
+                {/* Track */}
+                <circle
+                  cx="24" cy="24" r="18"
+                  fill="none"
+                  stroke="#eff4ff"
+                  strokeWidth="5"
+                />
+                {/* Progress */}
+                <circle
+                  cx="24" cy="24" r="18"
+                  fill="none"
+                  strokeWidth="5"
+                  strokeLinecap="round"
+                  style={{
+                    stroke: m.progressColor.startsWith('bg-[#') ? m.progressColor.replace('bg-[#', '#').replace(']', '') : undefined,
+                    strokeDasharray: `${2 * Math.PI * 18}`,
+                    strokeDashoffset: `${2 * Math.PI * 18 * (1 - (m.progress || (m.value > 0 ? 60 : 5)) / 100)}`,
+                    transition: 'stroke-dashoffset 0.5s ease',
+                  }}
+                />
+              </svg>
             </div>
           </Link>
         ))}
@@ -410,13 +427,9 @@ export default async function DashboardPage() {
               return (
                 <div
                   key={hall.id}
-                  className="bg-white rounded-xl shadow-sm p-4 flex flex-col justify-between gap-4 relative overflow-hidden"
+                  className="bg-white rounded-xl shadow-sm p-4 flex flex-col justify-between gap-4"
                 >
-                  {/* Left accent bar */}
-                  <div
-                    className={`absolute left-0 top-0 bottom-0 w-1.5 ${isActive ? "bg-emerald-500" : "bg-[#c4c5d7]"}`}
-                  />
-                  <div className="pl-3 flex flex-col gap-1">
+                  <div className="flex flex-col gap-1">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <span className="font-headline-md text-[#0b1c30]">
@@ -438,7 +451,7 @@ export default async function DashboardPage() {
                       </p>
                     )}
                   </div>
-                  <div className="pl-3 flex items-center justify-between bg-[#f8f9ff] p-2.5 rounded-lg">
+                  <div className="flex items-center justify-between bg-[#f8f9ff] p-2.5 rounded-lg">
                     {session ? (
                       <>
                         <span className="font-code-sm text-[11px] text-[#434655]">

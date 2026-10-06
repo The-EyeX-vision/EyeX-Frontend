@@ -155,7 +155,7 @@ export function TopNavbar({
             <div className="hidden sm:block w-px h-6 bg-[#c4c5d7] shrink-0" />
 
             {/* School identity & Active session ticker */}
-            <div className="flex flex-col min-w-0">
+            <div className="hidden sm:flex flex-col min-w-0">
               <div className="flex items-center gap-2">
                 <span className="text-[13px] font-semibold text-[#0b1c30] truncate max-w-[180px] sm:max-w-[260px]">
                   {schoolName}
