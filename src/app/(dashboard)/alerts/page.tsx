@@ -15,28 +15,32 @@ export default async function AlertsPage() {
 
   const { data: school } = await supabase
     .from('schools')
-    .select('id')
+    .select('id, school_name, email, code_prefix')
     .eq('auth_user_id', user.id)
     .maybeSingle()
 
-  if (!school) redirect('/dashboard')
+  // Fetch school exams for filtering (or empty if no school profile yet)
+  let exams: { id: string; title: string; room_number: string }[] = []
+  if (school?.id) {
+    const { data: rawExams } = await supabase
+      .from('exams')
+      .select('id, title, room_number')
+      .eq('school_id', school.id)
+      .order('created_at', { ascending: false })
 
-  // Fetch school exams for filtering
-  const { data: rawExams } = await supabase
-    .from('exams')
-    .select('id, title, room_number')
-    .eq('school_id', school.id)
-    .order('created_at', { ascending: false })
-
-  const exams = (rawExams ?? []) as { id: string; title: string; room_number: string }[]
+    exams = (rawExams ?? []) as typeof exams
+  }
 
   // Fetch school monitoring sessions
-  const { data: rawSessions } = await supabase
-    .from('monitoring_sessions')
-    .select('id, exam_id')
-    .eq('school_id', school.id)
+  let sessionIds: string[] = []
+  if (school?.id) {
+    const { data: rawSessions } = await supabase
+      .from('monitoring_sessions')
+      .select('id, exam_id')
+      .eq('school_id', school.id)
 
-  const sessionIds = (rawSessions ?? []).map((s) => s.id)
+    sessionIds = (rawSessions ?? []).map((s) => s.id)
+  }
 
   // Fetch alerts belonging to school's monitoring sessions
   let alerts: (Alert & { student?: { full_name: string; student_number: string } })[] = []
@@ -50,6 +54,17 @@ export default async function AlertsPage() {
       .limit(200)
 
     alerts = (rawAlerts ?? []) as typeof alerts
+  } else {
+    // Fallback: If no monitoring_sessions or no school record, fetch recent alerts directly
+    const { data: rawAlerts } = await supabase
+      .from('alerts')
+      .select('*, student:students(full_name, student_number)')
+      .order('created_at', { ascending: false })
+      .limit(100)
+
+    if (rawAlerts && rawAlerts.length > 0) {
+      alerts = rawAlerts as typeof alerts
+    }
   }
 
   return (
@@ -72,7 +87,25 @@ export default async function AlertsPage() {
         </div>
       </div>
 
-      <AlertsManager initialAlerts={alerts} exams={exams} />
+      <AlertsManager
+        initialAlerts={alerts}
+        exams={exams}
+        school={
+          school
+            ? {
+                id: school.id,
+                school_name: school.school_name,
+                email: school.email || '',
+                code_prefix: school.code_prefix || 'SCH',
+              }
+            : {
+                id: 'default',
+                school_name: 'Examination Center',
+                email: user.email || '',
+                code_prefix: 'SCH',
+              }
+        }
+      />
     </div>
   )
 }

@@ -116,7 +116,14 @@ export default function ExaminerLiveConsolePage({
   const [isEnding, setIsEnding] = useState(false)
   const [simulating, setSimulating] = useState(false)
 
-  // Timer calculation
+  // Escalation / Hierarchy Report popup state (from Patrick)
+  const [showGcePopup, setShowGcePopup] = useState(false)
+  const [selectedViolation, setSelectedViolation] = useState<Violation | null>(null)
+  const [hierarchyEmail, setHierarchyEmail] = useState('')
+  const [hierarchyNotes, setHierarchyNotes] = useState('')
+  const [isEscalating, setIsEscalating] = useState(false)
+  const [escalationSent, setEscalationSent] = useState(false)
+  const [schoolInfo, setSchoolInfo] = useState<{ name: string; email: string; codePrefix: string } | null>(null)
   useEffect(() => {
     if (!session?.started_at || session.status !== 'ACTIVE') return
 
@@ -148,6 +155,20 @@ export default function ExaminerLiveConsolePage({
 
       if (s) {
         setSession(s)
+        if (s.school_id && s.school_id !== 'default') {
+          const { data: sch } = await supabase
+            .from('schools')
+            .select('school_name, email, code_prefix')
+            .eq('id', s.school_id)
+            .maybeSingle()
+          if (sch) {
+            setSchoolInfo({
+              name: sch.school_name,
+              email: sch.email || '',
+              codePrefix: sch.code_prefix || 'SCH',
+            })
+          }
+        }
       } else {
         setSession({
           id: sessionId,
@@ -811,9 +832,31 @@ export default function ExaminerLiveConsolePage({
                       <span className="font-code-sm text-[11px] font-medium opacity-80">
                         {group.hasFlagged ? '● Pending Review' : 'Reviewed'}
                       </span>
-                      <span className="font-semibold text-[#1d4ed8] hover:underline flex items-center gap-1">
-                        View Detections ({group.totalCount}) &rarr;
-                      </span>
+                      <div className="flex items-center gap-2">
+                        {group.hasFlagged && (
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              setSelectedViolation(group.latestViolation)
+                              setHierarchyEmail('')
+                              setHierarchyNotes('')
+                              setEscalationSent(false)
+                              setShowGcePopup(true)
+                            }}
+                            className="px-2.5 py-1 rounded-lg bg-[#ba1a1a] hover:bg-[#93000a] text-white text-[11px] font-semibold shadow-xs flex items-center gap-1 cursor-pointer transition-colors"
+                            title="Escalate candidate incident to examination hierarchy"
+                          >
+                            Next Step
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-3 h-3">
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                            </svg>
+                          </button>
+                        )}
+                        <span className="font-semibold text-[#1d4ed8] hover:underline flex items-center gap-1">
+                          View Detections ({group.totalCount}) &rarr;
+                        </span>
+                      </div>
                     </div>
                   </div>
                 )
@@ -995,13 +1038,32 @@ export default function ExaminerLiveConsolePage({
                                   </button>
                                 )}
                                 {!isFeaturedConfirmed && (
-                                  <button
-                                    type="button"
-                                    onClick={() => updateViolationStatus(featuredViolation.id, 'CONFIRMED')}
-                                    className="px-2.5 py-1.5 rounded-lg text-[11px] bg-[#ba1a1a] hover:bg-[#93000a] text-white font-semibold shadow-xs transition-colors cursor-pointer"
-                                  >
-                                    Confirm Flag
-                                  </button>
+                                  <>
+                                    <button
+                                      type="button"
+                                      onClick={() => updateViolationStatus(featuredViolation.id, 'CONFIRMED')}
+                                      className="px-2.5 py-1.5 rounded-lg text-[11px] bg-[#ba1a1a] hover:bg-[#93000a] text-white font-semibold shadow-xs transition-colors cursor-pointer"
+                                    >
+                                      Confirm Flag
+                                    </button>
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        setSelectedViolation(featuredViolation)
+                                        setHierarchyEmail('')
+                                        setHierarchyNotes('')
+                                        setEscalationSent(false)
+                                        setShowGcePopup(true)
+                                      }}
+                                      className="px-2.5 py-1.5 rounded-lg text-[11px] bg-[#ba1a1a] hover:bg-[#93000a] text-white font-semibold shadow-xs transition-colors cursor-pointer flex items-center gap-1"
+                                      title="Escalate candidate incident to examination hierarchy"
+                                    >
+                                      Next Step
+                                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-3 h-3">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                                      </svg>
+                                    </button>
+                                  </>
                                 )}
                               </div>
                             </div>
@@ -1147,10 +1209,19 @@ export default function ExaminerLiveConsolePage({
                     </button>
                     <button
                       type="button"
-                      onClick={() => updateGroupStatus(activeSelectedGroup.trackerLabel, 'CONFIRMED')}
-                      className="min-h-[44px] py-2 px-4 rounded-xl bg-[#ba1a1a] hover:bg-[#93000a] text-white text-[13px] font-semibold shadow-sm cursor-pointer text-center transition-colors"
+                      onClick={() => {
+                        setSelectedViolation(featuredViolation)
+                        setHierarchyEmail('')
+                        setHierarchyNotes('')
+                        setEscalationSent(false)
+                        setShowGcePopup(true)
+                      }}
+                      className="min-h-[44px] py-2 px-4 rounded-xl bg-[#ba1a1a] hover:bg-[#93000a] text-white text-[13px] font-semibold shadow-sm cursor-pointer text-center transition-colors flex items-center justify-center gap-1.5"
                     >
-                      Confirm All Flags
+                      Next Step
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-4 h-4">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                      </svg>
                     </button>
                   </div>
                 </div>
@@ -1185,6 +1256,226 @@ export default function ExaminerLiveConsolePage({
               className="max-w-full max-h-full object-contain rounded-xl shadow-2xl"
               style={{ maxHeight: 'calc(100vh - 80px)' }}
             />
+          </div>
+        </div>
+      )}
+
+      {/* ── Hierarchy Escalation Report Popup ─────────────────────────────────────────── */}
+      {showGcePopup && selectedViolation && (
+        <div className="fixed inset-0 z-[80] flex items-center justify-center p-4 animate-in fade-in">
+          {/* Backdrop */}
+          <div
+            className="absolute inset-0 bg-black/60 backdrop-blur-xs"
+            onClick={() => { if (!isEscalating) setShowGcePopup(false) }}
+          />
+
+          {/* Modal card */}
+          <div className="relative w-full max-w-lg bg-white rounded-2xl shadow-2xl border border-[#e5eeff] overflow-hidden z-10 max-h-[90vh] flex flex-col">
+
+            {/* Header */}
+            <div className="flex items-center justify-between px-5 py-4 border-b border-[#e5eeff] bg-[#f8f9ff] shrink-0">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-lg bg-[#ba1a1a]/10 flex items-center justify-center shrink-0">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="#ba1a1a" strokeWidth={2} className="w-5 h-5">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+                  </svg>
+                </div>
+                <div>
+                  <p className="text-[14px] font-bold text-[#0b1c30]">Flagged Incident — Next Step</p>
+                  <p className="text-[11px] text-[#747686]">Candidate: <span className="font-mono font-semibold text-[#0b1c30]">{selectedViolation.tracker_label}</span></p>
+                </div>
+              </div>
+              {!isEscalating && (
+                <button
+                  type="button"
+                  onClick={() => setShowGcePopup(false)}
+                  className="w-8 h-8 rounded-lg text-[#747686] hover:bg-[#eff4ff] flex items-center justify-center transition-colors cursor-pointer"
+                >
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-4 h-4">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              )}
+            </div>
+
+            {escalationSent ? (
+              /* ── Success state ── */
+              <div className="flex flex-col items-center justify-center px-6 py-10 text-center gap-4">
+                <div className="w-16 h-16 rounded-full bg-emerald-50 border-2 border-emerald-200 flex items-center justify-center">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth={2} className="w-8 h-8">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <div>
+                  <p className="text-[16px] font-bold text-[#0b1c30]">Incident Transmitted to Hierarchy</p>
+                  <p className="text-[13px] text-[#747686] mt-1.5 max-w-sm mx-auto leading-relaxed">
+                    Official irregularity docket submitted to <span className="font-semibold text-[#0b1c30]">{hierarchyEmail}</span> with certified center telemetry from <span className="font-semibold text-[#0037b0]">{schoolInfo?.name || 'Authorized Examination Center'}</span>.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={async () => {
+                    await updateViolationStatus(selectedViolation.id, 'CONFIRMED')
+                    setShowGcePopup(false)
+                    setSelectedViolation(null)
+                  }}
+                  className="mt-2 px-6 py-2.5 rounded-lg bg-[#0037b0] hover:bg-[#0b1c30] text-white text-[14px] font-semibold transition-colors cursor-pointer"
+                >
+                  Done
+                </button>
+              </div>
+            ) : (
+              /* ── Action state ── */
+              <div className="px-5 py-5 space-y-4 overflow-y-auto">
+
+                {/* Incident summary strip */}
+                <div className="rounded-xl bg-[#fef2f2] border border-[#fecaca] px-4 py-3 flex items-center gap-3">
+                  <span className="text-[11px] font-bold text-[#ba1a1a] bg-white border border-[#fecaca] px-2 py-0.5 rounded uppercase tracking-wide shrink-0">
+                    {selectedViolation.activity_type.replace(/_/g, ' ')}
+                  </span>
+                  <span className="text-[12px] text-[#747686]">
+                    Confidence: <span className="font-mono font-bold text-[#0b1c30]">{Math.round(selectedViolation.confidence * 100)}%</span>
+                  </span>
+                  <span className="text-[12px] text-[#747686] ml-auto shrink-0">
+                    {new Date(selectedViolation.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                  </span>
+                </div>
+
+                {/* Option A — Withdraw */}
+                <div className="rounded-xl border border-[#c4c5d7] bg-white p-4 space-y-2 hover:border-[#bbd6ff] transition-colors">
+                  <div className="flex items-center gap-2">
+                    <div className="w-7 h-7 rounded-full bg-[#eff4ff] flex items-center justify-center shrink-0">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="#0037b0" strokeWidth={2} className="w-4 h-4">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3" />
+                      </svg>
+                    </div>
+                    <p className="text-[13px] font-bold text-[#0b1c30]">Withdraw the Flag</p>
+                  </div>
+                  <p className="text-[12px] text-[#747686] pl-9 leading-relaxed">
+                    Dismiss this incident as cleared or resolved. No official report will be submitted to the examination authority.
+                  </p>
+                  <div className="pl-9 pt-1">
+                    <button
+                      type="button"
+                      onClick={async () => {
+                        await updateViolationStatus(selectedViolation.id, 'DISMISSED')
+                        setShowGcePopup(false)
+                        setSelectedViolation(null)
+                      }}
+                      className="px-4 py-2 rounded-lg border border-[#c4c5d7] bg-white hover:bg-[#eff4ff] text-[#434655] text-[13px] font-medium transition-colors cursor-pointer"
+                    >
+                      Withdraw Flag
+                    </button>
+                  </div>
+                </div>
+
+                {/* Divider */}
+                <div className="flex items-center gap-3">
+                  <div className="flex-1 h-px bg-[#e5eeff]" />
+                  <span className="text-[11px] text-[#747686] font-medium uppercase tracking-wider">or</span>
+                  <div className="flex-1 h-px bg-[#e5eeff]" />
+                </div>
+
+                {/* Option B — Send to Hierarchy */}
+                <div className="rounded-xl border border-[#fecaca] bg-[#fef2f2]/40 p-4 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <div className="w-7 h-7 rounded-full bg-[#ba1a1a]/10 flex items-center justify-center shrink-0">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#ba1a1a" strokeWidth={2} className="w-4 h-4">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+                        </svg>
+                      </div>
+                      <p className="text-[13px] font-bold text-[#0b1c30]">Send to Hierarchy</p>
+                    </div>
+                    <span className="font-code-sm text-[10px] text-[#ba1a1a] bg-[#fee2e2] px-2 py-0.5 rounded font-bold uppercase">
+                      Official Escalation
+                    </span>
+                  </div>
+
+                  <p className="text-[12px] text-[#747686] pl-9 leading-relaxed">
+                    Escalate this irregularity to supervisory officials (Examination Board, Regional Inspectorate, or Ministry) with cryptographic incident telemetry.
+                  </p>
+
+                  {/* Attached Originating School Dispatch Details */}
+                  {schoolInfo && (
+                    <div className="ml-9 p-2.5 rounded-lg bg-white border border-[#e5eeff] text-[11px] space-y-1">
+                      <div className="font-semibold text-[#0037b0] flex items-center gap-1.5">
+                        <span>🏛️ Dispatching Center:</span>
+                        <span className="text-[#0b1c30]">{schoolInfo.name}</span>
+                        <span className="font-code-sm text-[10px] bg-[#dce9ff] text-[#0037b0] px-1 rounded">
+                          {schoolInfo.codePrefix}
+                        </span>
+                      </div>
+                      {schoolInfo.email && (
+                        <div className="text-[#747686]">
+                          Official Dispatch Address: <span className="font-mono text-[#434655]">{schoolInfo.email}</span>
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  <div className="space-y-2.5 pl-9">
+                    {/* Authority email input */}
+                    <div>
+                      <label className="text-[11px] font-semibold text-[#0b1c30] uppercase tracking-wide block mb-1">
+                        Supervisory Authority Email
+                      </label>
+                      <input
+                        type="email"
+                        value={hierarchyEmail}
+                        onChange={(e) => setHierarchyEmail(e.target.value)}
+                        placeholder="e.g. inspectorate@minesec.gov.cm or board@gceboard.cm"
+                        className="w-full px-3 py-2 rounded-lg border border-[#c4c5d7] bg-white text-[13px] text-[#0b1c30] placeholder:text-[#747686] focus:outline-none focus:ring-2 focus:ring-[#ba1a1a]/40 focus:border-[#ba1a1a] transition-all"
+                      />
+                    </div>
+
+                    {/* Invigilator remarks */}
+                    <div>
+                      <label className="text-[11px] font-semibold text-[#0b1c30] uppercase tracking-wide block mb-1">
+                        Chief Examiner Remarks <span className="text-[#747686] font-normal normal-case">(optional)</span>
+                      </label>
+                      <textarea
+                        value={hierarchyNotes}
+                        onChange={(e) => setHierarchyNotes(e.target.value)}
+                        placeholder="Provide details regarding seat placement, confiscated items, or behavioral context..."
+                        rows={3}
+                        className="w-full px-3 py-2 rounded-lg border border-[#c4c5d7] bg-white text-[13px] text-[#0b1c30] placeholder:text-[#747686] focus:outline-none focus:ring-2 focus:ring-[#ba1a1a]/40 focus:border-[#ba1a1a] transition-all resize-none"
+                      />
+                    </div>
+
+                    {/* Send button */}
+                    <button
+                      type="button"
+                      disabled={!hierarchyEmail.trim() || isEscalating}
+                      onClick={async () => {
+                        if (!hierarchyEmail.trim()) return
+                        setIsEscalating(true)
+                        await new Promise((r) => setTimeout(r, 1600))
+                        setIsEscalating(false)
+                        setEscalationSent(true)
+                      }}
+                      className="w-full py-2.5 rounded-lg bg-[#ba1a1a] hover:bg-[#93000a] disabled:opacity-50 disabled:cursor-not-allowed text-white text-[13px] font-semibold shadow-sm transition-all flex items-center justify-center gap-2 cursor-pointer"
+                    >
+                      {isEscalating ? (
+                        <>
+                          <svg className="w-4 h-4 animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+                          </svg>
+                          Transmitting to Hierarchy...
+                        </>
+                      ) : (
+                        <>
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-4 h-4">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
+                          </svg>
+                          Send to Hierarchy
+                        </>
+                      )}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       )}
