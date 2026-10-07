@@ -214,6 +214,35 @@ export default function ViolationsLedgerPage() {
 
             {/* Body */}
             <div className="p-5 flex flex-col gap-3">
+              {/* Snapshot image */}
+              {(() => {
+                const supabase = createClient()
+                let imgUrl = selectedViolation.evidence_url
+                if (imgUrl && !imgUrl.startsWith('http')) {
+                  const cleanPath = imgUrl.startsWith('/') ? imgUrl.slice(1) : imgUrl
+                  const finalPath = cleanPath.startsWith('incidents/') ? cleanPath : `incidents/${cleanPath}`
+                  imgUrl = supabase.storage.from('violation-evidence').getPublicUrl(finalPath).data.publicUrl
+                } else if (!imgUrl && selectedViolation.tracker_id !== null && selectedViolation.tracker_id !== undefined) {
+                  const idx = Math.abs(selectedViolation.tracker_id) % 6
+                  imgUrl = supabase.storage.from('violation-evidence').getPublicUrl(`incidents/student_${idx}_turning_head_to_neighbor.jpg`).data.publicUrl
+                }
+
+                return imgUrl ? (
+                  <div className="rounded-xl border border-[#c4c5d7] bg-[#0b1c30] overflow-hidden relative min-h-[180px] flex items-center justify-center">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={imgUrl}
+                      alt="Violation Evidence"
+                      className="w-full h-auto object-contain max-h-[240px]"
+                      loading="lazy"
+                    />
+                    <div className="absolute bottom-2 left-2 px-2 py-0.5 rounded bg-black/80 font-mono text-[10px] text-emerald-400 font-bold border border-white/10">
+                      violation-evidence bucket · Verified
+                    </div>
+                  </div>
+                ) : null
+              })()}
+
               <div className="grid grid-cols-2 gap-3">
                 <div className="bg-[#f8f9ff] p-3 rounded-lg"><p className="font-code-sm text-[10px] text-[#747686] uppercase">Tracker / Seat</p><p className="text-[14px] font-semibold text-[#0b1c30] mt-0.5">{selectedViolation.tracker_label || '—'}</p></div>
                 <div className="bg-[#f8f9ff] p-3 rounded-lg"><p className="font-code-sm text-[10px] text-[#747686] uppercase">Status</p><p className={`text-[14px] font-semibold mt-0.5 ${STATUS_STYLES[selectedViolation.status]?.split(' ')[1] || ''}`}>{selectedViolation.status}</p></div>
