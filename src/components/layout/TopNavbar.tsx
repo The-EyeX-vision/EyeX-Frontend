@@ -154,8 +154,8 @@ export function TopNavbar({
 
             <div className="hidden sm:block w-px h-6 bg-[#c4c5d7] shrink-0" />
 
-            {/* School identity & Active session ticker */}
-            <div className="flex flex-col min-w-0">
+            {/* School identity — desktop only */}
+            <div className="hidden sm:flex flex-col min-w-0">
               <div className="flex items-center gap-2">
                 <span className="text-[13px] font-semibold text-[#0b1c30] truncate max-w-[180px] sm:max-w-[260px]">
                   {schoolName}
@@ -164,26 +164,39 @@ export function TopNavbar({
                   {schoolPrefix}
                 </span>
               </div>
-              {activeSession ? (
-                <Link
-                  href={`/monitoring/${activeSession.id}`}
-                  className="flex items-center gap-1.5 group"
-                >
-                  <span className="relative flex h-1.5 w-1.5">
-                    <span className="live-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                    <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500" />
-                  </span>
-                  <span className="text-[11px] text-emerald-700 font-semibold truncate max-w-[180px] sm:max-w-[280px] group-hover:underline">
-                    Live: {activeSession.exam?.title ?? "Active Session"} ·{" "}
-                    {elapsed}
-                  </span>
-                </Link>
-              ) : (
-                <span className="text-[11px] text-[#747686] hidden sm:inline">
+              {!activeSession && (
+                <span className="text-[11px] text-[#747686]">
                   Station Online · Supervision Ready
                 </span>
               )}
             </div>
+
+            {/* Active session pill — always visible on ALL screen sizes when a session is running */}
+            {activeSession ? (
+              <Link
+                href={`/monitoring/${activeSession.id}`}
+                className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-emerald-50 border border-emerald-200 hover:bg-emerald-100 hover:border-emerald-300 active:scale-95 transition-all group shrink-0"
+                title={`Go to live session: ${activeSession.exam?.title ?? "Active Session"}`}
+              >
+                <span className="relative flex h-2 w-2 shrink-0">
+                  <span className="live-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+                </span>
+                {/* Mobile: just "LIVE" label */}
+                <span className="text-[12px] font-bold text-emerald-700 sm:hidden">
+                  LIVE
+                </span>
+                {/* Desktop: full exam title + elapsed */}
+                <span className="hidden sm:flex items-center gap-2">
+                  <span className="text-[12px] font-semibold text-emerald-700 truncate max-w-[160px] lg:max-w-[240px] group-hover:underline">
+                    {activeSession.exam?.title ?? "Active Session"}
+                  </span>
+                  <span className="font-code-sm text-[11px] text-emerald-600 bg-emerald-100 px-1.5 py-0.5 rounded shrink-0">
+                    {elapsed}
+                  </span>
+                </span>
+              </Link>
+            ) : null}
           </div>
 
           {/* ── RIGHT: Telemetry + Alerts + Emergency + User ──────────── */}

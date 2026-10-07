@@ -181,12 +181,16 @@ export function Sidebar({
     },
   ]
 
+  // On mobile the drawer is always fully expanded regardless of desktop collapse state
+  const expanded = !isCollapsed || isMobileOpen
+
   const sidebarContent = (
     <div className="flex flex-col h-full bg-white text-[#0b1c30]">
       {/* ─── Header: Brand + Collapse Toggle ────────────────────────────── */}
+      {/* Hidden on mobile — the drawer already renders its own logo header */}
       <div className={`h-20 flex items-center border-b border-[#c4c5d7] shrink-0 transition-all ${
-        isCollapsed ? 'justify-center px-2' : 'justify-between px-5'
-      }`}>
+        isMobileOpen ? 'hidden' : ''
+      } ${isCollapsed ? 'justify-center px-2' : 'justify-between px-5'}`}>
         {isCollapsed ? (
           <Link href="/dashboard" className="flex items-center justify-center p-1 rounded-lg hover:bg-[#eff4ff] transition-colors" title="EyeX Examination Monitor">
             <EyeXLogo variant="icon" width={34} />
@@ -216,7 +220,7 @@ export function Sidebar({
         {navGroups.map((group) => (
           <div key={group.groupLabel} className="space-y-1">
             {/* Section label (expanded only) */}
-            {!isCollapsed && (
+            {expanded && (
               <p className="px-3 text-[10px] font-bold uppercase tracking-wider text-[#747686] mb-1.5 select-none">
                 {group.groupLabel}
               </p>
@@ -231,7 +235,7 @@ export function Sidebar({
                   onClick={onCloseMobile}
                   title={isCollapsed ? item.label : undefined}
                   className={`group relative flex items-center rounded-xl transition-all ${
-                    isCollapsed ? 'justify-center p-3' : 'px-3.5 py-2.5 gap-3'
+                    expanded ? 'px-3.5 py-2.5 gap-3' : 'justify-center p-3'
                   } ${
                     active
                       ? 'bg-[#0037b0] text-white font-semibold shadow-xs'
@@ -239,7 +243,7 @@ export function Sidebar({
                   }`}
                 >
                   {/* Left active marker (when collapsed) */}
-                  {isCollapsed && active && (
+                  {!expanded && active && (
                     <span className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-[#0037b0] rounded-r-full" />
                   )}
 
@@ -249,14 +253,14 @@ export function Sidebar({
                   </span>
 
                   {/* Label (expanded only) */}
-                  {!isCollapsed && (
+                  {expanded && (
                     <span className="text-[13px] leading-tight truncate flex-1">
                       {item.label}
                     </span>
                   )}
 
                   {/* Badges */}
-                  {!isCollapsed && item.badge && (
+                  {expanded && item.badge && (
                     <span
                       className={`font-code-sm text-[10px] px-1.5 py-0.5 rounded-full font-bold uppercase tracking-wider shrink-0 ${
                         item.badgeColor ?? 'bg-[#dce9ff] text-[#0037b0]'
@@ -267,12 +271,12 @@ export function Sidebar({
                   )}
 
                   {/* Collapsed dot badge */}
-                  {isCollapsed && item.badge && (
+                  {!expanded && item.badge && (
                     <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-[#ba1a1a] ring-2 ring-white" />
                   )}
 
                   {/* Tooltip for collapsed state on hover */}
-                  {isCollapsed && (
+                  {!expanded && (
                     <div className="hidden group-hover:lg:block absolute left-full ml-3 px-2.5 py-1.5 bg-[#0b1c30] text-white text-[12px] font-medium rounded-lg shadow-xl whitespace-nowrap z-50 pointer-events-none">
                       {item.label}
                       {item.badge && (
@@ -291,9 +295,9 @@ export function Sidebar({
 
       {/* ─── Footer: School Context & Expand button ────────────────────── */}
       <div className={`border-t border-[#c4c5d7] p-3 shrink-0 bg-[#f8f9ff] ${
-        isCollapsed ? 'flex flex-col items-center gap-2' : ''
+        !expanded ? 'flex flex-col items-center gap-2' : ''
       }`}>
-        {isCollapsed ? (
+        {!expanded ? (
           <>
             <button
               type="button"
