@@ -393,7 +393,7 @@ export function AlertsManager({ initialAlerts, exams, school }: Props) {
       {/* ── Image Preview Modal ────────────────────────────────────────────── */}
       {selectedScreenshot && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm">
-          <div className="relative max-w-3xl w-full bg-white rounded-2xl overflow-hidden shadow-2xl border border-[#c4c5d7]">
+          <div className="relative max-w-3xl w-full bg-white rounded-2xl overflow-hidden shadow-2xl border border-[#c4c5d7] max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between px-5 py-3 border-b border-[#e5eeff] bg-[#f8f9ff]">
               <div className="flex items-center gap-2">
                 <span className="font-semibold text-[13px] text-[#0b1c30]">Incident Evidence Capture</span>

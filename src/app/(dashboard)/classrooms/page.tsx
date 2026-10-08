@@ -102,48 +102,46 @@ export default function ClassroomsPage() {
 
       {/* ── Page Header ───────────────────────────────────────────── */}
       <div className="flex flex-col gap-1">
-        <nav className="flex items-center gap-1.5 text-[13px] text-[#747686]">
-          <span className="hover:text-[#0037b0] cursor-pointer">Examinations</span>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-3.5 h-3.5"><path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
-          <span className="font-medium text-[#0b1c30]">Examination Halls Directory</span>
-        </nav>
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pt-1">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-1">
           <div className="flex flex-col gap-1">
             <div className="flex items-center gap-2.5">
-              <span className="w-2.5 h-6 bg-[#1d4ed8] rounded-sm" />
-              <h1 className="font-headline-lg text-[#0b1c30] tracking-tight">Examination Halls & Hall Terminals</h1>
+              <span className="w-2.5 h-6 bg-[#1d4ed8] rounded-sm shrink-0" />
+              <h1 className="font-headline-lg text-[#0b1c30] tracking-tight">
+                <span className="sm:hidden">Examination Halls</span>
+                <span className="hidden sm:inline">Examination Halls &amp; Hall Terminals</span>
+              </h1>
             </div>
-            <p className="text-[14px] text-[#434655] pl-5 leading-relaxed">
+            <p className="text-[14px] text-[#434655] pl-5 leading-relaxed hidden sm:block">
               Configure examination halls, manage 8-character invigilator access codes, and monitor camera rig connections.
             </p>
           </div>
-          <div className="flex items-center gap-2 self-start lg:self-auto">
+          <div className="flex items-center gap-2 self-start sm:self-auto">
             <button
               onClick={() => setIsModalOpen(true)}
-              className="flex items-center gap-2 bg-[#1d4ed8] text-white font-semibold px-4 py-2 rounded-lg text-[14px] hover:bg-[#0037b0] transition-colors shadow-sm"
+              className="flex items-center gap-2 bg-[#1d4ed8] text-white font-semibold px-3.5 py-2 sm:px-4 sm:py-2 rounded-lg text-[13px] sm:text-[14px] hover:bg-[#0037b0] transition-colors shadow-sm"
             >
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-4 h-4">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
               </svg>
-              Register New Hall
+              <span>Register New Hall</span>
             </button>
           </div>
         </div>
       </div>
 
       {/* ── Stats Row ─────────────────────────────────────────────── */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
         {[
           { label: 'Configured Halls', value: classrooms.length, sub: 'Halls Calibrated', iconColor: 'text-[#0037b0] bg-[#eff4ff]' },
           { label: 'Active Cameras', value: totalCameras, sub: 'Total Feeds', iconColor: 'text-[#0037b0] bg-[#eff4ff]' },
           { label: 'Access Tokens', value: classrooms.length, sub: 'Active Passkeys', iconColor: 'text-[#0037b0] bg-[#eff4ff]' },
           { label: 'Expired Codes', value: classrooms.filter((h) => h.code_expires_at && new Date(h.code_expires_at) < new Date()).length, sub: 'Need Rotation', iconColor: 'text-[#b91c1c] bg-[#fef2f2]' },
         ].map((s) => (
-          <div key={s.label} className="bg-white p-4 rounded-xl shadow-sm flex flex-col gap-2">
-            <span className="font-code-sm text-[11px] uppercase tracking-wider text-[#747686] font-semibold">{s.label}</span>
+          <div key={s.label} className="bg-white p-3 sm:p-4 rounded-xl shadow-sm flex flex-col gap-1.5 sm:gap-2">
+            <span className="font-code-sm text-[10px] sm:text-[11px] uppercase tracking-wider text-[#747686] font-semibold">{s.label}</span>
             <div className="flex items-baseline gap-2">
-              <span className="font-headline-xl text-[#0b1c30] font-bold">{s.value}</span>
-              <span className="text-[12px] text-[#466083] font-medium">{s.sub}</span>
+              <span className="font-headline-xl text-[#0b1c30] font-bold text-xl sm:text-2xl">{s.value}</span>
+              <span className="text-[11px] sm:text-[12px] text-[#466083] font-medium hidden sm:inline">{s.sub}</span>
             </div>
           </div>
         ))}
@@ -190,14 +188,14 @@ export default function ClassroomsPage() {
       ) : (
         <div className="bg-white rounded-xl shadow-sm overflow-hidden">
           <div className="overflow-x-auto">
-            <table className="w-full text-left min-w-[700px]">
+            <table className="w-full text-left min-w-[340px] sm:min-w-[650px]">
               <thead>
                 <tr className="bg-[#eff4ff] font-code-sm text-[11px] text-[#747686] uppercase tracking-wider">
-                  <th className="py-3 px-5">Hall & Location</th>
-                  <th className="py-3 px-5">Terminal Invigilator Passcode</th>
-                  <th className="py-3 px-5">Camera Feeds</th>
-                  <th className="py-3 px-5">Status</th>
-                  <th className="py-3 px-5 text-right">Actions</th>
+                  <th className="py-3 px-3 sm:px-5">Hall</th>
+                  <th className="py-3 px-3 sm:px-5">Access Code</th>
+                  <th className="py-3 px-4 hidden md:table-cell">Camera Feeds</th>
+                  <th className="py-3 px-3 sm:px-5">Status</th>
+                  <th className="py-3 px-3 sm:px-5 text-right">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-[#eff4ff]">
@@ -209,22 +207,22 @@ export default function ClassroomsPage() {
 
                   return (
                     <tr key={hall.id} className="hover:bg-[#f8f9ff] transition-colors">
-                      <td className="py-4 px-5">
-                        <Link href={`/classrooms/${hall.id}`} className="font-semibold text-[14px] text-[#0b1c30] hover:text-[#1d4ed8] transition-colors">
+                      <td className="py-3.5 sm:py-4 px-3 sm:px-5">
+                        <Link href={`/classrooms/${hall.id}`} className="font-semibold text-[13px] sm:text-[14px] text-[#0b1c30] hover:text-[#1d4ed8] transition-colors">
                           {hall.name}
                         </Link>
-                        <p className="font-code-sm text-[11px] text-[#747686] mt-0.5">ID: {hall.id.slice(0, 8)}…</p>
+                        <p className="font-code-sm text-[10px] sm:text-[11px] text-[#747686] mt-0.5 hidden sm:block">ID: {hall.id.slice(0, 8)}…</p>
                       </td>
 
-                      <td className="py-4 px-5">
-                        <div className="flex items-center gap-2">
-                          <span className="font-code-md text-[13px] font-bold text-[#0037b0] bg-[#eff4ff] px-3 py-1 rounded-lg tracking-widest border border-[#bbd6ff]">
+                      <td className="py-3.5 sm:py-4 px-3 sm:px-5">
+                        <div className="flex items-center gap-1.5 sm:gap-2">
+                          <span className="font-code-md text-[12px] sm:text-[13px] font-bold text-[#0037b0] bg-[#eff4ff] px-2 sm:px-3 py-1 rounded-lg tracking-wider sm:tracking-widest border border-[#bbd6ff]">
                             {hall.access_code}
                           </span>
                           <button
                             onClick={() => copyCode(hall)}
                             title="Copy access code"
-                            className="p-1.5 rounded-lg text-[#747686] hover:bg-[#eff4ff] hover:text-[#0037b0] transition-colors"
+                            className="p-1 sm:p-1.5 rounded-lg text-[#747686] hover:bg-[#eff4ff] hover:text-[#0037b0] transition-colors"
                           >
                             {isCopied ? (
                               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-3.5 h-3.5 text-emerald-600">
@@ -240,7 +238,7 @@ export default function ClassroomsPage() {
                             onClick={() => handleRotateCode(hall.id)}
                             disabled={isRotating}
                             title="Rotate access code"
-                            className="p-1.5 rounded-lg text-[#747686] hover:bg-[#eff4ff] hover:text-[#0037b0] transition-colors disabled:opacity-50"
+                            className="p-1 sm:p-1.5 rounded-lg text-[#747686] hover:bg-[#eff4ff] hover:text-[#0037b0] transition-colors disabled:opacity-50"
                           >
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} className={`w-3.5 h-3.5 ${isRotating ? 'animate-spin' : ''}`}>
                               <path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
@@ -248,13 +246,13 @@ export default function ClassroomsPage() {
                           </button>
                         </div>
                         {hall.code_expires_at && (
-                          <p className="font-code-sm text-[10px] text-[#747686] mt-1">
+                          <p className="font-code-sm text-[10px] text-[#747686] mt-1 hidden sm:block">
                             Expires: {new Date(hall.code_expires_at).toLocaleDateString()}
                           </p>
                         )}
                       </td>
 
-                      <td className="py-4 px-5">
+                      <td className="py-3.5 sm:py-4 px-4 hidden md:table-cell">
                         <div className="flex items-center gap-1.5">
                           <span className="relative flex h-2 w-2">
                             <span className="live-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
@@ -264,7 +262,7 @@ export default function ClassroomsPage() {
                         </div>
                       </td>
 
-                      <td className="py-4 px-5">
+                      <td className="py-3.5 sm:py-4 px-3 sm:px-5">
                         <span className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded font-code-sm text-[10px] font-bold ${
                           isExpired
                             ? 'bg-[#fef2f2] text-[#b91c1c] border border-[#fecaca]'
@@ -274,11 +272,11 @@ export default function ClassroomsPage() {
                         </span>
                       </td>
 
-                      <td className="py-4 px-5">
-                        <div className="flex items-center justify-end gap-2">
+                      <td className="py-3.5 sm:py-4 px-3 sm:px-5">
+                        <div className="flex items-center justify-end gap-1.5 sm:gap-2">
                           <Link
                             href={`/classrooms/${hall.id}`}
-                            className="px-3 py-1.5 rounded-lg bg-[#eff4ff] text-[#0037b0] text-[13px] font-semibold hover:bg-[#e5eeff] transition-colors"
+                            className="px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-lg bg-[#eff4ff] text-[#0037b0] text-[12px] sm:text-[13px] font-semibold hover:bg-[#e5eeff] transition-colors"
                           >
                             Manage →
                           </Link>
@@ -305,7 +303,7 @@ export default function ClassroomsPage() {
       {/* ── Add Hall Modal ───────────────────────────────────────── */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
-          <div className="w-full max-w-md bg-white rounded-2xl shadow-2xl overflow-hidden">
+          <div className="w-full max-w-md bg-white rounded-2xl shadow-2xl overflow-hidden max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between px-6 py-4 border-b border-[#e5eeff]">
               <div>
                 <h3 className="font-headline-md text-[#0b1c30]">Register New Examination Hall</h3>

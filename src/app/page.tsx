@@ -1,9 +1,12 @@
+'use client'
+
+import { useState } from "react";
 import Link from "next/link";
 import { EyeXLogo } from "@/components/ui/EyeXLogo";
 
-export const dynamic = "force-dynamic";
-
 export default function LandingPage() {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
   return (
     <div className="min-h-screen bg-[#f8f9ff] text-[#0b1c30] antialiased">
       {/* ── Fixed Top Header ── */}
@@ -36,7 +39,7 @@ export default function LandingPage() {
             </Link>
           </nav>
 
-          <div className="flex items-center gap-3">
+          <div className="hidden sm:flex items-center gap-3">
             <Link
               href="/login"
               className="inline-flex items-center justify-center text-[14px] font-medium text-[#434655] hover:text-[#0b1c30] px-3 py-2 transition-colors"
@@ -50,7 +53,70 @@ export default function LandingPage() {
               Register
             </Link>
           </div>
+
+          {/* Mobile hamburger button */}
+          <button
+            type="button"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="md:hidden p-2 rounded-lg border border-[#c4c5d7] text-[#434655] hover:bg-[#eff4ff] transition-colors"
+            aria-label="Toggle menu"
+          >
+            {mobileMenuOpen ? (
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-5 h-5">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            ) : (
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-5 h-5">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+              </svg>
+            )}
+          </button>
         </div>
+
+        {/* Mobile menu dropdown */}
+        {mobileMenuOpen && (
+          <div className="md:hidden border-t border-[#e5eeff] bg-white px-4 py-4 space-y-3 shadow-lg">
+            <div className="flex flex-col space-y-2 text-[14px] font-medium">
+              <Link
+                href="/"
+                onClick={() => setMobileMenuOpen(false)}
+                className="px-3 py-2 rounded-lg text-[#0037b0] bg-[#eff4ff] font-semibold"
+              >
+                Home
+              </Link>
+              <Link
+                href="#about"
+                onClick={() => setMobileMenuOpen(false)}
+                className="px-3 py-2 rounded-lg text-[#434655] hover:bg-[#eff4ff] transition-colors"
+              >
+                About
+              </Link>
+              <Link
+                href="/hall-access"
+                onClick={() => setMobileMenuOpen(false)}
+                className="px-3 py-2 rounded-lg text-[#434655] hover:bg-[#eff4ff] transition-colors"
+              >
+                Invigilator Hall Code
+              </Link>
+            </div>
+            <div className="pt-2 border-t border-[#eff4ff] flex flex-col gap-2">
+              <Link
+                href="/login"
+                onClick={() => setMobileMenuOpen(false)}
+                className="w-full text-center py-2.5 rounded-lg border border-[#c4c5d7] text-[14px] font-medium text-[#434655]"
+              >
+                Login
+              </Link>
+              <Link
+                href="/signup"
+                onClick={() => setMobileMenuOpen(false)}
+                className="w-full text-center py-2.5 rounded-lg bg-[#1d4ed8] text-white text-[14px] font-semibold"
+              >
+                Register School
+              </Link>
+            </div>
+          </div>
+        )}
       </header>
 
       {/* ── Main Canvas ── */}
@@ -180,7 +246,7 @@ export default function LandingPage() {
                     <label className="block font-code-sm text-[11px] text-[#466083] uppercase font-semibold mb-2">
                       Active Hall Token Code
                     </label>
-                    <div className="flex items-center gap-3">
+                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
                       <Link
                         href="/hall-access"
                         className="flex-1 bg-white text-[#0b1c30] font-code-lg text-[16px] font-semibold tracking-widest px-4 py-2.5 rounded-lg border border-[#c4c5d7] hover:border-[#1d4ed8] transition-colors flex items-center justify-between"
@@ -192,7 +258,7 @@ export default function LandingPage() {
                       </Link>
                       <Link
                         href="/hall-access"
-                        className="inline-flex items-center gap-1.5 bg-[#1d4ed8] text-white text-[14px] font-semibold px-4 py-2.5 rounded-lg hover:bg-[#0037b0] transition-colors shadow-sm"
+                        className="inline-flex items-center justify-center gap-1.5 bg-[#1d4ed8] text-white text-[14px] font-semibold px-4 py-2.5 rounded-lg hover:bg-[#0037b0] transition-colors shadow-sm"
                       >
                         <span>Enter Hall</span>
                         <svg
@@ -272,7 +338,7 @@ export default function LandingPage() {
                     Examination Officers, and GCE Center Superintendents.
                   </p>
 
-                  <div className="mt-5 grid grid-cols-2 gap-3">
+                  <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div className="p-3.5 rounded-xl bg-[#eff4ff] flex flex-col justify-between">
                       <span className="font-code-sm text-[10px] text-[#747686] uppercase font-semibold">
                         Verified Centers
@@ -577,12 +643,6 @@ export default function LandingPage() {
               >
                 Register School Now
               </Link>
-              <Link
-                href="/api/docs"
-                className="inline-flex items-center justify-center bg-white text-[#0b1c30] text-[14px] font-semibold px-5 py-3 rounded-lg hover:bg-[#e5eeff] transition-colors border border-[#c4c5d7]"
-              >
-                Documentation
-              </Link>
             </div>
           </div>
         </section>
@@ -643,14 +703,6 @@ export default function LandingPage() {
                     className="hover:text-[#0037b0] transition-colors"
                   >
                     New Examination Center Registry
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/api/docs"
-                    className="hover:text-[#0037b0] transition-colors"
-                  >
-                    Hardware Driver API Docs
                   </Link>
                 </li>
               </ul>

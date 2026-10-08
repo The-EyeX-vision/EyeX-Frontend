@@ -450,40 +450,41 @@ export default function ExaminerLiveConsolePage({
 
   return (
     <div className="min-h-screen bg-[#f8f9ff] text-[#0b1c30] flex flex-col antialiased">
-      {/* â”€â”€ Top Bar â”€â”€ */}
-      <header className="border-b border-[#c4c5d7] bg-white px-4 sm:px-6 py-3.5 flex flex-wrap items-center justify-between gap-4 sticky top-0 z-30" style={{ boxShadow: '0 1px 8px rgba(0,0,0,0.04)' }}>
-        <div className="flex items-center gap-3">
+      {/* Top Bar */}
+      <header className="border-b border-[#c4c5d7] bg-white px-3 sm:px-6 py-2.5 sm:py-3.5 flex items-center justify-between gap-2 sm:gap-4 sticky top-0 z-30" style={{ boxShadow: '0 1px 8px rgba(0,0,0,0.04)' }}>
+        <div className="flex items-center gap-2 sm:gap-3 min-w-0">
           <Link
-            href={session?.classroom_id ? `/hall/${session.classroom_id}` : '/hall-access'}
-            className="text-[13px] text-[#747686] hover:text-[#0b1c30] transition-colors"
+            href={session?.classroom_id ? `/hall/${session.classroom_id}` : '/sessions'}
+            className="p-1.5 sm:p-2 rounded-lg text-[#434655] hover:text-[#0b1c30] hover:bg-[#eff4ff] transition-colors border border-[#c4c5d7] bg-white flex items-center justify-center shrink-0 shadow-xs"
+            title="Go back"
+            aria-label="Back"
           >
-            â† Hall Workspace
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.25} className="w-4 h-4 sm:w-4.5 sm:h-4.5">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+            </svg>
           </Link>
-          <span className="text-[#c4c5d7]">/</span>
-          <div className="flex items-center gap-2">
-            <EyeXLogo width={90} showTagline={false} />
-            <span className="text-[#c4c5d7]">/</span>
-            <div>
-              <div className="flex items-center gap-2">
-                <h1 className="text-[15px] sm:text-[16px] font-bold text-[#0b1c30] truncate max-w-xs sm:max-w-md">
-                  {session?.course_name || 'Live Examination'}
-                </h1>
-                <span className="px-2 py-0.5 rounded font-code-sm text-[10px] font-bold bg-[#eff4ff] text-[#0037b0] border border-[#bbd6ff]">
-                  {session?.classroom?.name || 'Classroom Station'}
-                </span>
-              </div>
-              <p className="font-code-sm text-[11px] text-[#747686]">
-                {session?.course_code ? `${session.course_code} â€¢ ` : ''}Expected Duration: {session?.duration_minutes}m
-              </p>
+          <EyeXLogo width={78} showTagline={false} />
+          <div className="h-4 w-[1px] bg-[#c4c5d7] hidden sm:block shrink-0" />
+          <div className="min-w-0">
+            <div className="flex items-center gap-1.5 sm:gap-2">
+              <h1 className="text-[13px] sm:text-[16px] font-bold text-[#0b1c30] truncate max-w-[130px] sm:max-w-xs md:max-w-md">
+                {session?.course_name || 'Live Examination'}
+              </h1>
+              <span className="hidden sm:inline-block px-2 py-0.5 rounded font-code-sm text-[10px] font-bold bg-[#eff4ff] text-[#0037b0] border border-[#bbd6ff] shrink-0">
+                {session?.classroom?.name || 'Classroom Station'}
+              </span>
             </div>
+            <p className="font-code-sm text-[10px] sm:text-[11px] text-[#747686] hidden sm:block">
+              {session?.course_code ? `${session.course_code} • ` : ''}Duration: {session?.duration_minutes}m
+            </p>
           </div>
         </div>
 
         {/* Status Indicators & Action Buttons */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
           {/* Live Beacon & Elapsed Timer */}
-          <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-emerald-200 bg-emerald-50 text-[12px] font-mono">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+          <div className="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg border border-emerald-200 bg-emerald-50 text-[11px] sm:text-[12px] font-mono">
+            <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-emerald-500 animate-pulse" />
             <span className="text-emerald-700 font-bold">LIVE</span>
             <span className="text-[#c4c5d7]">|</span>
             <span className="text-[#0b1c30] font-semibold">{elapsed}</span>
@@ -493,15 +494,15 @@ export default function ExaminerLiveConsolePage({
           <button
             type="button"
             onClick={() => setSoundEnabled(!soundEnabled)}
-            className="p-2 rounded-lg border border-[#c4c5d7] bg-white hover:bg-[#eff4ff] text-[13px] text-[#434655] transition-colors min-h-[40px] min-w-[40px] flex items-center justify-center cursor-pointer"
+            className="p-1.5 sm:p-2 rounded-lg border border-[#c4c5d7] bg-white hover:bg-[#eff4ff] text-[13px] text-[#434655] transition-colors h-8 w-8 sm:h-10 sm:w-10 flex items-center justify-center cursor-pointer shrink-0"
             title={soundEnabled ? 'Mute alert sounds' : 'Enable alert sounds'}
           >
             {soundEnabled ? (
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} className="w-4 h-4 text-emerald-600">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-600">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
               </svg>
             ) : (
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} className="w-4 h-4 text-[#747686]">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#747686]">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 9.75L19.5 12m0 0l2.25 2.25M19.5 12l2.25-2.25M19.5 12l-2.25 2.25m-10.5-6l4.72-4.72a.75.75 0 011.28.53v15.88a.75.75 0 01-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 012.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75z" />
               </svg>
             )}
@@ -512,15 +513,20 @@ export default function ExaminerLiveConsolePage({
             type="button"
             onClick={handleEndSession}
             disabled={isEnding}
-            className="min-h-[40px] px-4 py-2 rounded-lg bg-[#ba1a1a] hover:bg-[#93000a] text-white text-[13px] font-semibold transition-colors disabled:opacity-50 shadow-sm cursor-pointer"
+            className="h-8 sm:h-10 px-2.5 sm:px-4 rounded-lg bg-[#ba1a1a] hover:bg-[#93000a] text-white text-[11px] sm:text-[13px] font-semibold transition-colors disabled:opacity-50 shadow-sm cursor-pointer shrink-0"
           >
-            {isEnding ? 'Endingâ€¦' : 'End Examination'}
+            {isEnding ? 'Ending…' : (
+              <>
+                <span className="sm:hidden">End</span>
+                <span className="hidden sm:inline">End Examination</span>
+              </>
+            )}
           </button>
         </div>
       </header>
 
       {/* â”€â”€ Main Split View Grid â”€â”€ */}
-      <div className="flex-1 grid grid-cols-1 lg:grid-cols-12 overflow-hidden">
+      <div className="flex-1 grid grid-cols-1 lg:grid-cols-12 overflow-y-auto lg:overflow-hidden">
         {/* Left: Camera Feed HUD & Tracker Seating Grid (8 Cols) */}
         <div className="lg:col-span-8 flex flex-col p-4 sm:p-6 overflow-y-auto space-y-5 border-r border-[#c4c5d7]">
           {/* â”€â”€ Camera HUD Container â”€â”€ */}
@@ -559,15 +565,15 @@ export default function ExaminerLiveConsolePage({
                 <p className="text-[12px] text-[#0037b0] font-mono mt-1 font-semibold">
                   Autonomous Pose &amp; Object Detection Active
                 </p>
-                <div className="mt-3 pt-3 border-t border-[#e5eeff] text-[11px] text-[#747686]">
-                  Zero biometric face models retained â€¢ Non-invasive behavioral observation only
+                <div className="mt-3 pt-3 border-t border-[#e5eeff] text-[11px] text-[#747686] hidden sm:block">
+                  Zero biometric face models retained • Non-invasive behavioral observation only
                 </div>
               </div>
 
               {/* Bottom HUD Metrics */}
               <div className="absolute bottom-3 left-4 right-4 flex items-center justify-between font-code-sm text-[11px] text-[#466083]">
                 <span className="bg-white/80 px-2 py-1 rounded border border-[#c4c5d7] shadow-xs">
-                  FOV: 115Â° Wide
+                  FOV: 115° Wide
                 </span>
                 <span className="bg-white/80 px-2 py-1 rounded border border-[#c4c5d7] text-emerald-700 font-semibold shadow-xs">
                   Latency: 42ms
@@ -576,31 +582,31 @@ export default function ExaminerLiveConsolePage({
             </div>
 
             {/* Cam Footer: Expected vs Detected Trackers Counter */}
-            <div className="p-3 border-t border-[#e5eeff] bg-[#f8f9ff] flex flex-wrap items-center justify-between gap-3 text-[13px]">
-              <div className="flex items-center gap-4">
+            <div className="p-2.5 sm:p-3 border-t border-[#e5eeff] bg-[#f8f9ff] flex flex-wrap items-center justify-between gap-2 sm:gap-3 text-[12px] sm:text-[13px]">
+              <div className="flex items-center gap-3 sm:gap-4">
                 <div className="flex items-center gap-1.5">
-                  <span className="text-[#466083]">Expected Candidates:</span>
+                  <span className="text-[#466083]">Expected:</span>
                   <span className="font-mono font-bold text-[#0b1c30]">
                     {session?.expected_students || 24}
                   </span>
                 </div>
                 <span className="text-[#c4c5d7]">|</span>
                 <div className="flex items-center gap-1.5">
-                  <span className="text-[#466083]">Currently Detected:</span>
+                  <span className="text-[#466083]">Detected:</span>
                   <span className="font-mono font-bold text-emerald-700">
                     {detectedCount} Trackers
                   </span>
                 </div>
               </div>
 
-              <div className="font-code-sm text-[11px] text-[#747686]">
+              <div className="font-code-sm text-[10px] sm:text-[11px] text-[#747686] hidden sm:block">
                 Session ID: {session?.id?.slice(0, 8)}
               </div>
             </div>
           </div>
 
-          {/* â”€â”€ Dev Simulation Panel â”€â”€ */}
-          <div className="rounded-xl border border-amber-200 bg-[#fffbeb] p-4 space-y-3">
+          {/* Dev Simulation Panel */}
+          <div className="rounded-xl border border-amber-200 bg-[#fffbeb] p-3 sm:p-4 space-y-2.5 sm:space-y-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <span className="px-2 py-0.5 rounded font-code-sm text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-300">
@@ -610,7 +616,7 @@ export default function ExaminerLiveConsolePage({
                   Simulate Incident Violation
                 </span>
               </div>
-              <span className="font-code-sm text-[11px] text-amber-800 font-medium">
+              <span className="font-code-sm text-[11px] text-amber-800 font-medium hidden sm:inline">
                 Writes to DB &amp; Broadcasts WebSocket
               </span>
             </div>
@@ -620,7 +626,7 @@ export default function ExaminerLiveConsolePage({
                 type="button"
                 onClick={() => triggerSimulation('PHONE_DETECTED')}
                 disabled={simulating}
-                className="min-h-[40px] px-3 py-2 rounded-lg bg-white hover:bg-[#fef2f2] border border-[#fecaca] text-[#b91c1c] text-[12px] font-semibold transition-colors disabled:opacity-50 flex items-center justify-center gap-1.5 shadow-xs cursor-pointer"
+                className="min-h-[38px] sm:min-h-[40px] px-2.5 py-1.5 rounded-lg bg-white hover:bg-[#fef2f2] border border-[#fecaca] text-[#b91c1c] text-[11px] sm:text-[12px] font-semibold transition-colors disabled:opacity-50 flex items-center justify-center gap-1.5 shadow-xs cursor-pointer"
               >
                 <span>Phone Detected</span>
               </button>
@@ -628,15 +634,15 @@ export default function ExaminerLiveConsolePage({
                 type="button"
                 onClick={() => triggerSimulation('SUSPICIOUS_MOVEMENT')}
                 disabled={simulating}
-                className="min-h-[40px] px-3 py-2 rounded-lg bg-white hover:bg-[#fff7ed] border border-[#fed7aa] text-[#c2410c] text-[12px] font-semibold transition-colors disabled:opacity-50 flex items-center justify-center gap-1.5 shadow-xs cursor-pointer"
+                className="min-h-[38px] sm:min-h-[40px] px-2.5 py-1.5 rounded-lg bg-white hover:bg-[#fff7ed] border border-[#fed7aa] text-[#c2410c] text-[11px] sm:text-[12px] font-semibold transition-colors disabled:opacity-50 flex items-center justify-center gap-1.5 shadow-xs cursor-pointer"
               >
-                <span>Movement Anomaly</span>
+                <span>Movement</span>
               </button>
               <button
                 type="button"
                 onClick={() => triggerSimulation('POSSIBLE_COMMUNICATION')}
                 disabled={simulating}
-                className="min-h-[40px] px-3 py-2 rounded-lg bg-white hover:bg-[#eff4ff] border border-[#bbd6ff] text-[#0037b0] text-[12px] font-semibold transition-colors disabled:opacity-50 flex items-center justify-center gap-1.5 shadow-xs cursor-pointer"
+                className="min-h-[38px] sm:min-h-[40px] px-2.5 py-1.5 rounded-lg bg-white hover:bg-[#eff4ff] border border-[#bbd6ff] text-[#0037b0] text-[11px] sm:text-[12px] font-semibold transition-colors disabled:opacity-50 flex items-center justify-center gap-1.5 shadow-xs cursor-pointer"
               >
                 <span>Communication</span>
               </button>
@@ -644,21 +650,21 @@ export default function ExaminerLiveConsolePage({
                 type="button"
                 onClick={() => triggerSimulation('UNAUTHORIZED_MATERIAL')}
                 disabled={simulating}
-                className="min-h-[40px] px-3 py-2 rounded-lg bg-white hover:bg-[#fef2f2] border border-[#fecaca] text-[#ba1a1a] text-[12px] font-semibold transition-colors disabled:opacity-50 flex items-center justify-center gap-1.5 shadow-xs cursor-pointer"
+                className="min-h-[38px] sm:min-h-[40px] px-2.5 py-1.5 rounded-lg bg-white hover:bg-[#fef2f2] border border-[#fecaca] text-[#ba1a1a] text-[11px] sm:text-[12px] font-semibold transition-colors disabled:opacity-50 flex items-center justify-center gap-1.5 shadow-xs cursor-pointer"
               >
-                <span>Paper / Material</span>
+                <span>Material</span>
               </button>
             </div>
           </div>
 
-          {/* â”€â”€ Real-Time Tracker Cards Grid â”€â”€ */}
+          {/* Real-Time Tracker Cards Grid */}
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <div>
                 <h3 className="font-code-sm text-[11px] font-bold uppercase tracking-wider text-[#466083]">
                   Desk &amp; Tracker Monitoring Grid
                 </h3>
-                <p className="text-[12px] text-[#747686] mt-0.5">
+                <p className="text-[12px] text-[#747686] mt-0.5 hidden sm:block">
                   Click any tracker to inspect its captured frame and complete list of detections.
                 </p>
               </div>
@@ -721,7 +727,7 @@ export default function ExaminerLiveConsolePage({
         </div>
 
         {/* Right: Live Violation Feed & Evidence Drawer (4 Cols) */}
-        <div className="lg:col-span-4 flex flex-col bg-white border-t lg:border-t-0 border-[#c4c5d7] overflow-hidden h-full">
+        <div className="lg:col-span-4 flex flex-col bg-white border-t lg:border-t-0 border-[#c4c5d7] lg:overflow-hidden lg:h-full min-h-[500px]">
           {/* Header */}
           <div className="p-4 border-b border-[#e5eeff] bg-[#f8f9ff] flex items-center justify-between flex-shrink-0">
             <div className="flex items-center gap-2">
@@ -734,7 +740,7 @@ export default function ExaminerLiveConsolePage({
               </h3>
             </div>
             <span className="font-code-sm text-[11px] text-[#747686]">
-              {trackerGroups.length} candidate{trackerGroups.length !== 1 ? 's' : ''} flagged ({violations.length} total)
+              <span className="hidden sm:inline">{trackerGroups.length} flagged </span>({violations.length} total)
             </span>
           </div>
 

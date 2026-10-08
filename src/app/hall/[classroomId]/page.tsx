@@ -177,19 +177,23 @@ export default function HallWorkspacePage({
   return (
     <div className="min-h-screen bg-[#f8f9ff] text-[#0b1c30] flex flex-col justify-between antialiased">
       {/* ── Top Bar ── */}
-      <header className="border-b border-[#c4c5d7] bg-white px-4 sm:px-6 lg:px-8 py-4 flex flex-wrap items-center justify-between gap-4" style={{ boxShadow: '0 1px 8px rgba(0,0,0,0.04)' }}>
-        <div className="flex items-center gap-3">
-          <Link href="/hall-access" className="text-[13px] text-[#747686] hover:text-[#0b1c30] transition-colors p-1 -ml-1">
-            ← Change Hall
+      <header className="border-b border-[#c4c5d7] bg-white px-4 sm:px-6 lg:px-8 py-3.5 flex items-center justify-between gap-4 sticky top-0 z-30" style={{ boxShadow: '0 1px 8px rgba(0,0,0,0.04)' }}>
+        <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+          <Link
+            href="/hall-access"
+            className="p-1.5 sm:p-2 rounded-lg text-[#434655] hover:text-[#0b1c30] hover:bg-[#eff4ff] transition-colors border border-[#c4c5d7] bg-white flex items-center justify-center shrink-0 shadow-xs"
+            title="Change Hall"
+            aria-label="Back to hall access"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.25} className="w-4 h-4 sm:w-4.5 sm:h-4.5">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+            </svg>
           </Link>
-          <span className="text-[#c4c5d7]">/</span>
-          <div className="flex items-center gap-2">
-            <EyeXLogo width={100} showTagline={false} />
-            <span className="text-[#c4c5d7]">/</span>
-            <h1 className="text-[16px] font-bold text-[#0b1c30] tracking-tight">
-              {classroom?.name || 'Examination Hall'}
-            </h1>
-          </div>
+          <EyeXLogo width={85} showTagline={false} />
+          <div className="h-4 w-[1px] bg-[#c4c5d7] hidden sm:block shrink-0" />
+          <h1 className="text-[14px] sm:text-[16px] font-bold text-[#0b1c30] tracking-tight truncate">
+            {classroom?.name || 'Examination Hall'}
+          </h1>
         </div>
 
         <div className="flex items-center gap-2 sm:gap-3">
@@ -371,7 +375,7 @@ export default function HallWorkspacePage({
       {/* ── New Session Quick-Modal ── */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm animate-in fade-in">
-          <div className="w-full max-w-md rounded-2xl bg-white p-6 sm:p-7 shadow-2xl space-y-4 border border-[#e5eeff]">
+          <div className="w-full max-w-md rounded-2xl bg-white p-6 sm:p-7 shadow-2xl space-y-4 border border-[#e5eeff] max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between pb-3 border-b border-[#e5eeff]">
               <h3 className="text-[16px] font-bold text-[#0b1c30]">
                 Initialize Examination Session
