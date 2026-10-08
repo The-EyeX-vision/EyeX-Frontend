@@ -158,14 +158,14 @@ export default function ExaminerLiveConsolePage({
         if (s.school_id && s.school_id !== 'default') {
           const { data: sch } = await supabase
             .from('schools')
-            .select('school_name, email, code_prefix')
+            .select('school_name, email')
             .eq('id', s.school_id)
             .maybeSingle()
           if (sch) {
             setSchoolInfo({
               name: sch.school_name,
               email: sch.email || '',
-              codePrefix: sch.code_prefix || 'SCH',
+              codePrefix: (sch as { code_prefix?: string }).code_prefix || 'SCH',
             })
           }
         }

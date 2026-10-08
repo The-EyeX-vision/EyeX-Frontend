@@ -15,7 +15,7 @@ export default async function AlertsPage() {
 
   const { data: school } = await supabase
     .from('schools')
-    .select('id, school_name, email, code_prefix')
+    .select('id, school_name, email')
     .eq('auth_user_id', user.id)
     .maybeSingle()
 
@@ -91,7 +91,7 @@ export default async function AlertsPage() {
                 id: school.id,
                 school_name: school.school_name,
                 email: school.email || '',
-                code_prefix: school.code_prefix || 'SCH',
+                code_prefix: (school as { code_prefix?: string }).code_prefix || 'SCH',
               }
             : {
                 id: 'default',

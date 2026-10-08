@@ -59,8 +59,23 @@ export default function ClassroomsPage() {
       const supabase = createClient()
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) return
-      const { data: school } = await supabase.from('schools').select('id').eq('auth_user_id', user.id).maybeSingle()
-      if (!school) { setError('School record not found.'); setIsCreating(false); return }
+      let { data: school } = await supabase.from('schools').select('id').eq('auth_user_id', user.id).maybeSingle()
+      if (!school) {
+        const fallbackName =
+          (user.user_metadata?.school_name as string) ||
+          (user.email ? user.email.split('@')[0].toUpperCase() : 'EyeX School')
+        const { data: created } = await supabase
+          .from('schools')
+          .insert({
+            auth_user_id: user.id,
+            school_name: fallbackName,
+            email: user.email || '',
+          })
+          .select('id')
+          .maybeSingle()
+        if (created) school = created
+      }
+      if (!school) { setError('School record not found. Please reload or sign in again.'); setIsCreating(false); return }
       const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'
       let code = ''
       for (let i = 0; i < 8; i++) code += chars.charAt(Math.floor(Math.random() * chars.length))
