@@ -62,7 +62,7 @@ export default function ExaminerLiveConsolePage({
   const [hierarchyNotes, setHierarchyNotes] = useState('')
   const [isEscalating, setIsEscalating] = useState(false)
   const [escalationSent, setEscalationSent] = useState(false)
-  const [schoolInfo, setSchoolInfo] = useState<{ name: string; email: string; codePrefix: string } | null>(null)
+  const [schoolInfo, setSchoolInfo] = useState<{ id: string; name: string; email: string; codePrefix: string } | null>(null)
 
   // Timer calculation
   useEffect(() => {
@@ -99,11 +99,12 @@ export default function ExaminerLiveConsolePage({
         if (s.school_id && s.school_id !== 'default') {
           const { data: sch } = await supabase
             .from('schools')
-            .select('school_name, email, code_prefix')
+            .select('id, school_name, email, code_prefix')
             .eq('id', s.school_id)
             .maybeSingle()
           if (sch) {
             setSchoolInfo({
+              id: sch.id,
               name: sch.school_name,
               email: sch.email || '',
               codePrefix: sch.code_prefix || 'SCH',
