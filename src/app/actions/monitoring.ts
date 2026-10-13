@@ -265,12 +265,34 @@ export async function createSimulatedAlert(
 }
 
 // ── Send Hierarchy Escalation Email ───────────────────────────
+
+/** Supabase Storage bucket prefix — only URLs from this origin are embedded as evidence. */
+const ALLOWED_EVIDENCE_ORIGIN = process.env.NEXT_PUBLIC_SUPABASE_URL ?? ''
+
+/** Strip CR/LF from any value that will be placed into an email header. */
+function sanitizeHeader(value: string): string {
+  return value.replace(/[\r\n]+/g, ' ').trim()
+}
+
+/** Return only evidence URLs that start with the trusted Supabase Storage origin. */
+function filterEvidenceUrls(urls: string[]): string[] {
+  if (!ALLOWED_EVIDENCE_ORIGIN) return []
+  return urls.filter((u) => {
+    try {
+      return u.startsWith(ALLOWED_EVIDENCE_ORIGIN)
+    } catch {
+      return false
+    }
+  })
+}
+
 export interface EscalationPayload {
   to: string
   subject?: string
   schoolName: string
   schoolEmail?: string
   schoolCode?: string
+  schoolId?: string          // used for ownership verification
   candidateName: string
   candidateNumber?: string
   activityType: string
@@ -288,6 +310,27 @@ export async function sendHierarchyEscalationEmail(payload: EscalationPayload): 
   error?: string
 }> {
   try {
+    // ── 1. Auth + school-ownership check ─────────────────────────
+    const supabase = await createClient()
+    const { data: { user }, error: authError } = await supabase.auth.getUser()
+
+    if (authError || !user) {
+      return { success: false, delivered: false, error: 'Unauthorised: you must be signed in to escalate an incident.' }
+    }
+
+    if (payload.schoolId) {
+      const { data: schoolRecord } = await supabase
+        .from('schools')
+        .select('id')
+        .eq('id', payload.schoolId)
+        .eq('auth_user_id', user.id)
+        .maybeSingle()
+
+      if (!schoolRecord) {
+        return { success: false, delivered: false, error: 'Forbidden: you do not have permission to escalate on behalf of this school.' }
+      }
+    }
+
     const {
       to,
       subject,
@@ -308,14 +351,26 @@ export async function sendHierarchyEscalationEmail(payload: EscalationPayload): 
       return { success: false, delivered: false, error: 'Recipient authority email is required.' }
     }
 
+    // ── 2. Sanitise all header values (prevent header injection) ──
+    const safeSubject = sanitizeHeader(
+      subject || `[URGENT] Irregularity Incident Flag - ${schoolName || 'Center'} - ${candidateName || 'Candidate'}`
+    )
+    const safeTo = sanitizeHeader(to)
+
+    // ── 4. Validate evidence URLs against trusted storage origin ──
+    const safeEvidenceUrls = filterEvidenceUrls(evidenceUrls)
+
     const nodemailer = (await import('nodemailer')).default
 
     const host = process.env.SMTP_HOST || 'smtp.gmail.com'
     const port = parseInt(process.env.SMTP_PORT || '587', 10)
-    const user = process.env.SMTP_USER
+    const user_smtp = process.env.SMTP_USER
     const pass = process.env.SMTP_PASS
 
-    const senderDisplay = `"${schoolName || 'Examination Center'}" <${user || schoolEmail || 'surveillance@eyex.cm'}>`
+    // ── 2. DMARC-safe from: header ────────────────────────────────
+    // "From" uses the SMTP account only — the school appears in Reply-To.
+    // Using the school name in From with a different smtp domain would fail DMARC.
+    const senderDisplay = `"EyeX Platform" <${user_smtp || 'surveillance@eyex.cm'}>`
 
     const htmlBody = `
 <!DOCTYPE html>
@@ -380,11 +435,11 @@ export async function sendHierarchyEscalationEmail(payload: EscalationPayload): 
         </div>
       ` : ''}
 
-      ${evidenceUrls && evidenceUrls.length > 0 ? `
+      ${safeEvidenceUrls.length > 0 ? `
         <div style="margin-top: 20px;">
           <strong style="font-size: 12px; color: #0b1c30; text-transform: uppercase;">Attached Evidence Captures:</strong>
           <div style="margin-top: 8px; display: flex; gap: 8px; flex-wrap: wrap;">
-            ${evidenceUrls.map((url: string, i: number) => `<img src="${url}" style="width: 140px; height: 90px; object-fit: cover; border-radius: 6px; border: 1px solid #c4c5d7;" alt="Evidence ${i + 1}" />`).join('')}
+            ${safeEvidenceUrls.map((url: string, i: number) => `<img src="${url}" style="width: 140px; height: 90px; object-fit: cover; border-radius: 6px; border: 1px solid #c4c5d7;" alt="Evidence ${i + 1}" />`).join('')}
           </div>
         </div>
       ` : ''}
@@ -401,33 +456,46 @@ export async function sendHierarchyEscalationEmail(payload: EscalationPayload): 
     let delivered = false
     let messageId = `EYEX-DISPATCH-${Date.now()}`
 
-    if (user && pass) {
+    if (user_smtp && pass) {
       const transporter = nodemailer.createTransport({
         host,
         port,
         secure: port === 465,
-        auth: { user, pass },
+        auth: { user: user_smtp, pass },
       })
 
       const info = await transporter.sendMail({
         from: senderDisplay,
-        to,
-        replyTo: schoolEmail || user,
-        subject: subject || `[URGENT] Irregularity Incident Flag - ${schoolName || 'Center'} - ${candidateName || 'Candidate'}`,
+        to: safeTo,
+        replyTo: schoolEmail || user_smtp,
+        subject: safeSubject,
         html: htmlBody,
       })
 
       delivered = true
       messageId = info.messageId
     } else {
+      // ── 3. Production-safe fallback ───────────────────────────────
+      // In production, missing SMTP credentials is a hard failure — we must
+      // NOT show a success screen when no email was dispatched.
+      if (process.env.NODE_ENV === 'production') {
+        return {
+          success: false,
+          delivered: false,
+          error: 'Email service is not configured. Contact your system administrator to set SMTP credentials.',
+        }
+      }
+
+      // Dev/staging: log to console so developers can inspect the docket.
       console.log('---------------------------------------------------------')
-      console.log('--- [EYEX REAL SURVEILLANCE EMAIL DISPATCH LOG] --------')
+      console.log('--- [EYEX SURVEILLANCE EMAIL DISPATCH — DEV AUDIT LOG] --')
       console.log('From:', senderDisplay)
-      console.log('To:', to)
+      console.log('To:', safeTo)
       console.log('Reply-To:', schoolEmail)
-      console.log('Subject:', subject || `[URGENT] Irregularity Incident Flag - ${schoolName}`)
+      console.log('Subject:', safeSubject)
       console.log('Candidate:', candidateName, candidateNumber)
-      console.log('Status: Logged to Audit Log (Set SMTP_USER & SMTP_PASS in .env.local to send live external SMTP emails)')
+      console.log('Evidence URLs (safe):', safeEvidenceUrls)
+      console.log('Status: Audit log only — set SMTP_USER & SMTP_PASS in .env.local to send live emails.')
       console.log('---------------------------------------------------------')
     }
 

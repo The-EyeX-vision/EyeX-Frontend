@@ -911,6 +911,7 @@ export default function ExaminerLiveConsolePage({
                         try {
                           await sendHierarchyEscalationEmail({
                             to: hierarchyEmail.trim(),
+                            schoolId: schoolInfo?.id,
                             schoolName: schoolInfo?.name || 'Examination Center',
                             schoolEmail: schoolInfo?.email,
                             schoolCode: schoolInfo?.codePrefix || 'SCH',

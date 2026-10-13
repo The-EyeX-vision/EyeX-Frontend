@@ -600,6 +600,7 @@ export function AlertsManager({ initialAlerts, exams, school }: Props) {
                         try {
                           await sendHierarchyEscalationEmail({
                             to: hierarchyEmail.trim(),
+                            schoolId: school?.id,
                             schoolName: school?.school_name || 'Examination Center',
                             schoolEmail: school?.email,
                             schoolCode: school?.code_prefix || 'SCH',
