@@ -120,19 +120,15 @@ export default function SessionsManagementPage() {
     <div className="w-full px-4 sm:px-6 lg:px-8 py-6 max-w-7xl mx-auto space-y-6">
       {/* ── Page Header & Schedule Action ── */}
       <div className="flex flex-col gap-1">
-        <nav className="flex items-center gap-1.5 text-[13px] text-[#747686]">
-          <span>Operations</span>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-3.5 h-3.5"><path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
-          <span className="font-medium text-[#0b1c30]">Exams &amp; Sessions</span>
-        </nav>
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-1">
           <div className="flex items-center gap-2.5">
-            <span className="w-2.5 h-6 bg-[#1d4ed8] rounded-sm" />
+            <span className="w-2.5 h-6 bg-[#1d4ed8] rounded-sm shrink-0" />
             <div>
               <h1 className="font-headline-lg text-[#0b1c30] tracking-tight">
-                Examination Sessions Directory
+                <span className="sm:hidden">Exam Sessions</span>
+                <span className="hidden sm:inline">Examination Sessions Directory</span>
               </h1>
-              <p className="text-[13px] text-[#434655] mt-0.5">
+              <p className="text-[13px] text-[#434655] mt-0.5 hidden sm:block">
                 Complete schedule, live active tests, and historical proctoring archives across all halls.
               </p>
             </div>
@@ -140,12 +136,12 @@ export default function SessionsManagementPage() {
 
           <button
             onClick={() => setIsModalOpen(true)}
-            className="flex items-center gap-2 bg-[#1d4ed8] text-white font-semibold px-4 py-2 rounded-lg text-[14px] hover:bg-[#0037b0] transition-colors shadow-sm self-start sm:self-auto"
+            className="flex items-center gap-2 bg-[#1d4ed8] text-white font-semibold px-3.5 py-2 sm:px-4 sm:py-2 rounded-lg text-[13px] sm:text-[14px] hover:bg-[#0037b0] transition-colors shadow-sm self-start sm:self-auto"
           >
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-4 h-4">
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
             </svg>
-            Schedule Examination
+            <span>Schedule Examination</span>
           </button>
         </div>
       </div>
@@ -208,16 +204,16 @@ export default function SessionsManagementPage() {
       ) : (
         <div className="bg-white rounded-xl shadow-sm overflow-hidden">
           <div className="overflow-x-auto">
-            <table className="w-full text-left min-w-[700px]">
+            <table className="w-full text-left min-w-[340px] sm:min-w-[650px]">
               <thead>
                 <tr className="bg-[#eff4ff] font-code-sm text-[11px] text-[#747686] uppercase tracking-wider">
-                  <th className="py-3 px-5">Course Details</th>
-                  <th className="py-3 px-5">Assigned Hall</th>
-                  <th className="py-3 px-5">Status</th>
-                  <th className="py-3 px-5">Duration</th>
-                  <th className="py-3 px-5">Candidates</th>
-                  <th className="py-3 px-5">Date &amp; Time</th>
-                  <th className="py-3 px-5 text-right">Console</th>
+                  <th className="py-3 px-3 sm:px-5">Course</th>
+                  <th className="py-3 px-3 sm:px-5">Hall</th>
+                  <th className="py-3 px-3 sm:px-5">Status</th>
+                  <th className="py-3 px-4 hidden sm:table-cell">Duration</th>
+                  <th className="py-3 px-4 hidden md:table-cell">Candidates</th>
+                  <th className="py-3 px-4 hidden lg:table-cell">Date &amp; Time</th>
+                  <th className="py-3 px-3 sm:px-5 text-right">Console</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-[#eff4ff]">
@@ -232,55 +228,55 @@ export default function SessionsManagementPage() {
 
                   return (
                     <tr key={s.id} className="hover:bg-[#f8f9ff] transition-colors">
-                      <td className="py-4 px-5">
+                      <td className="py-3.5 sm:py-4 px-3 sm:px-5">
                         <Link
                           href={`/hall/session/${s.id}`}
-                          className="font-bold text-[14px] text-[#0b1c30] hover:text-[#1d4ed8] transition-colors"
+                          className="font-bold text-[13px] sm:text-[14px] text-[#0b1c30] hover:text-[#1d4ed8] transition-colors"
                         >
                           {s.course_name}
                         </Link>
                         {s.course_code && (
-                          <p className="font-code-sm text-[11px] text-[#747686] mt-0.5">
+                          <p className="font-code-sm text-[10px] sm:text-[11px] text-[#747686] mt-0.5">
                             {s.course_code}
                           </p>
                         )}
                       </td>
 
-                      <td className="py-4 px-5 text-[14px] text-[#434655]">
+                      <td className="py-3.5 sm:py-4 px-3 sm:px-5 text-[13px] sm:text-[14px] text-[#434655]">
                         {s.classroom?.name || 'Classroom Hall'}
                       </td>
 
-                      <td className="py-4 px-5">
+                      <td className="py-3.5 sm:py-4 px-3 sm:px-5">
                         <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full font-code-sm text-[10px] font-bold border ${statusBadge}`}>
                           {isActive && <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />}
                           {s.status}
                         </span>
                       </td>
 
-                      <td className="py-4 px-5 font-code-sm text-[12px] text-[#434655]">
-                        {s.duration_minutes} min
+                      <td className="py-3.5 sm:py-4 px-4 font-code-sm text-[12px] text-[#434655] hidden sm:table-cell">
+                        {s.duration_minutes}m
                       </td>
 
-                      <td className="py-4 px-5 font-code-sm text-[12px] text-[#434655]">
-                        {s.expected_students} Expected
+                      <td className="py-3.5 sm:py-4 px-4 font-code-sm text-[12px] text-[#434655] hidden md:table-cell">
+                        {s.expected_students}
                       </td>
 
-                      <td className="py-4 px-5 font-code-sm text-[11px] text-[#747686]">
+                      <td className="py-3.5 sm:py-4 px-4 font-code-sm text-[11px] text-[#747686] hidden lg:table-cell">
                         {s.started_at
                           ? new Date(s.started_at).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' })
                           : new Date(s.created_at).toLocaleDateString()}
                       </td>
 
-                      <td className="py-4 px-5 text-right">
+                      <td className="py-3.5 sm:py-4 px-3 sm:px-5 text-right">
                         <Link
                           href={`/hall/session/${s.id}`}
-                          className={`px-3 py-1.5 rounded-lg text-[13px] font-semibold transition-colors inline-flex items-center gap-1 ${
+                          className={`px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-lg text-[12px] sm:text-[13px] font-semibold transition-colors inline-flex items-center gap-1 ${
                             isActive
                               ? 'bg-emerald-600 hover:bg-emerald-700 text-white'
                               : 'bg-[#eff4ff] hover:bg-[#e5eeff] text-[#0037b0]'
                           }`}
                         >
-                          {isActive ? 'Enter Live →' : 'View →'}
+                          {isActive ? 'Enter →' : 'View →'}
                         </Link>
                       </td>
                     </tr>
@@ -295,7 +291,7 @@ export default function SessionsManagementPage() {
       {/* ── Schedule Exam Modal ── */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm animate-in fade-in">
-          <div className="w-full max-w-md rounded-2xl bg-white p-6 sm:p-7 shadow-2xl space-y-4 border border-[#e5eeff]">
+          <div className="w-full max-w-md rounded-2xl bg-white p-6 sm:p-7 shadow-2xl space-y-4 border border-[#e5eeff] max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between pb-3 border-b border-[#e5eeff]">
               <h3 className="text-[16px] font-bold text-[#0b1c30]">Schedule Examination Session</h3>
               <button

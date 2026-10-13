@@ -53,14 +53,15 @@ export async function POST(request: NextRequest) {
 
     // 2. If no direct classroom found, check if code matches an existing school's code_prefix
     if (!classroom) {
-      const sanitized = rawCode.replace(/[^A-Z0-9]/g, '')
-      const { data: school } = await db
-        .from('schools')
-        .select('id, school_name, code_prefix')
-        .or(`code_prefix.ilike.%${sanitized}%,code_prefix.ilike.%${rawCode}%`)
-        .maybeSingle()
+      try {
+        const sanitized = rawCode.replace(/[^A-Z0-9]/g, '')
+        const { data: school } = await db
+          .from('schools')
+          .select('id, school_name')
+          .ilike('school_name', `%${sanitized}%`)
+          .maybeSingle()
 
-      if (school) {
+        if (school) {
         // Auto-provision a default Hall for this school if needed
         const { data: newHall } = await db
           .from('classrooms')
@@ -76,7 +77,10 @@ export async function POST(request: NextRequest) {
           classroom = newHall
         }
       }
+    } catch {
+      // Ignored if school table or match fails
     }
+  }
 
     if (!classroom) {
       return NextResponse.json(

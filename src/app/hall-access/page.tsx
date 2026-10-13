@@ -14,6 +14,7 @@ export default function HallAccessPage() {
     hallName: string;
     classroomId: string;
   } | null>(null);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
   const fullCode = code.join("");
@@ -153,18 +154,77 @@ export default function HallAccessPage() {
             </div>
             <Link
               href="/login"
-              className="text-[14px] font-medium text-[#434655] hover:text-[#0b1c30] px-3 py-2 transition-colors"
+              className="hidden sm:inline-flex text-[14px] font-medium text-[#434655] hover:text-[#0b1c30] px-3 py-2 transition-colors"
             >
               Login
             </Link>
             <Link
               href="/signup"
-              className="bg-[#1d4ed8] text-white text-[14px] font-semibold px-4 py-2 rounded-lg hover:bg-[#0037b0] transition-colors shadow-sm"
+              className="hidden sm:inline-flex bg-[#1d4ed8] text-white text-[14px] font-semibold px-4 py-2 rounded-lg hover:bg-[#0037b0] transition-colors shadow-sm"
             >
               Register
             </Link>
+
+            {/* Mobile hamburger button */}
+            <button
+              type="button"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="md:hidden p-2 rounded-lg border border-[#c4c5d7] text-[#434655] hover:bg-[#eff4ff] transition-colors"
+              aria-label="Toggle menu"
+            >
+              {mobileMenuOpen ? (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-5 h-5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              ) : (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-5 h-5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                </svg>
+              )}
+            </button>
           </div>
         </div>
+
+        {/* Mobile menu dropdown */}
+        {mobileMenuOpen && (
+          <div className="md:hidden border-t border-[#e5eeff] bg-white px-4 py-4 space-y-3 shadow-lg">
+            <div className="flex flex-col space-y-2 text-[14px] font-medium">
+              <Link
+                href="/"
+                onClick={() => setMobileMenuOpen(false)}
+                className="px-3 py-2 rounded-lg text-[#434655] hover:bg-[#eff4ff] transition-colors"
+              >
+                Home
+              </Link>
+              <Link
+                href="/#about"
+                onClick={() => setMobileMenuOpen(false)}
+                className="px-3 py-2 rounded-lg text-[#434655] hover:bg-[#eff4ff] transition-colors"
+              >
+                About
+              </Link>
+              <span className="px-3 py-2 rounded-lg text-[#0037b0] bg-[#eff4ff] font-semibold">
+                Invigilator Hall Code
+              </span>
+            </div>
+            <div className="pt-2 border-t border-[#eff4ff] flex flex-col gap-2">
+              <Link
+                href="/login"
+                onClick={() => setMobileMenuOpen(false)}
+                className="w-full text-center py-2.5 rounded-lg border border-[#c4c5d7] text-[14px] font-medium text-[#434655]"
+              >
+                Login
+              </Link>
+              <Link
+                href="/signup"
+                onClick={() => setMobileMenuOpen(false)}
+                className="w-full text-center py-2.5 rounded-lg bg-[#1d4ed8] text-white text-[14px] font-semibold"
+              >
+                Register School
+              </Link>
+            </div>
+          </div>
+        )}
       </header>
 
       <main className="w-full px-4 sm:px-8 py-10 max-w-xl mx-auto flex flex-col items-center">
@@ -191,7 +251,7 @@ export default function HallAccessPage() {
                   8-Character Access Code
                 </label>
                 <div
-                  className="mt-1 grid grid-cols-8 gap-1.5 sm:gap-2 items-center"
+                  className="mt-1 grid grid-cols-8 gap-1 sm:gap-2 items-center"
                   onPaste={handlePaste}
                 >
                   {code.map((char, idx) => (
@@ -206,7 +266,7 @@ export default function HallAccessPage() {
                       value={char}
                       onChange={(e) => handleCellChange(idx, e.target.value)}
                       onKeyDown={(e) => handleCellKeyDown(idx, e)}
-                      className={`h-12 sm:h-14 w-full text-center font-code-lg text-[18px] font-bold rounded-lg uppercase transition-all shadow-inner focus:outline-none focus:ring-2 focus:ring-[#1d4ed8] ${
+                      className={`h-11 sm:h-14 w-full text-center font-code-lg text-[15px] sm:text-[18px] px-0 font-bold rounded-lg uppercase transition-all shadow-inner focus:outline-none focus:ring-2 focus:ring-[#1d4ed8] ${
                         verified
                           ? "bg-emerald-50 text-emerald-700 ring-2 ring-emerald-400"
                           : "bg-[#eff4ff] text-[#0037b0] focus:bg-white"

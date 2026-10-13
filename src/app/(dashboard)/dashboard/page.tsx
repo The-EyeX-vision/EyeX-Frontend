@@ -514,8 +514,8 @@ export default async function DashboardPage() {
               View Full Ledger →
             </Link>
           </div>
-          <div className="bg-white rounded-xl shadow-sm overflow-hidden">
-            <table className="w-full text-left">
+          <div className="bg-white rounded-xl shadow-sm overflow-x-auto">
+            <table className="w-full text-left min-w-[500px]">
               <thead className="bg-[#eff4ff]">
                 <tr className="font-code-sm text-[11px] text-[#747686] uppercase tracking-wider">
                   <th className="py-3 px-4">Activity</th>

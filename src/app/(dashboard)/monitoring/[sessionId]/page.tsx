@@ -20,7 +20,7 @@ export default async function MonitoringSessionPage({
 
   const { data: school } = await supabase
     .from('schools')
-    .select('id, school_name, code_prefix')
+    .select('id, school_name')
     .eq('auth_user_id', user.id)
     .maybeSingle()
 

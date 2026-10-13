@@ -71,3 +71,39 @@ export async function POST(
     )
   }
 }
+
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    const { id: classroomId } = await params
+    const { searchParams } = new URL(request.url)
+    const cameraId = searchParams.get('cameraId')
+
+    if (!cameraId) {
+      return NextResponse.json({ error: 'cameraId is required.' }, { status: 400 })
+    }
+
+    const admin = createAdminClient()
+    const supabase = await createClient()
+    const db = admin || supabase
+
+    const { error } = await db
+      .from('cameras')
+      .delete()
+      .eq('id', cameraId)
+      .eq('classroom_id', classroomId)
+
+    if (error) {
+      return NextResponse.json({ error: error.message }, { status: 500 })
+    }
+
+    return NextResponse.json({ success: true })
+  } catch (err: unknown) {
+    return NextResponse.json(
+      { error: err instanceof Error ? err.message : 'Server error deleting camera.' },
+      { status: 500 }
+    )
+  }
+}

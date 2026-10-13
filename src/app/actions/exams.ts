@@ -3,6 +3,7 @@
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 import type { ExamStatus } from '@/types'
 
 export type ActionResult = { error: string } | { success: true; id: string }
@@ -11,12 +12,46 @@ async function getSchoolId(): Promise<string | null> {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return null
+
+  // 1. Try standard user client
   const { data: school } = await supabase
     .from('schools')
     .select('id')
     .eq('auth_user_id', user.id)
     .maybeSingle()
-  return school?.id ?? null
+
+  if (school?.id) return school.id
+
+  // 2. Try admin client if RLS blocked or record needs sync
+  const admin = createAdminClient()
+  if (admin) {
+    const { data: adminSchool } = await admin
+      .from('schools')
+      .select('id')
+      .eq('auth_user_id', user.id)
+      .maybeSingle()
+
+    if (adminSchool?.id) return adminSchool.id
+
+    // 3. Auto-provision school record if missing for this user
+    const schoolName =
+      (user.user_metadata?.school_name as string) ||
+      (user.email ? user.email.split('@')[0].toUpperCase() : 'EyeX School')
+
+    const { data: newSchool } = await admin
+      .from('schools')
+      .insert({
+        auth_user_id: user.id,
+        school_name: schoolName,
+        email: user.email || '',
+      })
+      .select('id')
+      .maybeSingle()
+
+    if (newSchool?.id) return newSchool.id
+  }
+
+  return null
 }
 
 // ── Create Exam ────────────────────────────────────────────────

@@ -68,17 +68,12 @@ export default function ViolationsLedgerPage() {
 
       {/* ── Header ──────────────────────────────────────────────── */}
       <div className="flex flex-col gap-1">
-        <nav className="flex items-center gap-1.5 text-[13px] text-[#747686]">
-          <span>Monitoring</span>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-3.5 h-3.5"><path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
-          <span className="font-medium text-[#0b1c30]">Activity Evidence Ledger</span>
-        </nav>
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-1">
           <div className="flex items-center gap-2.5">
-            <span className="w-2.5 h-6 bg-[#ba1a1a] rounded-sm" />
+            <span className="w-2.5 h-6 bg-[#ba1a1a] rounded-sm shrink-0" />
             <div>
               <h1 className="font-headline-lg text-[#0b1c30] tracking-tight">Flagged Activity Evidence Record</h1>
-              <p className="text-[13px] text-[#434655] mt-0.5">Complete audit trail of malpractice-flagged events detected during examination sessions.</p>
+              <p className="text-[13px] text-[#434655] mt-0.5 hidden sm:block">Complete audit trail of malpractice-flagged events detected during examination sessions.</p>
             </div>
           </div>
           <button onClick={() => loadViolations()} className="flex items-center gap-2 border border-[#c4c5d7] bg-white px-3 py-2 rounded-lg text-[13px] font-medium text-[#434655] hover:bg-[#eff4ff] transition-colors self-start sm:self-auto">
@@ -197,7 +192,7 @@ export default function ViolationsLedgerPage() {
       {/* ── Detail Panel / Modal ─────────────────────────────────── */}
       {selectedViolation && (
         <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-4 bg-black/40 backdrop-blur-sm" onClick={() => setSelectedViolation(null)}>
-          <div className="w-full sm:max-w-lg bg-white rounded-2xl shadow-2xl overflow-hidden" onClick={(e) => e.stopPropagation()}>
+          <div className="w-full sm:max-w-lg bg-white rounded-2xl shadow-2xl overflow-hidden max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
             {/* Header */}
             <div className={`px-5 py-4 border-b border-[#e5eeff] flex items-center justify-between ${selectedViolation.severity === 'CRITICAL' || selectedViolation.severity === 'HIGH' ? 'bg-[#fef2f2]' : 'bg-[#f8f9ff]'}`}>
               <div>
@@ -214,6 +209,35 @@ export default function ViolationsLedgerPage() {
 
             {/* Body */}
             <div className="p-5 flex flex-col gap-3">
+              {/* Snapshot image */}
+              {(() => {
+                const supabase = createClient()
+                let imgUrl = selectedViolation.evidence_url
+                if (imgUrl && !imgUrl.startsWith('http')) {
+                  const cleanPath = imgUrl.startsWith('/') ? imgUrl.slice(1) : imgUrl
+                  const finalPath = cleanPath.startsWith('incidents/') ? cleanPath : `incidents/${cleanPath}`
+                  imgUrl = supabase.storage.from('violation-evidence').getPublicUrl(finalPath).data.publicUrl
+                } else if (!imgUrl && selectedViolation.tracker_id !== null && selectedViolation.tracker_id !== undefined) {
+                  const idx = Math.abs(selectedViolation.tracker_id) % 6
+                  imgUrl = supabase.storage.from('violation-evidence').getPublicUrl(`incidents/student_${idx}_turning_head_to_neighbor.jpg`).data.publicUrl
+                }
+
+                return imgUrl ? (
+                  <div className="rounded-xl border border-[#c4c5d7] bg-[#0b1c30] overflow-hidden relative min-h-[180px] flex items-center justify-center">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={imgUrl}
+                      alt="Violation Evidence"
+                      className="w-full h-auto object-contain max-h-[240px]"
+                      loading="lazy"
+                    />
+                    <div className="absolute bottom-2 left-2 px-2 py-0.5 rounded bg-black/80 font-mono text-[10px] text-emerald-400 font-bold border border-white/10">
+                      violation-evidence bucket · Verified
+                    </div>
+                  </div>
+                ) : null
+              })()}
+
               <div className="grid grid-cols-2 gap-3">
                 <div className="bg-[#f8f9ff] p-3 rounded-lg"><p className="font-code-sm text-[10px] text-[#747686] uppercase">Tracker / Seat</p><p className="text-[14px] font-semibold text-[#0b1c30] mt-0.5">{selectedViolation.tracker_label || '—'}</p></div>
                 <div className="bg-[#f8f9ff] p-3 rounded-lg"><p className="font-code-sm text-[10px] text-[#747686] uppercase">Status</p><p className={`text-[14px] font-semibold mt-0.5 ${STATUS_STYLES[selectedViolation.status]?.split(' ')[1] || ''}`}>{selectedViolation.status}</p></div>

@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { redirect } from 'next/navigation'
 import { DashboardShell } from '@/components/layout/DashboardShell'
 import type { ActiveSessionData, NavbarAlertItem } from '@/components/layout/TopNavbar'
@@ -25,16 +26,36 @@ export default async function DashboardLayout({
   let initialAlerts: NavbarAlertItem[] = []
 
   try {
-    const { data: school } = await supabase
+    let { data: school } = await supabase
       .from('schools')
-      .select('id, school_name, code_prefix')
+      .select('id, school_name')
       .eq('auth_user_id', user.id)
       .maybeSingle()
+
+    if (!school) {
+      const admin = createAdminClient()
+      const db = admin || supabase
+      const fallbackName =
+        (user.user_metadata?.school_name as string) ||
+        (user.email ? user.email.split('@')[0].toUpperCase() : 'EyeX School')
+
+      const { data: createdSchool } = await db
+        .from('schools')
+        .insert({
+          auth_user_id: user.id,
+          school_name: fallbackName,
+          email: user.email || '',
+        })
+        .select('id, school_name')
+        .maybeSingle()
+
+      school = createdSchool
+    }
 
     if (school) {
       schoolId = school.id
       schoolName = school.school_name
-      schoolPrefix = school.code_prefix || 'SCH'
+      schoolPrefix = 'SCH'
 
       // 1. Fetch current active examination session
       const { data: sessionData } = await supabase
