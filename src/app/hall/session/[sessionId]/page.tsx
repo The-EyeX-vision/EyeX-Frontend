@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
 import { EyeXLogo } from '@/components/ui/EyeXLogo'
+import { sendHierarchyEscalationEmail } from '@/app/actions/monitoring'
 import type { HallSession, Violation, ViolationActivityType } from '@/types'
 
 // Web Audio API chime sound
@@ -905,11 +906,29 @@ export default function ExaminerLiveConsolePage({
                       type="button"
                       disabled={!hierarchyEmail.trim() || isEscalating}
                       onClick={async () => {
-                        if (!hierarchyEmail.trim()) return
+                        if (!hierarchyEmail.trim() || !selectedViolation) return
                         setIsEscalating(true)
-                        await new Promise((r) => setTimeout(r, 1600))
-                        setIsEscalating(false)
-                        setEscalationSent(true)
+                        try {
+                          await sendHierarchyEscalationEmail({
+                            to: hierarchyEmail.trim(),
+                            schoolName: schoolInfo?.name || 'Examination Center',
+                            schoolEmail: schoolInfo?.email,
+                            schoolCode: schoolInfo?.codePrefix || 'SCH',
+                            candidateName: selectedViolation.tracker_label,
+                            candidateNumber: String(selectedViolation.tracker_id || selectedViolation.tracker_label),
+                            activityType: selectedViolation.activity_type,
+                            confidence: selectedViolation.confidence,
+                            severity: selectedViolation.severity,
+                            timestamp: selectedViolation.created_at,
+                            remarks: hierarchyNotes,
+                            evidenceUrls: selectedViolation.evidence_url ? [selectedViolation.evidence_url] : [],
+                          })
+                        } catch (err) {
+                          console.error('Failed to dispatch escalation email:', err)
+                        } finally {
+                          setIsEscalating(false)
+                          setEscalationSent(true)
+                        }
                       }}
                       className="w-full py-2.5 rounded-lg bg-[#ba1a1a] hover:bg-[#93000a] disabled:opacity-50 disabled:cursor-not-allowed text-white text-[13px] font-semibold shadow-sm transition-all flex items-center justify-center gap-2 cursor-pointer"
                     >
