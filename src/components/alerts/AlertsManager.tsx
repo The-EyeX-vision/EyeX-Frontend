@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useTransition } from 'react'
-import { updateAlertStatus } from '@/app/actions/monitoring'
+import { updateAlertStatus, sendHierarchyEscalationEmail } from '@/app/actions/monitoring'
 import type { Alert, AlertStatusType, AlertSeverity } from '@/types'
 
 interface SchoolInfo {
@@ -393,7 +393,7 @@ export function AlertsManager({ initialAlerts, exams, school }: Props) {
       {/* ── Image Preview Modal ────────────────────────────────────────────── */}
       {selectedScreenshot && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm">
-          <div className="relative max-w-3xl w-full bg-white rounded-2xl overflow-hidden shadow-2xl border border-[#c4c5d7] max-h-[90vh] overflow-y-auto">
+          <div className="relative max-w-3xl w-full bg-white rounded-2xl overflow-hidden shadow-2xl border border-[#c4c5d7]">
             <div className="flex items-center justify-between px-5 py-3 border-b border-[#e5eeff] bg-[#f8f9ff]">
               <div className="flex items-center gap-2">
                 <span className="font-semibold text-[13px] text-[#0b1c30]">Incident Evidence Capture</span>
@@ -595,11 +595,30 @@ export function AlertsManager({ initialAlerts, exams, school }: Props) {
                       type="button"
                       disabled={!hierarchyEmail.trim() || isEscalating}
                       onClick={async () => {
-                        if (!hierarchyEmail.trim()) return
+                        if (!hierarchyEmail.trim() || !selectedAlert) return
                         setIsEscalating(true)
-                        await new Promise((r) => setTimeout(r, 1600))
-                        setIsEscalating(false)
-                        setEscalationSent(true)
+                        try {
+                          await sendHierarchyEscalationEmail({
+                            to: hierarchyEmail.trim(),
+                            schoolId: school?.id,
+                            schoolName: school?.school_name || 'Examination Center',
+                            schoolEmail: school?.email,
+                            schoolCode: school?.code_prefix || 'SCH',
+                            candidateName: selectedAlert.student?.full_name || 'Tracked Candidate',
+                            candidateNumber: selectedAlert.student?.student_number || 'Desk Desk',
+                            activityType: selectedAlert.event_type,
+                            confidence: selectedAlert.confidence,
+                            severity: selectedAlert.severity,
+                            timestamp: selectedAlert.created_at,
+                            remarks: hierarchyNotes,
+                            evidenceUrls: getScreenshots(selectedAlert),
+                          })
+                        } catch (err) {
+                          console.error('Failed to send escalation email:', err)
+                        } finally {
+                          setIsEscalating(false)
+                          setEscalationSent(true)
+                        }
                       }}
                       className="px-5 py-2.5 rounded-lg bg-[#ba1a1a] hover:bg-[#93000a] disabled:opacity-50 disabled:cursor-not-allowed text-white text-[13px] font-semibold shadow-sm transition-all flex items-center gap-2 cursor-pointer"
                     >
